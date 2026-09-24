@@ -1,0 +1,14 @@
+food_id,name_en,name_bn,food_group,kcal,protein_g,carb_g,fat_g,fiber_g,iron_mg,calcium_mg,zinc_mg,folate_ug,vit_a_ug,vit_c_mg,sodium_mg,potassium_mg,tags,source
+F001,White rice (boiled),ভাত,grain,130,2.7,28.0,0.3,0.4,0.2,10,0.5,3,0,0,1,35,staple,DEMO
+F002,Red lentils (cooked),মসুর ডাল,legume,116,9.0,20.0,0.4,7.9,3.3,19,1.3,181,2,1.5,2,369,high_protein|high_fiber|iron_rich,DEMO
+F003,Hilsa fish,ইলিশ মাছ,fish,310,22.0,3.0,22.0,0.0,2.4,180,1.0,15,30,0,90,280,high_protein|omega3|high_fat,DEMO
+F004,Spinach (cooked),পালং শাক,vegetable,23,2.9,3.6,0.4,2.2,3.6,136,0.8,146,524,9.8,70,466,iron_rich|leafy_green,DEMO
+F005,Egg (boiled),সিদ্ধ ডিম,egg,155,13.0,1.1,11.0,0.0,1.2,50,1.0,44,149,0,124,126,high_protein,DEMO
+F006,Banana,কলা,fruit,89,1.1,23.0,0.3,2.6,0.3,5,0.2,20,3,8.7,1,358,fruit|potassium_rich,DEMO
+F007,Chicken breast (cooked),মুরগির মাংস,meat,165,31.0,0.0,3.6,0.0,1.0,15,1.0,4,6,0,74,256,high_protein|lean,DEMO
+F008,Milk (whole),দুধ,dairy,61,3.2,4.8,3.3,0.0,0.03,113,0.4,5,46,0,43,132,dairy|calcium_rich,DEMO
+F009,Potato (boiled),আলু,vegetable,87,1.9,20.0,0.1,1.8,0.3,5,0.3,10,0,13,6,379,staple,DEMO
+F010,Plain yogurt,টক দই,dairy,61,3.5,4.7,3.3,0.0,0.05,121,0.6,7,27,0.5,46,155,dairy|calcium_rich|probiotic,DEMO
+F011,Soybean oil,সয়াবিন তেল,oil,884,0.0,0.0,100.0,0.0,0.0,0,0.0,0,0,0,0,0,oil|high_fat,DEMO
+F012,Roshogolla,রসগোল্লা,sweet,186,4.0,32.0,4.5,0.0,0.2,60,0.4,5,40,0,50,80,high_sugar|dessert,DEMO
+F013,Dried fish (shutki),শুঁটকি,fish,270,55.0,0.0,4.0,0.0,4.5,1500,3.0,20,25,0,3500,900,high_protein|high_sodium|iron_rich,DEMO

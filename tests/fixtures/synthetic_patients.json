@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Ayesha Rahman",
+    "sex": "female",
+    "birth_year": 1992,
+    "height_cm": 158,
+    "pregnant": false,
+    "conditions": [],
+    "fitness_level": "beginner",
+    "notes": "Synthetic demo patient: hypertension + diabetes-range glucose + moderate anemia.",
+    "visit": {
+      "weight_kg": 68,
+      "biomarkers": {
+        "fasting_glucose": 132,
+        "systolic_bp": 148,
+        "diastolic_bp": 94,
+        "hemoglobin": 10.2
+      }
+    }
+  },
+  {
+    "name": "Karim Hossain",
+    "sex": "male",
+    "birth_year": 1985,
+    "height_cm": 170,
+    "pregnant": false,
+    "conditions": [],
+    "fitness_level": "intermediate",
+    "notes": "Synthetic demo patient: all values normal.",
+    "visit": {
+      "weight_kg": 82,
+      "biomarkers": {
+        "fasting_glucose": 95,
+        "systolic_bp": 118,
+        "diastolic_bp": 76,
+        "hemoglobin": 14.5
+      }
+    }
+  },
+  {
+    "name": "Fatema Begum",
+    "sex": "female",
+    "birth_year": 1998,
+    "height_cm": 155,
+    "pregnant": true,
+    "conditions": [],
+    "fitness_level": "beginner",
+    "notes": "Synthetic demo patient: pregnant, moderate anemia by pregnancy cutoffs.",
+    "visit": {
+      "weight_kg": 60,
+      "biomarkers": {
+        "fasting_glucose": 88,
+        "systolic_bp": 110,
+        "diastolic_bp": 70,
+        "hemoglobin": 9.8
+      }
+    }
+  },
+  {
+    "name": "Rahim Uddin",
+    "sex": "male",
+    "birth_year": 1960,
+    "height_cm": 165,
+    "pregnant": false,
+    "conditions": ["knee_osteoarthritis"],
+    "fitness_level": "beginner",
+    "notes": "Synthetic demo patient: elderly, prediabetes, stage-1 BP, knee osteoarthritis.",
+    "visit": {
+      "weight_kg": 75,
+      "biomarkers": {
+        "fasting_glucose": 118,
+        "systolic_bp": 138,
+        "diastolic_bp": 88,
+        "hemoglobin": 13.5
+      }
+    }
+  }
+]

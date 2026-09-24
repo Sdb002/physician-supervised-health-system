@@ -1,0 +1,12 @@
+{
+  "name": "physician-root",
+  "private": true,
+  "scripts": {
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev.ps1",
+    "dev:api": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev.ps1 -ApiOnly",
+    "dev:web": "npm run dev --prefix dashboard",
+    "build": "npm run build --prefix dashboard",
+    "start": "npm run start --prefix dashboard",
+    "lint": "npm run lint --prefix dashboard"
+  }
+}

@@ -1,0 +1,11 @@
+exercise_id,name_en,name_bn,category,met_value,equipment,intensity_level,contra_tags,source
+E001,Brisk walking,দ্রুত হাঁটা,aerobic,4.3,none,moderate,,DEMO
+E002,Jogging,জগিং,aerobic,7.0,none,vigorous,high_impact|high_exertion,DEMO
+E003,Cycling (leisure),সাইকেল চালানো,aerobic,5.5,bicycle,moderate,,DEMO
+E004,Swimming (leisure),সাঁতার,aerobic,5.8,pool,moderate,,DEMO
+E005,Bodyweight squats,স্কোয়াট,strength,5.0,none,moderate,knee_stress,DEMO
+E006,Push-ups,বুকডন,strength,8.0,none,vigorous,wrist_stress|high_exertion,DEMO
+E007,Hatha yoga,যোগব্যায়াম,flexibility,2.5,mat,light,,DEMO
+E008,Stair climbing,সিঁড়ি ওঠা,aerobic,8.0,stairs,vigorous,high_impact|knee_stress|high_exertion,DEMO
+E009,Resistance band rows,রেজিস্ট্যান্স ব্যান্ড রো,strength,3.5,resistance band,moderate,,DEMO
+E010,Stretching routine,স্ট্রেচিং,flexibility,2.3,none,light,,DEMO

@@ -1,0 +1,58 @@
+# Condition → tags to exclude. Consumed by src/clinical/contraindication.py,
+# the HARD safety gate: any food, recipe, or exercise carrying an excluded tag
+# is removed before recommendations are ranked. The gate is deterministic and
+# runs before (and independent of) any LLM involvement.
+#
+# Condition keys are matched against (a) conditions derived from risk scoring
+# (hypertension, diabetes, anemia) and (b) physician-recorded conditions on the
+# patient. Every entry requires a citation.
+
+conditions:
+  hypertension:
+    display_en: Hypertension
+    display_bn: উচ্চ রক্তচাপ
+    exclude_food_tags: [high_sodium]
+    exclude_exercise_tags: [high_exertion]
+    citation: >
+      WHO Guideline: Sodium intake for adults and children (2012) — <2 g/day
+      sodium. ACSM Guidelines for Exercise Testing and Prescription, 11th ed. —
+      defer high-intensity and heavy isometric exercise in uncontrolled
+      hypertension pending physician clearance.
+
+  diabetes:
+    display_en: Diabetes / impaired fasting glucose
+    display_bn: ডায়াবেটিস
+    exclude_food_tags: [high_sugar]
+    exclude_exercise_tags: []
+    citation: >
+      American Diabetes Association. Standards of Care in Diabetes—2024,
+      Facilitating positive health behaviors: minimize intake of added sugars.
+
+  anemia:
+    display_en: Anemia
+    display_bn: রক্তস্বল্পতা
+    exclude_food_tags: []
+    exclude_exercise_tags: [high_exertion]
+    citation: >
+      Conservative precaution: defer vigorous exercise in moderate/severe
+      anemia pending physician clearance (reduced oxygen-carrying capacity;
+      ACSM GETP 11th ed., clinical populations).
+
+  pregnancy:
+    display_en: Pregnancy
+    display_bn: গর্ভাবস্থা
+    exclude_food_tags: []
+    exclude_exercise_tags: [high_impact, abdominal_pressure, supine_position]
+    citation: >
+      ACOG Committee Opinion No. 804 (2020): Physical Activity and Exercise
+      During Pregnancy and the Postpartum Period — avoid activities with high
+      fall/contact risk and prolonged supine positioning.
+
+  knee_osteoarthritis:
+    display_en: Knee osteoarthritis
+    display_bn: হাঁটুর অস্টিওআর্থারাইটিস
+    exclude_food_tags: []
+    exclude_exercise_tags: [high_impact, knee_stress]
+    citation: >
+      OARSI guidelines for the non-surgical management of knee, hip, and
+      polyarticular osteoarthritis (2019) — prefer low-impact aerobic exercise.

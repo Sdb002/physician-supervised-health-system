@@ -1,0 +1,20 @@
+# Optional: PostgreSQL for production-like runs. SQLite is the default and
+# needs nothing. To use Postgres:
+#   1. docker compose up -d
+#   2. Set DATABASE_URL in .env to:
+#      postgresql+psycopg://health:health@localhost:5432/health
+#   3. Add the driver: pip install "psycopg[binary]"
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: health
+      POSTGRES_PASSWORD: health
+      POSTGRES_DB: health
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

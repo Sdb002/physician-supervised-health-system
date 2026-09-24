@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* Class-based dark mode, not media-only: a physician on a bright ward should
+ * be able to force light regardless of the OS setting, and vice versa. The
+ * inline script in layout.tsx sets .dark before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+ * Clinical design tokens - light mode is the source of truth.
+ *
+ * Semantic names, not raw hex at the call site, so dark mode is a value swap
+ * below rather than a `dark:` variant on every element. Every text pair is
+ * measured against WCAG AA (4.5:1).
+ * ------------------------------------------------------------------------ */
+@theme {
+  --font-sans: var(--font-figtree), var(--font-noto-bengali), ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-bangla: var(--font-noto-bengali), var(--font-figtree), sans-serif;
+
+  /* Primary. teal-700, not teal-600: white on teal-600 measures 3.74:1 and
+   * fails AA; teal-700 reaches 5.47:1. */
+  --color-clinical: #0f766e;
+  --color-clinical-hover: #115e59;
+  --color-clinical-tint: #f0fdfa;
+  --color-on-clinical: #ffffff;
+
+  /* Text. ink-muted is slate-500, not slate-400: slate-400 on white is
+   * 2.56:1 and fails AA for anything carrying meaning. */
+  --color-ink: #0f172a;
+  --color-ink-strong: #334155;
+  --color-ink-soft: #475569;
+  --color-ink-muted: #64748b;
+
+  /* Surfaces */
+  --color-canvas: #f1f5f9;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8fafc;
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+}
+
+/* ---------------------------------------------------------------------------
+ * Dark mode. Slate-900 surfaces on a slate-950 canvas rather than pure black:
+ * pure black raises halation against light text, which matters when the job
+ * is reading numbers off a screen for long stretches.
+ * ------------------------------------------------------------------------ */
+.dark {
+  /* teal-400 with near-black text measures 10.84:1. Keeping the light-mode
+   * teal-700 + white here would technically pass, but reads muddy against a
+   * dark canvas. */
+  --color-clinical: #2dd4bf;
+  --color-clinical-hover: #5eead4;
+  --color-clinical-tint: #042f2e;
+  --color-on-clinical: #020617;
+
+  --color-ink: #f1f5f9;
+  --color-ink-strong: #e2e8f0;
+  --color-ink-soft: #cbd5e1;
+  --color-ink-muted: #94a3b8;
+
+  --color-canvas: #020617;
+  --color-surface: #0f172a;
+  --color-surface-soft: #1e293b;
+  --color-line: #334155;
+  --color-line-strong: #64748b;
+
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Bangla needs its own family at the same optical size as Latin. */
+:lang(bn) {
+  font-family: var(--font-bangla);
+}
+
+/* Motion is decoration here, never information. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The report letterhead carries a clinical accent rule at the top edge. */
+.report-head {
+  border-top: 3px solid var(--color-clinical);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* Patient reports are printed and filed, so print gets real treatment rather
+ * than just a white background: sane page margins, and no section split
+ * across a page break mid-table. */
+@page {
+  margin: 16mm;
+}
+
+@media print {
+  body {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  section,
+  table,
+  .report-head {
+    break-inside: avoid;
+  }
+
+  /* Repeat column headers when a long table does span pages. */
+  thead {
+    display: table-header-group;
+  }
+
+  /* The dashboard's link URLs are noise on a filed report. */
+  a[href]::after {
+    content: "";
+  }
+}

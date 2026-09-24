@@ -1,0 +1,51 @@
+# Recommended daily intakes by demographic group — consumed by
+# src/clinical/deficiency.py and src/diet/meal_plan.py.
+#
+# Values are RDAs (AI where the DRI defines no RDA: fiber, potassium) for
+# adults 19–50 y, from the NIH Office of Dietary Supplements DRI tables
+# (Institute of Medicine / National Academies). kcal values are approximate
+# estimated energy requirements at moderate activity and are refined per
+# patient at runtime (Mifflin-St Jeor in src/clinical/bmi.py).
+#
+# Sodium limit: WHO Guideline: Sodium intake for adults and children (2012):
+# <2000 mg/day sodium.
+
+groups:
+  male_adult:
+    kcal: 2500
+    protein_g: 56
+    fiber_g: 38
+    iron_mg: 8
+    calcium_mg: 1000
+    zinc_mg: 11
+    folate_ug: 400
+    vit_a_ug: 900
+    vit_c_mg: 90
+    potassium_mg: 3400
+
+  female_adult:
+    kcal: 2000
+    protein_g: 46
+    fiber_g: 25
+    iron_mg: 18
+    calcium_mg: 1000
+    zinc_mg: 8
+    folate_ug: 400
+    vit_a_ug: 700
+    vit_c_mg: 75
+    potassium_mg: 2600
+
+  pregnant:
+    kcal: 2200
+    protein_g: 71
+    fiber_g: 28
+    iron_mg: 27
+    calcium_mg: 1000
+    zinc_mg: 11
+    folate_ug: 600
+    vit_a_ug: 770
+    vit_c_mg: 85
+    potassium_mg: 2900
+
+limits:
+  sodium_mg: 2000

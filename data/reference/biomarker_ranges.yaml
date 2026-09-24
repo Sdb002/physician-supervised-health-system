@@ -1,0 +1,67 @@
+# Clinical reference ranges — consumed by src/clinical/risk_scoring.py.
+# These are REAL, cited values (unlike the DEMO CSVs). Do not edit without a citation.
+#
+# Band semantics: half-open interval [min, max). Omitted min = -infinity,
+# omitted max = +infinity. Exactly one band matches any value.
+# risk levels: none | low | moderate | high | critical
+#
+# Blood pressure note: systolic and diastolic are banded separately; the overall
+# BP category is the MORE SEVERE of the two, per ACC/AHA 2017 ("or" criterion).
+
+biomarkers:
+  fasting_glucose:
+    unit: mg/dL
+    citation: >
+      American Diabetes Association. Standards of Care in Diabetes—2024.
+      Diabetes Care 47(Suppl 1). Diagnostic thresholds: FPG 100–125 mg/dL
+      prediabetes, >=126 mg/dL diabetes; <70 mg/dL hypoglycemia alert value.
+    bands:
+      - {label: hypoglycemia, max: 70, risk: high}
+      - {label: normal, min: 70, max: 100, risk: none}
+      - {label: prediabetes, min: 100, max: 126, risk: moderate}
+      - {label: diabetes_range, min: 126, risk: high}
+
+  systolic_bp:
+    unit: mmHg
+    citation: >
+      Whelton PK et al. 2017 ACC/AHA Guideline for the Prevention, Detection,
+      Evaluation, and Management of High Blood Pressure in Adults.
+      Hypertension. 2018;71(6):e13-e115.
+    bands:
+      - {label: normal, max: 120, risk: none}
+      - {label: elevated, min: 120, max: 130, risk: low}
+      - {label: hypertension_stage1, min: 130, max: 140, risk: moderate}
+      - {label: hypertension_stage2, min: 140, max: 180, risk: high}
+      - {label: hypertensive_crisis, min: 180, risk: critical}
+
+  diastolic_bp:
+    unit: mmHg
+    citation: >
+      Whelton PK et al. 2017 ACC/AHA Guideline (as above).
+    bands:
+      - {label: normal, max: 80, risk: none}
+      - {label: hypertension_stage1, min: 80, max: 90, risk: moderate}
+      - {label: hypertension_stage2, min: 90, max: 120, risk: high}
+      - {label: hypertensive_crisis, min: 120, risk: critical}
+
+  hemoglobin:
+    unit: g/dL
+    citation: >
+      WHO. Haemoglobin concentrations for the diagnosis of anaemia and
+      assessment of severity. WHO/NMH/NHD/MNM/11.1 (2011).
+    groups:
+      male_adult:
+        - {label: severe_anemia, max: 8.0, risk: critical}
+        - {label: moderate_anemia, min: 8.0, max: 11.0, risk: high}
+        - {label: mild_anemia, min: 11.0, max: 13.0, risk: moderate}
+        - {label: normal, min: 13.0, risk: none}
+      female_adult:
+        - {label: severe_anemia, max: 8.0, risk: critical}
+        - {label: moderate_anemia, min: 8.0, max: 11.0, risk: high}
+        - {label: mild_anemia, min: 11.0, max: 12.0, risk: moderate}
+        - {label: normal, min: 12.0, risk: none}
+      pregnant:
+        - {label: severe_anemia, max: 7.0, risk: critical}
+        - {label: moderate_anemia, min: 7.0, max: 10.0, risk: high}
+        - {label: mild_anemia, min: 10.0, max: 11.0, risk: moderate}
+        - {label: normal, min: 11.0, risk: none}

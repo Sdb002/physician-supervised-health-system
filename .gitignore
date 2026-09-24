@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Trained models (regenerable build artifact — run scripts/train_food_recommender.py)
+data/models/
+
+# Environment & secrets
+.env
+admin.txt
+
+# Database
+*.db
+*.sqlite3
+
+# Node / Next.js
+node_modules/
+dashboard/.next/
+dashboard/out/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+.DS_Store

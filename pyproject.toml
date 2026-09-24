@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "physician-supervised-health-system"
+version = "0.1.0"
+description = "Physician-supervised diet & lifestyle recommendation system. Deterministic clinical core; LLM for OCR and phrasing only."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "anthropic>=0.40",
+    "ruamel.yaml>=0.18",
+    "python-multipart>=0.0.9",
+    "scikit-learn==1.9.0",
+    "numpy>=2,<3",
+    "joblib>=1.4,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

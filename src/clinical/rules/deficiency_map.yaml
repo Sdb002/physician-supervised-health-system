@@ -1,0 +1,35 @@
+# Lab finding → nutrients to emphasize in the diet plan.
+# Consumed by src/clinical/deficiency.py. Every entry requires a citation.
+
+findings:
+  anemia:
+    # any *_anemia risk band triggers this finding
+    boost_nutrients: [iron_mg, folate_ug, vit_c_mg]
+    rationale: >
+      Iron deficiency is the dominant cause of anemia in Bangladesh; folate
+      deficiency is a co-contributor. Vitamin C is included because it enhances
+      non-heme iron absorption, which matters in largely plant-based diets.
+    citation: >
+      WHO (2011) WHO/NMH/NHD/MNM/11.1; Hallberg L, Brune M, Rossander L.
+      The role of vitamin C in iron absorption. Int J Vitam Nutr Res Suppl 1989.
+
+  hypertension:
+    # any hypertension_* band triggers this finding
+    boost_nutrients: [potassium_mg, fiber_g]
+    rationale: >
+      DASH-pattern emphasis: increased potassium and fiber intake lowers blood
+      pressure; the sodium ceiling is enforced separately as a hard limit.
+    citation: >
+      Appel LJ et al. A clinical trial of the effects of dietary patterns on
+      blood pressure (DASH). N Engl J Med 1997;336:1117-24; WHO potassium
+      guideline (2012).
+
+  diabetes:
+    # prediabetes or diabetes_range bands trigger this finding
+    boost_nutrients: [fiber_g]
+    rationale: >
+      Higher dietary fiber improves glycemic control; added-sugar exclusion is
+      enforced separately by the contraindication gate.
+    citation: >
+      American Diabetes Association. Standards of Care in Diabetes—2024
+      (nutrition therapy).
