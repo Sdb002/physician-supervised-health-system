@@ -17,6 +17,7 @@ import {
 } from "@/lib/clinical-terms";
 import { DayPicker, WeekPlan } from "@/components/week-plan";
 import { PlanNutrition } from "@/components/plan-nutrition";
+import { dietaryRestrictionLabel } from "@/lib/patient-options";
 import { pid } from "@/lib/format";
 import { riskLabel } from "@/lib/triage";
 import { FoodCombobox } from "@/components/FoodCombobox";
@@ -363,6 +364,20 @@ export default function ReviewDetailPage() {
             )}
           </Card>
 
+          {(r.cautions ?? []).length > 0 && (
+            <div role="note" className="rounded-xl border border-watch-line bg-watch-tint px-5 py-4">
+              <h2 className="flex items-center gap-2 font-semibold text-watch-ink">
+                <IconAlert className="h-4 w-4 shrink-0" />
+                Check before approving
+              </h2>
+              <ul className="mt-2 space-y-2 text-sm text-watch-ink">
+                {r.cautions!.map((caution) => (
+                  <li key={caution}>{caution}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <Card title="Why this plan">
             <h3 className="text-sm font-semibold text-ink-strong">Derived conditions</h3>
             <p className="mt-1 text-sm text-ink">
@@ -372,6 +387,14 @@ export default function ReviewDetailPage() {
                 r.conditions.map((c) => conditionName(c)).join(", ")
               )}
             </p>
+            {(r.dietary_restrictions ?? []).length > 0 && (
+              <>
+                <h3 className="mt-4 text-sm font-semibold text-ink-strong">Does not eat</h3>
+                <p className="mt-1 text-sm text-ink">
+                  {r.dietary_restrictions!.map(dietaryRestrictionLabel).join(", ")}
+                </p>
+              </>
+            )}
             <h3 className="mt-4 text-sm font-semibold text-ink-strong">Safety exclusions applied</h3>
             <p className="mt-1 text-sm text-ink-soft">
               Removed before ranking: foods tagged{" "}

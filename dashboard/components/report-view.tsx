@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, DoctorNote, Report } from "@/lib/api";
 import { useLang } from "@/lib/use-lang";
-import { conditionName, formatDate, localName, planDays } from "@/lib/clinical-terms";
+import { bmiCategoryName, conditionName, formatDate, localName, planDays } from "@/lib/clinical-terms";
 import { WeekPlan } from "@/components/week-plan";
 import { IconChevronLeft, IconLock, IconPrinter, IconRx, IconSparkles } from "@/components/icons";
 import {
@@ -209,9 +209,12 @@ export function ReportView({
   const [noteError, setNoteError] = useState<string | null>(null);
   const [tab, setTab] = useState<ReportTab>(isReportTab(initialTab) ? initialTab : "overview");
 
-  useEffect(() => {
+  // a link to another tab of the same report changes the prop, not the page
+  const [linkedTab, setLinkedTab] = useState(initialTab);
+  if (initialTab !== linkedTab) {
+    setLinkedTab(initialTab);
     if (isReportTab(initialTab)) setTab(initialTab);
-  }, [initialTab]);
+  }
 
   const load = useCallback(() => {
     setLoading(true);
@@ -230,6 +233,9 @@ export function ReportView({
       .finally(() => setLoading(false));
   }, [visitId, lang, useLlm]);
 
+  // fetch on mount and whenever the visit, language or phrasing changes; the
+  // loading flag is raised here because nothing else knows a fetch began
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(load, [load]);
 
   const submitNote = async () => {
@@ -308,6 +314,22 @@ export function ReportView({
       </div>
 
       {error && <ErrorNote message={error} />}
+
+      {/* an approved plan is never rebuilt: the physician is told when the
+          planner has moved on since, and how to plan again */}
+      {viewer === "doctor" &&
+        report?.engine_version &&
+        report.current_engine_version &&
+        report.engine_version !== report.current_engine_version && (
+          <p
+            role="note"
+            className="rounded-md border border-watch-line bg-watch-tint px-4 py-2.5 text-sm text-watch-ink print:hidden"
+          >
+            This plan was built by planner version {report.engine_version}; the current version is{" "}
+            {report.current_engine_version} and may plan differently. The plan stays as it was approved. To plan
+            again with the current version, record a new visit.
+          </p>
+        )}
 
       {locked && (
         <div className="rounded-lg border border-watch-line bg-watch-tint px-6 py-10 text-center">
@@ -420,8 +442,8 @@ export function ReportView({
                         <dt className="text-sm text-ink-soft">{t.bmiLabel}</dt>
                         <dd className="text-xl font-bold text-ink">
                           {anthro.bmi}
-                          <span className="ml-1.5 text-sm font-normal capitalize text-ink-muted">
-                            {anthro.bmi_category}
+                          <span className="ml-1.5 text-sm font-normal text-ink-muted">
+                            {bmiCategoryName(anthro.bmi_category, lang)}
                           </span>
                         </dd>
                       </div>

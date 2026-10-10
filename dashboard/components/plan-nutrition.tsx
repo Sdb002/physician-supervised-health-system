@@ -72,7 +72,15 @@ const L = {
         b.activity_assumed ? ", assumed because no activity level is recorded" : ""
       } = ${a.tdee_kcal} kcal to hold weight steady.`,
     adjustment: (a: Anthropometrics, b: EnergyBasis) =>
-      b.adjustment_kcal === 0
+      b.pregnancy
+        ? `No weight-loss or weight-gain adjustment in pregnancy. ${
+            b.pregnancy.trimester == null
+              ? "No trimester is recorded, so no pregnancy energy is added"
+              : b.pregnancy.extra_kcal === 0
+                ? "No extra energy in the first trimester"
+                : `Plus ${b.pregnancy.extra_kcal} kcal for the ${b.pregnancy.trimester === 2 ? "second" : "third"} trimester`
+          }: ${a.target_kcal} kcal a day.`
+        : b.adjustment_kcal === 0
         ? `No adjustment at this body mass index (${a.bmi}, ${a.bmi_category}): ${a.target_kcal} kcal a day.`
         : `${b.adjustment_kcal < 0 ? "Less" : "Plus"} ${Math.abs(b.adjustment_kcal)} kcal for weight ${
             b.adjustment_kcal < 0 ? "loss" : "gain"
@@ -120,7 +128,15 @@ const L = {
         b.activity_assumed ? ", ধরে নেওয়া হয়েছে কারণ কর্মব্যস্ততার মাত্রা নথিভুক্ত নেই" : ""
       }) = ওজন ধরে রাখতে ${a.tdee_kcal} কিলোক্যালরি।`,
     adjustment: (a: Anthropometrics, b: EnergyBasis) =>
-      b.adjustment_kcal === 0
+      b.pregnancy
+        ? `গর্ভাবস্থায় ওজন কমানো বা বাড়ানোর জন্য কোনো সমন্বয় করা হয় না। ${
+            b.pregnancy.trimester == null
+              ? "ত্রৈমাসিক নথিভুক্ত নেই, তাই গর্ভাবস্থার বাড়তি শক্তি যোগ করা হয়নি"
+              : b.pregnancy.extra_kcal === 0
+                ? "প্রথম ত্রৈমাসিকে বাড়তি শক্তি লাগে না"
+                : `${b.pregnancy.trimester === 2 ? "দ্বিতীয়" : "তৃতীয়"} ত্রৈমাসিকের জন্য ${b.pregnancy.extra_kcal} কিলোক্যালরি বেশি`
+          }: দিনে ${a.target_kcal} কিলোক্যালরি।`
+        : b.adjustment_kcal === 0
         ? `এই বডি মাস ইনডেক্সে (${a.bmi}) কোনো সমন্বয় নেই: দিনে ${a.target_kcal} কিলোক্যালরি।`
         : `ওজন ${b.adjustment_kcal < 0 ? "কমানোর" : "বাড়ানোর"} জন্য ${Math.abs(b.adjustment_kcal)} কিলোক্যালরি ${
             b.adjustment_kcal < 0 ? "কম" : "বেশি"

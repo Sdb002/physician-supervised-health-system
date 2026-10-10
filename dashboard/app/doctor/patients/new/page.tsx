@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
+import { CONDITION_OPTIONS, DIETARY_RESTRICTION_OPTIONS } from "@/lib/patient-options";
+import { ActivityField, OptionChecks, PregnancyFields, choiceRow } from "@/components/patient-fields";
 import {
   ErrorNote,
   Field,
@@ -11,17 +13,6 @@ import {
   checkboxClass,
   inputClass,
 } from "@/components/ui";
-
-const CONDITION_OPTIONS = [
-  { key: "hypertension", label: "Hypertension" },
-  { key: "diabetes", label: "Diabetes" },
-  { key: "anemia", label: "Anaemia" },
-  { key: "knee_osteoarthritis", label: "Knee osteoarthritis" },
-];
-
-const choiceRow =
-  "flex cursor-pointer items-center gap-3 rounded-lg border border-line px-3 py-2.5 text-sm text-ink-strong " +
-  "has-[:checked]:border-clinical has-[:checked]:bg-clinical-tint hover:bg-surface-soft";
 
 const sectionClass = "grid gap-x-8 gap-y-4 px-5 py-6 md:grid-cols-[14rem_1fr]";
 
@@ -38,8 +29,11 @@ export default function NewPatientPage() {
     birth_year: 1990,
     height_cm: 160,
     pregnant: false,
+    pregnancy_trimester: null as number | null,
     conditions: [] as string[],
+    dietary_restrictions: [] as string[],
     fitness_level: "beginner",
+    activity_level: null as string | null,
     notes: "",
   });
 
@@ -53,7 +47,9 @@ export default function NewPatientPage() {
       // don't create the patient twice if a previous attempt failed only on the account step
       let patientId = createdId;
       if (patientId === null) {
-        const patient = await api.createPatient(form);
+        const patient = await api.createPatient(
+          form.sex === "female" ? form : { ...form, pregnant: false, pregnancy_trimester: null }
+        );
         patientId = patient.id;
         setCreatedId(patientId);
       }
@@ -132,20 +128,13 @@ export default function NewPatientPage() {
               </Field>
             </div>
             {form.sex === "female" && (
-              <label className={choiceRow}>
-                <input
-                  type="checkbox"
-                  className={checkboxClass}
-                  checked={form.pregnant}
-                  onChange={(e) => set("pregnant", e.target.checked)}
-                />
-                <span>
-                  Currently pregnant
-                  <span className="block text-xs text-ink-muted">
-                    Changes anaemia cutoffs, nutrient targets and excluded exercises.
-                  </span>
-                </span>
-              </label>
+              <PregnancyFields
+                pregnant={form.pregnant}
+                trimester={form.pregnancy_trimester}
+                onChange={(next) => setForm((f) => ({ ...f, ...next }))}
+                label="Currently pregnant"
+                hint="Changes anaemia cutoffs, nutrient targets, excluded foods and exercises; no weight-loss deficit is applied."
+              />
             )}
           </div>
         </section>
@@ -159,39 +148,38 @@ export default function NewPatientPage() {
           </div>
           <div className="space-y-4">
             <fieldset>
-              <legend className="text-sm font-semibold text-ink-strong">Diagnosed conditions</legend>
-              <div className="mt-1.5 grid gap-2 sm:grid-cols-2">
-                {CONDITION_OPTIONS.map((c) => (
-                  <label key={c.key} className={choiceRow}>
-                    <input
-                      type="checkbox"
-                      className={checkboxClass}
-                      checked={form.conditions.includes(c.key)}
-                      onChange={(e) =>
-                        set(
-                          "conditions",
-                          e.target.checked
-                            ? [...form.conditions, c.key]
-                            : form.conditions.filter((x) => x !== c.key)
-                        )
-                      }
-                    />
-                    {c.label}
-                  </label>
-                ))}
-              </div>
+              <legend className="mb-1.5 text-sm font-semibold text-ink-strong">Diagnosed conditions</legend>
+              <OptionChecks
+                options={CONDITION_OPTIONS}
+                value={form.conditions}
+                onChange={(conditions) => set("conditions", conditions)}
+              />
             </fieldset>
-            <Field label="Fitness level" hint="Scales the starting exercise volume.">
-              <select
-                className={inputClass}
-                value={form.fitness_level}
-                onChange={(e) => set("fitness_level", e.target.value)}
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </Field>
+            <fieldset>
+              <legend className="text-sm font-semibold text-ink-strong">Food the patient does not eat</legend>
+              <p className="mb-1.5 text-xs text-ink-muted">
+                For faith, choice or allergy. These foods and any dish containing them are never planned or offered.
+              </p>
+              <OptionChecks
+                options={DIETARY_RESTRICTION_OPTIONS}
+                value={form.dietary_restrictions}
+                onChange={(restrictions) => set("dietary_restrictions", restrictions)}
+              />
+            </fieldset>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <ActivityField value={form.activity_level} onChange={(level) => set("activity_level", level)} />
+              <Field label="Fitness level" hint="Scales the starting exercise volume.">
+                <select
+                  className={inputClass}
+                  value={form.fitness_level}
+                  onChange={(e) => set("fitness_level", e.target.value)}
+                >
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </Field>
+            </div>
             <Field label="Notes (optional)">
               <textarea
                 className={inputClass}

@@ -6,21 +6,11 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth-layout";
-import { ErrorNote, Field, buttonPrimary, checkboxClass, inputClass } from "@/components/ui";
-
-const CONDITION_OPTIONS = [
-  { key: "hypertension", label: "High blood pressure" },
-  { key: "diabetes", label: "Diabetes" },
-  { key: "anemia", label: "Anaemia" },
-  { key: "knee_osteoarthritis", label: "Knee osteoarthritis" },
-];
+import { CONDITION_OPTIONS_PLAIN, DIETARY_RESTRICTION_OPTIONS } from "@/lib/patient-options";
+import { ActivityField, OptionChecks, PregnancyFields, choiceRow } from "@/components/patient-fields";
+import { ErrorNote, Field, buttonPrimary, inputClass } from "@/components/ui";
 
 const legendClass = "text-base font-semibold text-ink";
-
-/** A row-sized checkbox target: the whole row toggles, not just the 16px box. */
-const choiceRow =
-  "flex cursor-pointer items-center gap-3 rounded-lg border border-line px-3 py-2.5 text-sm text-ink-strong " +
-  "has-[:checked]:border-clinical has-[:checked]:bg-clinical-tint hover:bg-surface-soft";
 
 export default function PatientRegisterPage() {
   const router = useRouter();
@@ -35,8 +25,11 @@ export default function PatientRegisterPage() {
     birth_year: 1990,
     height_cm: 160,
     pregnant: false,
+    pregnancy_trimester: null as number | null,
     conditions: [] as string[],
+    dietary_restrictions: [] as string[],
     fitness_level: "beginner",
+    activity_level: null as string | null,
   });
 
   const set = (key: string, value: unknown) => setForm((f) => ({ ...f, [key]: value }));
@@ -56,8 +49,11 @@ export default function PatientRegisterPage() {
           birth_year: form.birth_year,
           height_cm: form.height_cm,
           pregnant: form.sex === "female" ? form.pregnant : false,
+          pregnancy_trimester: form.sex === "female" ? form.pregnancy_trimester : null,
           conditions: form.conditions,
+          dietary_restrictions: form.dietary_restrictions,
           fitness_level: form.fitness_level,
+          activity_level: form.activity_level,
         },
       });
       const session = await api.login({ email: form.email, password: form.password });
@@ -167,52 +163,59 @@ export default function PatientRegisterPage() {
               />
             </Field>
           </div>
-          <Field label="How active are you?" hint="Used to set a safe starting point for exercise.">
+          <ActivityField
+            value={form.activity_level}
+            onChange={(level) => set("activity_level", level)}
+            label="What is a usual day like?"
+            hint="Used to work out how much energy your meals should give you."
+            notRecorded="I'm not sure"
+          />
+          <Field label="How used to exercise are you?" hint="Used to set a safe starting point for exercise.">
             <select
               className={inputClass}
               value={form.fitness_level}
               onChange={(e) => set("fitness_level", e.target.value)}
             >
-              <option value="beginner">Not very active</option>
-              <option value="intermediate">Somewhat active</option>
-              <option value="advanced">Very active</option>
+              <option value="beginner">I rarely exercise</option>
+              <option value="intermediate">I exercise some weeks</option>
+              <option value="advanced">I exercise most days</option>
             </select>
           </Field>
           {form.sex === "female" && (
-            <label className={choiceRow}>
-              <input
-                type="checkbox"
-                className={checkboxClass}
-                checked={form.pregnant}
-                onChange={(e) => set("pregnant", e.target.checked)}
-              />
-              I am currently pregnant
-            </label>
+            <PregnancyFields
+              pregnant={form.pregnant}
+              trimester={form.pregnancy_trimester}
+              onChange={(next) => setForm((f) => ({ ...f, ...next }))}
+              label="I am currently pregnant"
+              trimesterLabel="Which trimester?"
+              notRecorded="I'm not sure"
+            />
           )}
         </fieldset>
 
         <fieldset className="border-t border-line pt-6">
           <legend className={`${legendClass} float-left w-full`}>Conditions a doctor has diagnosed</legend>
           <p className="clear-both pt-1 text-sm text-ink-muted">Tick any that apply. Leave all unticked if none.</p>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {CONDITION_OPTIONS.map((c) => (
-              <label key={c.key} className={choiceRow}>
-                <input
-                  type="checkbox"
-                  className={checkboxClass}
-                  checked={form.conditions.includes(c.key)}
-                  onChange={(e) =>
-                    set(
-                      "conditions",
-                      e.target.checked
-                        ? [...form.conditions, c.key]
-                        : form.conditions.filter((x) => x !== c.key)
-                    )
-                  }
-                />
-                {c.label}
-              </label>
-            ))}
+          <div className="mt-3">
+            <OptionChecks
+              options={CONDITION_OPTIONS_PLAIN}
+              value={form.conditions}
+              onChange={(conditions) => set("conditions", conditions)}
+            />
+          </div>
+        </fieldset>
+
+        <fieldset className="border-t border-line pt-6">
+          <legend className={`${legendClass} float-left w-full`}>Food you do not eat</legend>
+          <p className="clear-both pt-1 text-sm text-ink-muted">
+            For faith, choice or allergy. Your meal plan will leave these out. Leave all unticked if none.
+          </p>
+          <div className="mt-3">
+            <OptionChecks
+              options={DIETARY_RESTRICTION_OPTIONS}
+              value={form.dietary_restrictions}
+              onChange={(restrictions) => set("dietary_restrictions", restrictions)}
+            />
           </div>
         </fieldset>
 

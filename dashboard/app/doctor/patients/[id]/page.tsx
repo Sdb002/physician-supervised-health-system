@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, Patient, Visit } from "@/lib/api";
 import { formatDate } from "@/lib/clinical-terms";
+import { TRIMESTER_OPTIONS, activityLabel, dietaryRestrictionLabel } from "@/lib/patient-options";
 import { bmi, pid } from "@/lib/format";
 import { IconPlus } from "@/components/icons";
 import {
@@ -268,15 +269,43 @@ export default function PatientDetailPage() {
             </Card>
           )}
 
-          <Card title="Profile">
+          <Card
+            title="Profile"
+            action={
+              <Link href={`/doctor/patients/${patient.id}/edit`} className={linkButton}>
+                Edit
+              </Link>
+            }
+          >
             <dl className="space-y-2.5 text-sm">
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">Year of birth</dt>
                 <dd className="font-semibold text-ink">{patient.birth_year}</dd>
               </div>
+              {patient.pregnant && (
+                <div className="flex justify-between gap-4">
+                  <dt className="text-ink-muted">Trimester</dt>
+                  <dd className="text-right font-semibold text-ink">
+                    {TRIMESTER_OPTIONS.find((o) => o.key === String(patient.pregnancy_trimester))?.label ??
+                      "Not recorded"}
+                  </dd>
+                </div>
+              )}
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">Daily activity</dt>
+                <dd className="font-semibold text-ink">{activityLabel(patient.activity_level)}</dd>
+              </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">Fitness level</dt>
                 <dd className="font-semibold capitalize text-ink">{patient.fitness_level}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">Does not eat</dt>
+                <dd className="text-right font-semibold text-ink">
+                  {patient.dietary_restrictions.length
+                    ? patient.dietary_restrictions.map(dietaryRestrictionLabel).join(", ")
+                    : "No restrictions"}
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">Registered</dt>

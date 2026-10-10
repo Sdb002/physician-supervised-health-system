@@ -11,6 +11,7 @@ import {
   planDays,
   todayIndex,
   weekdayName,
+  bmiCategoryName,
   conditionName,
   formatDate,
   localName,
@@ -236,8 +237,8 @@ export default function PatientHome() {
                       <span className="text-xl font-bold text-ink">
                         {report.result.anthropometrics.bmi}
                       </span>
-                      <span className="ml-2 text-sm capitalize text-ink-muted">
-                        {report.result.anthropometrics.bmi_category}
+                      <span className="ml-2 text-sm text-ink-muted">
+                        {bmiCategoryName(report.result.anthropometrics.bmi_category, lang)}
                       </span>
                     </p>
                   </div>

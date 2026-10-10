@@ -55,14 +55,24 @@ const CONDITIONS: Record<Lang, Record<string, string>> = {
     diabetes: "Diabetes",
     hypertension: "High blood pressure",
     anemia: "Anaemia",
+    pregnancy: "Pregnancy",
+    chronic_kidney_disease: "Kidney disease",
     knee_osteoarthritis: "Knee osteoarthritis",
   },
   bn: {
     diabetes: "ডায়াবেটিস",
     hypertension: "উচ্চ রক্তচাপ",
     anemia: "রক্তস্বল্পতা",
+    pregnancy: "গর্ভাবস্থা",
+    chronic_kidney_disease: "কিডনি রোগ",
     knee_osteoarthritis: "হাঁটুর অস্টিওআর্থ্রাইটিস",
   },
+};
+
+/* The engine's body mass index categories (src/clinical/bmi.py). */
+const BMI_CATEGORIES: Record<Lang, Record<string, string>> = {
+  en: { underweight: "Underweight", normal: "Normal", overweight: "Overweight", obese: "Obese" },
+  bn: { underweight: "কম ওজন", normal: "স্বাভাবিক ওজন", overweight: "অতিরিক্ত ওজন", obese: "স্থূলতা" },
 };
 
 const RISK_LEVELS: Record<Lang, Record<string, string>> = {
@@ -97,6 +107,7 @@ function term(table: Record<Lang, Record<string, string>>, lang: Lang, key: stri
 export const biomarkerName = (key: string, lang: Lang = "en") => term(BIOMARKERS, lang, key);
 export const findingName = (label: string, lang: Lang = "en") => term(FINDINGS, lang, label);
 export const conditionName = (key: string, lang: Lang = "en") => term(CONDITIONS, lang, key);
+export const bmiCategoryName = (key: string, lang: Lang = "en") => term(BMI_CATEGORIES, lang, key);
 export const riskWords = (risk: string, lang: Lang = "en") => term(RISK_LEVELS, lang, risk);
 export const mealName = (key: string, lang: Lang = "en") => term(MEALS, lang, key);
 

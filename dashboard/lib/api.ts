@@ -95,11 +95,33 @@ export interface Patient {
   birth_year: number;
   height_cm: number;
   pregnant: boolean;
+  /** 1-3 while pregnant; null when not pregnant or not recorded */
+  pregnancy_trimester: number | null;
   conditions: string[];
+  /** keys of the engine's dietary restrictions, e.g. "no_beef" */
+  dietary_restrictions: string[];
   fitness_level: string;
+  /** sedentary | light | moderate | active; null = not recorded */
+  activity_level: string | null;
   notes: string;
   created_at: string;
 }
+
+/** A change to a patient's record: only the fields sent are changed. */
+export type PatientUpdate = Partial<
+  Pick<
+    Patient,
+    | "name"
+    | "height_cm"
+    | "pregnant"
+    | "pregnancy_trimester"
+    | "conditions"
+    | "dietary_restrictions"
+    | "fitness_level"
+    | "activity_level"
+    | "notes"
+  >
+>;
 
 export interface Visit {
   id: number;
@@ -216,12 +238,19 @@ export interface AssessmentResult {
       adjustment_kcal: number;
       floor_kcal: number;
       floor_applied: boolean;
+      /** pregnancy only (engine 0.7.0 onwards): the trimester's extra energy */
+      pregnancy?: { trimester: number | null; extra_kcal: number };
     };
   };
   risk_flags: RiskFlag[];
   bp_category: string | null;
   overall_risk: string;
   conditions: string[];
+  /** what the patient does not eat (engine 0.7.0 onwards) */
+  dietary_restrictions?: string[];
+  /** what the reviewing physician should check before approving (engine
+   * 0.7.0 onwards); never sent to the patient */
+  cautions?: string[];
   exclusions: { food_tags: string[]; exercise_tags: string[] };
   nutrition: {
     group: string;
@@ -229,6 +258,8 @@ export interface AssessmentResult {
     limits: Record<string, number>;
     emphasize: string[];
     rationales: Record<string, string>;
+    /** each finding in the patient's words (engine 0.7.0 onwards) */
+    patient_rationales?: Record<string, { en: string; bn: string }>;
     scoring_backend?: "ml" | "linear";
     recipe_scoring_backend?: "ml" | "linear";
     top_foods: RecommendedFood[];
@@ -298,6 +329,9 @@ export interface Report {
   text: string;
   approved_by: string;
   approved_at: string;
+  /** the engine that built this plan, and the one running now */
+  engine_version?: string;
+  current_engine_version?: string;
   comment: string;
   visit_date: string | null;
   result: AssessmentResult;
@@ -314,8 +348,11 @@ export interface PatientProfileIn {
   birth_year: number;
   height_cm: number;
   pregnant?: boolean;
+  pregnancy_trimester?: number | null;
   conditions?: string[];
+  dietary_restrictions?: string[];
   fitness_level?: string;
+  activity_level?: string | null;
 }
 
 export interface RegisterIn {
@@ -417,6 +454,8 @@ export const api = {
   getPatient: (id: number | string) => request<Patient>(`/patients/${id}`),
   createPatient: (data: Omit<Patient, "id" | "created_at">) =>
     request<Patient>("/patients", { method: "POST", body: JSON.stringify(data) }),
+  updatePatient: (id: number | string, data: PatientUpdate) =>
+    request<Patient>(`/patients/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   listVisits: (patientId: number | string) => request<Visit[]>(`/patients/${patientId}/visits`),
 
   getPatientAccount: (patientId: number | string) =>
