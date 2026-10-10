@@ -97,7 +97,20 @@ The app has three role-based dashboards, each with its own sign-in page
 All workflow API routes require a signed-in doctor or admin; patients can
 only read their own dashboard and their own **approved** reports (the 403
 report gate is unchanged). Sessions are HMAC-signed tokens (stdlib-only, no
-extra dependencies) — set a strong `SECRET_KEY` in `.env` outside dev.
+extra dependencies).
+
+**Deploying.** Set your own `SECRET_KEY` and `ADMIN_PASSWORD` in `.env`. The
+API refuses to start on the published defaults whenever the setup is not a
+local one: `ENVIRONMENT` is anything but `development`, `DATABASE_URL` is not
+SQLite, or `CORS_ORIGINS` names a host other than localhost. On your own
+machine the defaults only log a warning.
+
+### Database migrations
+
+The schema is managed with Alembic and applied at API startup, so an existing
+`health.db` picks up new columns the next time the API (or `seed_db.py`)
+runs — nothing to do by hand. To change the schema, see
+`src/db/migrations/README.md`.
 
 ### Optional: enable LLM features
 
@@ -211,14 +224,23 @@ every item before approval.
 
 1. **Intake** — create a patient, then a visit with weight + biomarkers
    (fasting glucose, blood pressure, hemoglobin). Optionally upload a lab
-   report image to prefill the form via OCR.
+   report image to prefill the form via OCR. The patient record also holds
+   what the plan depends on: diagnosed conditions, pregnancy and trimester,
+   daily activity, and the foods the patient does not eat (vegetarian, no
+   beef, allergies…). It can be edited later; a plan still awaiting review
+   is rebuilt from the edited record.
 2. **Engine** — the deterministic engine immediately computes BMI (WHO Asian
-   cutoffs), risk flags, derived conditions, nutrient targets (RDI +
-   deficiency emphasis), two contraindication-filtered rankings — **foods**
-   and **home recipes**, separately — a one-day meal plan, and an ACSM
-   FITT-VP exercise prescription. Stored as a **pending** assessment.
+   cutoffs), risk flags, derived conditions, nutrient targets (RDI by age
+   band + emphasis from lab findings and recorded conditions), two
+   gate-filtered rankings — **foods** and **home recipes**, separately — a
+   week of meals with each day's cooking salt set to stay under the sodium
+   limit, and an ACSM FITT-VP exercise prescription. Stored as a **pending**
+   assessment.
 3. **Review** — the physician sees the queue, inspects the full assessment,
-   and approves / edits / rejects. Every decision is written to the
+   and approves / edits / rejects. Where the engine worked from an
+   assumption or emphasized something that is not safe for everyone (no
+   trimester recorded, a patient under 19, potassium for hypertension), the
+   review screen says what to check first. Every decision is written to the
    append-only audit log.
 4. **Report** — only after approval, `GET /report/{visit_id}?lang=bn|en`
    returns the patient report (LLM-phrased if configured, template otherwise).
@@ -226,11 +248,19 @@ every item before approval.
 ## Tests
 
 ```powershell
-.venv\Scripts\python.exe -m pytest
+.venv\Scripts\python.exe -m pytest      # engine and API
+cd dashboard; npm test                   # dashboard display helpers
 ```
 
 `tests/test_risk_scoring.py` is the threshold validation table (doubles as the
 thesis validation table — exported to CSV by `notebooks/03_results_figures.ipynb`).
+The Python suite runs against a throwaway database, never your `health.db`,
+and on the deterministic scorers; `tests/test_trained_models.py` runs the
+same rules through the trained recommenders when `data/models/` has them and
+is skipped otherwise.
+
+`.github/workflows/ci.yml` runs both suites, the dashboard lint and a
+production build on every push to `main` and every pull request.
 
 ## Project layout
 
@@ -242,7 +272,7 @@ src/diet       food DB, recipe nutrition (computed from ingredients), matcher, m
 src/lifestyle  exercise DB, ACSM FITT-VP prescription, intensity scaling
 src/llm        OCR + phrasing only (env-gated Claude; app fully works without it)
 src/api        FastAPI: intake, review, report (403-gated), patients
-src/db         SQLAlchemy models: Patient, Visit, Assessment, Approval, AuditLog
+src/db         SQLAlchemy models: Patient, Visit, Assessment, Approval, AuditLog; Alembic migrations
 src/core       config, logging, append-only audit helpers
 dashboard/     Next.js physician UI
 tests/         validation tables + gate/isolation tests + synthetic fixtures

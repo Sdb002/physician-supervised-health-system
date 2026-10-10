@@ -24,7 +24,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
 
+  // the session lives in localStorage, which the server render cannot see:
+  // it has to be read after mount, or the first client render would not
+  // match the server's
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSession(loadSession());
     setReady(true);
   }, []);
