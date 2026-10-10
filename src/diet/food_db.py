@@ -5,6 +5,7 @@ real dataset is added.
 """
 
 import csv
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -63,5 +64,42 @@ def load_foods(path: Path | None = None) -> list[Food]:
     return foods
 
 
+_PARENTHETICAL = re.compile(r"\s*\([^)]*\)")
+
+
+def display_name(name_en: str) -> str:
+    """A food-table name as a person would say it. Table rows read like
+    "Guava, green, raw" or "Milk, cow, whole fat (pasteurized, UTH)"; in a
+    plan, "raw" and bracketed source notes are noise, so they go."""
+    parts = [p.strip() for p in _PARENTHETICAL.sub("", name_en).split(",")]
+    kept = [p for p in parts if p and p.lower() != "raw"]
+    return ", ".join(kept) or name_en
+
+
 def food_index(foods: list[Food]) -> dict[str, Food]:
     return {f.food_id: f for f in foods}
+
+
+def recommendable_foods(foods: list[Food]) -> list[Food]:
+    """The foods the engine may recommend on its own (top foods, meal plan):
+    those tagged `bangladeshi` — listed in the Food Composition Table for
+    Bangladesh 2013 or used in a household recipe. The table's IFCT/USDA rows
+    were compiled to fill nutrient gaps and include foods rarely eaten in
+    Bangladesh (Indian millets, marine fish, offal); they still supply recipe
+    nutrients and stay selectable in the physician's plan editor."""
+    return [f for f in foods if "bangladeshi" in f.tags]
+
+
+def untracked_nutrients(foods: list[Food]) -> frozenset[str]:
+    """Nutrient columns no food in the table has a value for. The current
+    dataset's source records no folate at all, so a plan can't be scored or
+    reported on it - better said plainly than shown as 0% coverage."""
+    return frozenset(c for c in NUTRIENT_COLUMNS if foods and all(f.nutrients[c] <= 0 for f in foods))
+
+
+def eaten_in_portions(foods: list[Food]) -> list[Food]:
+    """Drops seasonings (the spice group) and brewed concentrates (tea and
+    coffee powder): they are used by the gram, so a "foods that suit your
+    plan" list is the wrong place for them, however dense they are per 100 g
+    or per 100 kcal."""
+    return [f for f in foods if f.food_group != "spice" and "brewed_beverage" not in f.tags]

@@ -2,12 +2,30 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, User } from "@/lib/api";
+import { formatDate } from "@/lib/clinical-terms";
 import { did } from "@/lib/format";
 import { IconCheck, IconStethoscope, IconX } from "@/components/icons";
-import { Badge, EmptyState, ErrorNote, PageHeader, SearchInput, Skeleton } from "@/components/ui";
+import {
+  Avatar,
+  Badge,
+  EmptyState,
+  ErrorNote,
+  PageHeader,
+  SearchInput,
+  Skeleton,
+  buttonDanger,
+  buttonPrimary,
+  focusRing,
+} from "@/components/ui";
 
 const FILTERS = ["all", "pending", "active", "rejected"] as const;
 type Filter = (typeof FILTERS)[number];
+const FILTER_LABELS: Record<Filter, string> = {
+  all: "All",
+  pending: "Waiting",
+  active: "Active",
+  rejected: "Rejected",
+};
 
 export default function AdminDoctorsPage() {
   const [doctors, setDoctors] = useState<User[] | null>(null);
@@ -54,101 +72,97 @@ export default function AdminDoctorsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Doctors"
-        subtitle={
-          doctors
-            ? `${doctors.length} registered · ${pendingCount} awaiting approval`
-            : "Loading…"
-        }
-        action={
-          <SearchInput
-            value={query}
-            onChange={setQuery}
-            placeholder="Search by name, DID, specialty…"
-          />
-        }
+        subtitle={doctors ? `${doctors.length} registered, ${pendingCount} waiting for approval` : undefined}
       />
 
       {error && <ErrorNote message={error} />}
 
-      <div className="flex gap-1 rounded-xl bg-line/60 p-1 text-sm font-medium w-fit">
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            className={`rounded-lg px-3 py-1.5 capitalize transition ${
-              filter === f ? "bg-surface text-ink shadow-sm" : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            {f}
-            {f === "pending" && pendingCount > 0 && (
-              <span className="ml-1.5 rounded-full bg-amber-100 px-1.5 text-xs text-amber-800">
-                {pendingCount}
-              </span>
-            )}
-          </button>
-        ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div role="group" aria-label="Filter by status" className="inline-flex w-fit rounded-lg border border-line-strong bg-surface p-0.5">
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              aria-pressed={filter === f}
+              onClick={() => setFilter(f)}
+              className={`inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-md px-3 text-sm font-semibold transition-colors duration-150 ${focusRing} ${
+                filter === f ? "bg-clinical text-on-clinical" : "text-ink-soft hover:bg-surface-soft"
+              }`}
+            >
+              {FILTER_LABELS[f]}
+              {f === "pending" && pendingCount > 0 && (
+                <span
+                  className={`rounded-full px-1.5 text-xs ${
+                    filter === f ? "bg-on-clinical/20" : "bg-watch-tint text-watch-ink"
+                  }`}
+                >
+                  {pendingCount}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+        <SearchInput value={query} onChange={setQuery} placeholder="Search name, DID, specialty" />
       </div>
 
       {visible === null ? (
         <Skeleton className="h-48" />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={filter === "all" ? "No doctors yet" : `No ${filter} doctors`}
-          hint="Doctor applications from the registration page appear here."
+          title={filter === "all" ? "No doctors yet" : `No ${FILTER_LABELS[filter].toLowerCase()} doctors`}
+          hint="Applications from the doctor registration page appear here."
           icon={<IconStethoscope className="h-5 w-5" />}
         />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-line text-xs uppercase tracking-wide text-ink-muted">
+        <div className="overflow-x-auto rounded-xl border border-line bg-surface">
+          <table className="w-full min-w-3xl text-left text-sm">
+            <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th className="px-4 py-3">DID</th>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Specialty</th>
-                <th className="px-4 py-3">License</th>
-                <th className="px-4 py-3">Applied</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3"></th>
+                <th scope="col" className="px-5 py-3 font-semibold">Doctor</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Specialty</th>
+                <th scope="col" className="px-4 py-3 font-semibold">BMDC no.</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Applied</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Status</th>
+                <th scope="col" className="px-5 py-3"><span className="sr-only">Decision</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
               {visible.map((doc) => (
                 <tr key={doc.id} className="hover:bg-surface-soft">
-                  <td className="px-4 py-3 font-mono text-xs font-semibold text-teal-700">
-                    {did(doc.id)}
+                  <td className="px-5 py-3">
+                    <div className="flex items-center gap-3">
+                      <Avatar name={doc.name} />
+                      <div className="min-w-0">
+                        <p className="font-semibold text-ink">{doc.name}</p>
+                        <p className="text-ink-muted">
+                          <span>{did(doc.id)}</span>, {doc.email}
+                        </p>
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-ink">{doc.name}</p>
-                    <p className="text-xs text-ink-muted">{doc.email}</p>
-                  </td>
-                  <td className="px-4 py-3 text-ink-soft">
-                    {doc.specialty || <span className="text-ink-muted">—</span>}
-                  </td>
+                  <td className="px-4 py-3 text-ink-soft">{doc.specialty || <span className="text-ink-muted">—</span>}</td>
                   <td className="px-4 py-3 text-ink-soft">
                     {doc.license_no || <span className="text-ink-muted">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-ink-muted">
-                    {new Date(doc.created_at).toLocaleDateString()}
-                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{formatDate(doc.created_at)}</td>
                   <td className="px-4 py-3">
-                    <Badge kind={doc.status}>{doc.status}</Badge>
+                    <Badge kind={doc.status}>{doc.status === "pending" ? "Waiting" : doc.status}</Badge>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-5 py-3 text-right">
                     {doc.status === "pending" && (
                       <div className="flex justify-end gap-2">
                         <button
-                          onClick={() => decide(doc.id, "approved")}
-                          disabled={actioning === doc.id}
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
-                        >
-                          <IconCheck className="h-3.5 w-3.5" /> Approve
-                        </button>
-                        <button
                           onClick={() => decide(doc.id, "rejected")}
                           disabled={actioning === doc.id}
-                          className="inline-flex items-center gap-1 rounded-lg border border-rose-200 px-2.5 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+                          className={`${buttonDanger} min-h-8 px-3`}
                         >
-                          <IconX className="h-3.5 w-3.5" /> Reject
+                          <IconX className="h-4 w-4" /> Reject
+                        </button>
+                        <button
+                          onClick={() => decide(doc.id, "approved")}
+                          disabled={actioning === doc.id}
+                          className={`${buttonPrimary} min-h-8 px-3`}
+                        >
+                          <IconCheck className="h-4 w-4" /> Approve
                         </button>
                       </div>
                     )}

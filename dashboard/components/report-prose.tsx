@@ -62,17 +62,45 @@ function parse(src: string): Block[] {
   return blocks;
 }
 
-export function ReportProse({ text }: { text: string }) {
+/** Which blocks only re-list the plan. The letter is written to stand alone,
+ * so it spells out the week's meals, the foods, the recipes and the
+ * exercises; printed, those follow as tables and would be on paper twice. A
+ * list or paragraph counts when it names three or more plan lines, and a
+ * heading goes with the block under it. Anything else always prints. */
+function relisted(blocks: Block[], names: string[]): boolean[] {
+  const wanted = [...new Set(names.map((n) => n.trim().toLowerCase()))].filter((n) => n.length > 3);
+  const out = blocks.map((b) => {
+    if (b.kind === "heading") return false;
+    const body = (b.kind === "list" ? b.items.map((it) => it.text).join("\n") : b.text).toLowerCase();
+    return wanted.filter((name) => body.includes(name)).length >= 3;
+  });
+  blocks.forEach((b, i) => {
+    if (b.kind === "heading") out[i] = out[i + 1] ?? false;
+  });
+  return out;
+}
+
+export function ReportProse({
+  text,
+  tabled = [],
+}: {
+  text: string;
+  /** names of the plan lines the printed report sets out again as tables */
+  tabled?: string[];
+}) {
   const blocks = parse(text);
+  const offPaper = relisted(blocks, tabled);
 
   return (
-    <div className="space-y-4 text-[15px] leading-7 text-ink">
+    <div className="space-y-3 text-base leading-7 text-ink print:leading-6">
       {blocks.map((b, i) => {
+        const print = offPaper[i] ? "print:hidden" : "";
+
         if (b.kind === "heading") {
           return (
             <h3
               key={i}
-              className="mt-6 border-b border-line pb-1.5 text-sm font-bold uppercase tracking-wider text-ink-strong first:mt-0"
+              className={`mt-7 text-base font-semibold text-ink first:mt-0 print:mt-5 ${print}`}
             >
               {b.text}
             </h3>
@@ -81,7 +109,7 @@ export function ReportProse({ text }: { text: string }) {
 
         if (b.kind === "list") {
           return (
-            <ul key={i} className="space-y-1.5">
+            <ul key={i} className={`space-y-1.5 print:space-y-1 ${print}`}>
               {b.items.map((it, j) => (
                 <li
                   key={j}
@@ -101,7 +129,7 @@ export function ReportProse({ text }: { text: string }) {
         }
 
         return (
-          <p key={i} className="whitespace-pre-line">
+          <p key={i} className={`whitespace-pre-line ${print}`}>
             {b.text}
           </p>
         );

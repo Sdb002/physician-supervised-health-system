@@ -82,10 +82,10 @@ export function Modal({
       {/* Backdrop is its own element so the click-to-dismiss handler sits on
         * decorative chrome rather than on the dialog's own container. Escape
         * provides the equivalent keyboard path. */}
-      <div className="absolute inset-0 bg-slate-900/50" aria-hidden="true" onClick={onClose} />
+      <div className="absolute inset-0 bg-ink/50" aria-hidden="true" onClick={onClose} />
       <div
         ref={dialogRef}
-        className="relative w-full max-w-2xl rounded-2xl bg-surface p-6 shadow-xl focus:outline-none"
+        className="relative w-full max-w-2xl rounded-2xl border border-line bg-surface p-6 shadow-xl focus:outline-none"
         role="dialog"
         aria-modal="true"
         // Point at the visible heading so the name a screen reader announces
@@ -97,7 +97,7 @@ export function Modal({
         <div className="mb-4 flex items-center justify-between">
           <div className="min-w-0 flex-1">
             {title && (
-              <h2 id={titleId} className="text-lg font-semibold text-ink">
+              <h2 id={titleId} className="font-display text-lg font-bold leading-7 text-ink">
                 {title}
               </h2>
             )}
@@ -105,7 +105,7 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            className="shrink-0 rounded-lg p-1.5 text-ink-muted hover:bg-canvas hover:text-ink-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
+            className="shrink-0 rounded-md p-1.5 text-ink-muted hover:bg-surface-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clinical"
             aria-label="Close"
           >
             <IconX className="h-5 w-5" />

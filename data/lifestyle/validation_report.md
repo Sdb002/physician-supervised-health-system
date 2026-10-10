@@ -1,6 +1,6 @@
 # Validation report — exercises.csv
 
-- Date: 2026-07-31
+- Date: 2026-10-08
 - Rows: 10
 - Status: **PASS** (0 errors, 0 warnings)
 

@@ -3,25 +3,25 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, AdminStats, AuditEntry, User } from "@/lib/api";
+import { formatDate } from "@/lib/clinical-terms";
 import { did } from "@/lib/format";
+import { IconCheck, IconX } from "@/components/icons";
 import {
-  IconArrowRight,
-  IconCheck,
-  IconClipboard,
-  IconClock,
-  IconStethoscope,
-  IconUsers,
-  IconX,
-} from "@/components/icons";
-import {
-  Badge,
   Card,
   EmptyState,
   ErrorNote,
+  MetricRow,
   PageHeader,
   Skeleton,
-  StatCard,
+  buttonDanger,
+  buttonPrimary,
+  linkButton,
 } from "@/components/ui";
+
+const actionWords = (action: string) => {
+  const s = action.replace(/[._]/g, " ");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 
 export default function AdminOverview() {
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -58,59 +58,41 @@ export default function AdminOverview() {
   if (error && stats === null) return <ErrorNote message={error} />;
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Admin overview"
-        subtitle="Platform health and doctor registrations at a glance."
-      />
+    <div className="space-y-8">
+      <PageHeader title="Overview" subtitle="Doctor registrations and the state of the service." />
 
       {stats === null ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-28" />
-          ))}
-        </div>
+        <Skeleton className="h-28" />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            label="Registered patients"
-            value={stats.patients}
-            icon={<IconUsers className="h-5 w-5" />}
-            tone="emerald"
-            hint={`${stats.visits} visits recorded`}
-          />
-          <StatCard
-            label="Active doctors"
-            value={stats.doctors_active}
-            icon={<IconStethoscope className="h-5 w-5" />}
-            tone="teal"
-          />
-          <StatCard
-            label="Doctor approvals waiting"
-            value={stats.doctors_pending}
-            icon={<IconClock className="h-5 w-5" />}
-            tone="amber"
-            hint={stats.doctors_pending > 0 ? "Action needed below" : "All caught up"}
-          />
-          <StatCard
-            label="Assessments pending review"
-            value={stats.assessments_pending}
-            icon={<IconClipboard className="h-5 w-5" />}
-            tone="sky"
-            hint={`${stats.assessments_approved} approved · ${stats.assessments_rejected} rejected`}
-          />
-        </div>
+        <MetricRow
+          items={[
+            { label: "Patients", value: stats.patients, hint: `${stats.visits} visits recorded` },
+            { label: "Active doctors", value: stats.doctors_active },
+            {
+              label: "Doctors waiting for approval",
+              value: stats.doctors_pending,
+              hint: stats.doctors_pending > 0 ? "Decide below" : "All caught up",
+            },
+            {
+              label: "Assessments awaiting review",
+              value: stats.assessments_pending,
+              hint: `${stats.assessments_approved} approved, ${stats.assessments_rejected} rejected`,
+            },
+          ]}
+        />
       )}
 
       {error && <ErrorNote message={error} />}
 
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div className="grid items-start gap-6 lg:grid-cols-5">
         <Card
-          title="Doctor registration requests"
+          title="Doctor applications"
+          description="Check the BMDC number before approving."
           className="lg:col-span-3"
+          flush={pending !== null && pending.length > 0}
           action={
-            <Link href="/admin/doctors" className="text-sm font-medium text-indigo-600 hover:underline">
-              All doctors <IconArrowRight className="h-4 w-4" aria-hidden="true" />
+            <Link href="/admin/doctors" className={linkButton}>
+              All doctors
             </Link>
           }
         >
@@ -118,43 +100,42 @@ export default function AdminOverview() {
             <Skeleton className="h-24" />
           ) : pending.length === 0 ? (
             <EmptyState
-              title="No pending requests"
-              hint="New doctor registrations will appear here for your approval."
+              title="No applications waiting"
+              hint="New doctor registrations appear here for your decision."
               icon={<IconCheck className="h-5 w-5" />}
+              inset
             />
           ) : (
             <ul className="divide-y divide-line">
               {pending.map((doc) => (
-                <li key={doc.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                <li key={doc.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5">
                   <div className="min-w-0">
-                    <p className="font-medium text-ink">
-                      {doc.name}{" "}
-                      <span className="font-mono text-xs font-semibold text-teal-700">
-                        {did(doc.id)}
-                      </span>
+                    <p className="font-semibold text-ink">
+                      {doc.name}
+                      <span className="ml-2 text-sm font-semibold text-ink-muted">{did(doc.id)}</span>
                     </p>
-                    <p className="truncate text-xs text-ink-muted">
-                      {doc.email}
-                      {doc.specialty && <> · {doc.specialty}</>}
-                      {doc.license_no && <> · {doc.license_no}</>}
-                      {" · applied "}
-                      {new Date(doc.created_at).toLocaleDateString()}
+                    <p className="text-sm text-ink-muted">
+                      {[doc.specialty, doc.license_no && `BMDC ${doc.license_no}`].filter(Boolean).join(", ") ||
+                        "No specialty or licence given"}
+                    </p>
+                    <p className="truncate text-sm text-ink-muted">
+                      {doc.email}, applied {formatDate(doc.created_at)}
                     </p>
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => decide(doc.id, "approved")}
-                      disabled={actioning === doc.id}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
-                    >
-                      <IconCheck className="h-3.5 w-3.5" /> Approve
-                    </button>
-                    <button
                       onClick={() => decide(doc.id, "rejected")}
                       disabled={actioning === doc.id}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-surface px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+                      className={buttonDanger}
                     >
-                      <IconX className="h-3.5 w-3.5" /> Reject
+                      <IconX className="h-4 w-4" /> Reject
+                    </button>
+                    <button
+                      onClick={() => decide(doc.id, "approved")}
+                      disabled={actioning === doc.id}
+                      className={buttonPrimary}
+                    >
+                      <IconCheck className="h-4 w-4" /> Approve
                     </button>
                   </div>
                 </li>
@@ -163,27 +144,34 @@ export default function AdminOverview() {
           )}
         </Card>
 
-        <Card title="Recent activity" className="lg:col-span-2">
+        <Card title="Recent activity" description="From the append-only audit log." className="lg:col-span-2">
           {activity === null ? (
             <Skeleton className="h-24" />
           ) : activity.length === 0 ? (
             <p className="text-sm text-ink-muted">No activity yet.</p>
           ) : (
-            <ul className="space-y-3">
+            <ol className="relative space-y-4 before:absolute before:bottom-2 before:left-1.25 before:top-2 before:w-px before:bg-line">
               {activity.map((entry) => (
-                <li key={entry.id} className="flex items-start gap-3 text-sm">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-indigo-400" />
+                <li key={entry.id} className="relative flex gap-3.5 text-sm">
+                  <span
+                    aria-hidden="true"
+                    className="relative mt-1.5 h-2.75 w-2.75 shrink-0 rounded-full bg-clinical ring-4 ring-surface"
+                  />
                   <div className="min-w-0">
-                    <p className="text-ink-strong">
-                      <Badge kind="info">{entry.action}</Badge>
-                    </p>
-                    <p className="mt-0.5 truncate text-xs text-ink-muted">
-                      {entry.actor} · {new Date(entry.created_at).toLocaleString()}
+                    <p className="font-semibold text-ink">{actionWords(entry.action)}</p>
+                    <p className="truncate text-ink-muted">
+                      {entry.actor},{" "}
+                      {new Date(entry.created_at).toLocaleString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
                 </li>
               ))}
-            </ul>
+            </ol>
           )}
         </Card>
       </div>

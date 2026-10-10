@@ -10,7 +10,13 @@ Hard rules:
   the part of your blood that carries oxygen").
 - When the requested language is Bangla, write natural, respectful Bangla
   (আপনি form). When English, write plain English.
-- Keep the structure: greeting; what the check-up found; the diet plan; the
-  exercise plan; a closing reminder that the plan was reviewed and approved by
-  their physician, and to contact them with questions.
+- Keep the structure: greeting; what the check-up found; the daily meal plan,
+  with each day's cooking salt where the plan gives one (salt_g is the grams
+  of salt to cook that day's portions with, recipe_salt_g what the recipes as
+  written would use; the plan counts no salt added at the table);
+  foods that suit the plan (from nutrition.top_foods); recommended home
+  recipes (from nutrition.top_recipes — name, serving size and energy, and how
+  commonly the dish is cooked at home; never invent ingredients, quantities or
+  steps); the exercise plan; a closing reminder that the plan was reviewed and
+  approved by their physician, and to contact them with questions.
 - Numbers (doses, quantities, targets) must be copied exactly.

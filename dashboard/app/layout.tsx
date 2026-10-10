@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Figtree, Noto_Sans_Bengali } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Baloo_Da_2, Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
 
 /* Self-hosted by next/font: no request to fonts.googleapis.com and no layout
- * shift on load. Two families because Figtree has no Bengali coverage - the
- * app's Bangla headings would otherwise fall back to whatever the OS happens
- * to have, which is what made them look inconsistent next to the Latin UI. */
-const figtree = Figtree({
+ * shift on load. Two families because Atkinson has no Bengali coverage - the
+ * app's Bangla text would otherwise fall back to whatever the OS happens to
+ * have. Both are variable fonts, so every weight comes from one file each. */
+const atkinson = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
-  variable: "--font-figtree",
+  variable: "--font-atkinson",
   display: "swap",
 });
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["bengali", "latin"],
   variable: "--font-noto-bengali",
+  display: "swap",
+});
+
+/* Headings only. Baloo Da 2 was drawn by Ek Type for Bangla first, so a
+ * heading reads with the same round, friendly voice in either script; body
+ * text and every number a reader has to trust stay in Atkinson. */
+const balooDa = Baloo_Da_2({
+  subsets: ["bengali", "latin"],
+  variable: "--font-baloo",
   display: "swap",
 });
 
@@ -33,7 +42,7 @@ const themeScript = `
 `;
 
 export const metadata: Metadata = {
-  title: "স্বাস্থ্য পরিকল্পনা — Physician-Supervised Health System",
+  title: "স্বাস্থ্য পরিকল্পনা · Health Plan",
   description:
     "Physician-supervised diet & lifestyle recommendation system: intake, review, approve, report.",
 };
@@ -42,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${notoSansBengali.variable}`}
+      className={`${atkinson.variable} ${notoSansBengali.variable} ${balooDa.variable}`}
       // The theme script sets .dark on the client before React hydrates, so
       // the server and client html classNames legitimately differ.
       suppressHydrationWarning

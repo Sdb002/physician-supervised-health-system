@@ -131,7 +131,7 @@ export function TrendChart({
           role="img"
           aria-label={`${title} across ${points.length} visits`}
         >
-          <line x1={PAD.left} x2={WIDTH - PAD.right} y1={baselineY} y2={baselineY} stroke="#cbd5e1" strokeWidth={1} />
+          <line x1={PAD.left} x2={WIDTH - PAD.right} y1={baselineY} y2={baselineY} stroke="var(--color-line-strong)" strokeWidth={1} />
 
           {points.map((p, gi) => (
             <g

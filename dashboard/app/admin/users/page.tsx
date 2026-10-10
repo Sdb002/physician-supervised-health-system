@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api, User } from "@/lib/api";
+import { formatDate } from "@/lib/clinical-terms";
 import { did, pid } from "@/lib/format";
 import { IconUsers } from "@/components/icons";
 import {
@@ -47,12 +48,12 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <PageHeader
         title="Users"
-        subtitle={users ? `${users.length} accounts across all roles` : "Loading…"}
+        subtitle={users ? `${users.length} accounts across all roles` : undefined}
         action={
           <SearchInput
             value={query}
             onChange={setQuery}
-            placeholder="Search by name, email, PID/DID…"
+            placeholder="Search name, email, PID or DID"
           />
         }
       />
@@ -65,31 +66,28 @@ export default function AdminUsersPage() {
           icon={<IconUsers className="h-5 w-5" />}
         />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-line bg-surface">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-line text-xs uppercase tracking-wide text-ink-muted">
+            <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th className="px-4 py-3">ID</th>
-                <th className="px-4 py-3">User</th>
-                <th className="px-4 py-3">Role</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Joined</th>
+                <th scope="col" className="px-5 py-3 font-semibold">User</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Role</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Status</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Joined</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
               {visible.map((user) => (
                 <tr key={user.id} className="hover:bg-surface-soft">
-                  <td className={`px-4 py-3 font-mono text-xs font-semibold ${
-                    user.role === "doctor" ? "text-teal-700" : "text-emerald-700"
-                  }`}>
-                    {userDisplayId(user) ?? <span className="text-ink-muted">—</span>}
-                  </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
                       <Avatar name={user.name} />
-                      <div>
-                        <p className="font-medium text-ink">{user.name}</p>
-                        <p className="text-xs text-ink-muted">{user.email}</p>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-ink">{user.name}</p>
+                        <p className="text-ink-muted">
+                          {userDisplayId(user) && <span>{userDisplayId(user)}, </span>}
+                          {user.email}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -99,8 +97,8 @@ export default function AdminUsersPage() {
                   <td className="px-4 py-3">
                     <Badge kind={user.status}>{user.status}</Badge>
                   </td>
-                  <td className="px-4 py-3 text-ink-muted">
-                    {new Date(user.created_at).toLocaleDateString()}
+                  <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
+                    {formatDate(user.created_at)}
                   </td>
                 </tr>
               ))}

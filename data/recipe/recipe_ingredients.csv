@@ -1,8 +1,2350 @@
-recipe_id,food_id,qty_g
-R001,F029,400
-R001,F235,10
-R002,F081,300
-R002,F235,10
-R003,F211,200
-R003,F090,150
-R003,F235,15
+﻿recipe_id,seq,food_id,qty_g,household_measure,role,is_optional,rf_vit_a,rf_vit_c
+BDR-001,1,F023,320,1.6 cups raw parboiled rice,staple,0,1,0.8
+BDR-002,1,F031,320,1.6 cups raw brown parboiled rice,staple,0,1,0.8
+BDR-003,1,F023,200,1 cup rice,staple,0,1,0.8
+BDR-003,2,F064,100,1/2 cup red lentil,protein,0,1,0.8
+BDR-003,3,F234,150,"1 medium potato, cubed",vegetable,0,1,0.75
+BDR-003,4,F153,60,"1 medium onion, sliced",aromatic,0,1,0.8
+BDR-003,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-003,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-003,7,F124,10,2 green chillies,spice,0,1,0.8
+BDR-003,8,F283,1,1 bay leaf,spice,0,1,1
+BDR-003,9,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-003,10,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-004,1,F035,300,1.5 cups aromatic rice,staple,0,1,0.8
+BDR-004,2,F061,150,3/4 cup roasted mung dal,protein,0,1,0.8
+BDR-004,3,F153,100,"2 medium onions, sliced",aromatic,0,1,0.85
+BDR-004,4,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-004,5,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-004,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-004,7,F301,3,1/2 tsp cumin powder,spice,0,1,1
+BDR-004,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-004,9,F285,2,3 cardamom pods,spice,0,1,1
+BDR-004,10,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-004,11,F283,1,2 bay leaves,spice,0,1,1
+BDR-004,12,F124,15,4 green chillies,spice,0,1,0.85
+BDR-004,13,F679,35,2.5 tbsp soybean oil,oil,0,1,1
+BDR-004,14,F666,10,2 tsp ghee,oil,0,1,1
+BDR-004,15,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-005,1,F035,500,2.5 cups aromatic rice,staple,0,1,0.8
+BDR-005,2,F596,700,"1 whole chicken, 8 pieces",protein,0,1,0.8
+BDR-005,3,F153,150,"3 medium onions, sliced",aromatic,0,1,0.85
+BDR-005,4,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-005,5,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-005,6,F648,80,1/3 cup yoghurt,dairy,0,1,1
+BDR-005,7,F285,3,5 cardamom pods,spice,0,1,1
+BDR-005,8,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-005,9,F298,1,4 cloves,spice,0,1,1
+BDR-005,10,F283,1,2 bay leaves,spice,0,1,1
+BDR-005,11,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-005,12,F124,20,6 green chillies,spice,0,1,0.85
+BDR-005,13,F652,20,2 tbsp milk powder,dairy,0,1,1
+BDR-005,14,F666,40,3 tbsp ghee,oil,0,1,1
+BDR-005,15,F679,30,2 tbsp oil,oil,0,1,1
+BDR-005,16,F698,8,1.5 tsp sugar,sweetener,0,1,1
+BDR-005,17,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-006,1,F035,500,2.5 cups aromatic rice,staple,0,1,0.8
+BDR-006,2,F582,600,"600 g beef, small cubes",protein,0,1,0.8
+BDR-006,3,F153,150,"3 medium onions, sliced",aromatic,0,1,0.85
+BDR-006,4,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-006,5,F134,20,5 cloves garlic paste,aromatic,0,1,0.85
+BDR-006,6,F648,100,1/2 cup yoghurt,dairy,0,1,1
+BDR-006,7,F301,4,3/4 tsp cumin powder,spice,0,1,1
+BDR-006,8,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-006,9,F285,3,5 cardamom,spice,0,1,1
+BDR-006,10,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-006,11,F283,1,2 bay leaves,spice,0,1,1
+BDR-006,12,F324,2,1/2 tsp pepper,spice,0,1,1
+BDR-006,13,F124,25,8 green chillies,spice,0,1,0.85
+BDR-006,14,F672,60,4 tbsp mustard oil,oil,0,1,1
+BDR-006,15,F697,9,1.5 tsp salt,seasoning,0,1,1
+BDR-007,1,F035,700,3.5 cups aromatic rice,staple,0,1,0.8
+BDR-007,2,F602,1000,1 kg goat meat on bone,protein,0,1,0.8
+BDR-007,3,F234,400,4 medium potatoes,vegetable,0,1,0.8
+BDR-007,4,F153,200,"4 onions, fried",aromatic,0,1,0.85
+BDR-007,5,F308,30,4 tsp ginger paste,aromatic,0,1,1
+BDR-007,6,F134,25,6 cloves garlic paste,aromatic,0,1,0.85
+BDR-007,7,F648,200,1 cup yoghurt,dairy,0,1,1
+BDR-007,8,F285,4,8 cardamom,spice,0,1,1
+BDR-007,9,F297,4,4 cinnamon sticks,spice,0,1,1
+BDR-007,10,F298,2,6 cloves,spice,0,1,1
+BDR-007,11,F319,1,"1/4 nutmeg, grated",spice,0,1,1
+BDR-007,12,F324,3,3/4 tsp pepper,spice,0,1,1
+BDR-007,13,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-007,14,F124,25,8 green chillies,spice,0,1,0.85
+BDR-007,15,F666,80,6 tbsp ghee,oil,0,1,1
+BDR-007,16,F652,30,3 tbsp milk powder,dairy,0,1,1
+BDR-007,17,F247,20,2 tbsp almonds,garnish,0,1,1
+BDR-007,18,F697,12,2 tsp salt,seasoning,0,1,1
+BDR-008,1,F035,450,2.25 cups aromatic rice,staple,0,1,0.8
+BDR-008,2,F465,600,6 hilsa steaks,protein,0,1,0.75
+BDR-008,3,F153,120,"2 large onions, sliced",aromatic,0,1,0.85
+BDR-008,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-008,5,F134,10,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-008,6,F317,10,2 tsp mustard paste,spice,0,1,1
+BDR-008,7,F648,80,1/3 cup yoghurt,dairy,0,1,1
+BDR-008,8,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-008,9,F124,25,8 green chillies,spice,0,1,0.85
+BDR-008,10,F285,2,4 cardamom,spice,0,1,1
+BDR-008,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-008,12,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-008,13,F666,15,1 tbsp ghee,oil,0,1,1
+BDR-008,14,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-009,1,F035,250,"1.25 cups rice, pre-cooked and cooled",staple,0,1,0.8
+BDR-009,2,F119,80,"1 carrot, diced",vegetable,0,1,0.85
+BDR-009,3,F114,80,1 cup shredded cabbage,vegetable,0,1,0.85
+BDR-009,4,F158,60,1/2 cup green peas,vegetable,0,1,0.85
+BDR-009,5,F115,50,1/2 capsicum,vegetable,0,1,0.85
+BDR-009,6,F321,30,3 tbsp spring onion,garnish,0,1,1
+BDR-009,7,F134,10,"3 cloves garlic, chopped",aromatic,0,1,0.85
+BDR-009,8,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-009,9,F679,25,2 tbsp oil,oil,0,1,1
+BDR-009,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-010,1,F023,150,"3/4 cup rice, cooked previous night",staple,0,1,1
+BDR-010,2,F153,30,"1 small onion, sliced",aromatic,0,1,1
+BDR-010,3,F124,8,2 green chillies,spice,0,1,1
+BDR-010,4,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-011,1,F017,200,3 cups flattened rice,staple,0,1,0.8
+BDR-011,2,F234,120,"1 potato, diced",vegetable,0,1,0.8
+BDR-011,3,F153,60,"1 onion, sliced",aromatic,0,1,0.85
+BDR-011,4,F262,40,1/3 cup peanuts,protein,0,1,1
+BDR-011,5,F124,10,2 green chillies,spice,0,1,0.85
+BDR-011,6,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-011,7,F299,10,2 tbsp coriander leaf,garnish,0,1,1
+BDR-011,8,F375,15,wedge of lemon,garnish,0,1,0.85
+BDR-011,9,F679,20,1.5 tbsp oil,oil,0,1,1
+BDR-011,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-012,1,F046,320,2.5 cups wholewheat flour,staple,0,1,0.8
+BDR-012,2,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-013,1,F047,300,2.5 cups refined flour,staple,0,1,0.8
+BDR-013,2,F679,50,3.5 tbsp oil,oil,0,1,1
+BDR-013,3,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-014,1,F047,250,2 cups refined flour,staple,0,1,0.8
+BDR-014,2,F666,15,1 tbsp ghee for the dough,oil,0,1,1
+BDR-014,3,F679,45,absorbed frying oil,oil,0,1,1
+BDR-014,4,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-015,1,F047,350,3 cups refined flour,staple,0,1,0.8
+BDR-015,2,F648,80,1/3 cup yoghurt,dairy,0,1,1
+BDR-015,3,F654,60,1/4 cup milk,liquid,0,1,1
+BDR-015,4,F691,4,3/4 tsp baking powder,leavening,0,1,1
+BDR-015,5,F698,6,1 tsp sugar,sweetener,0,1,1
+BDR-015,6,F666,20,1.5 tbsp ghee for brushing,oil,0,1,1
+BDR-015,7,F318,2,1/2 tsp nigella seed,garnish,0,1,1
+BDR-015,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-016,1,F037,300,1.5 cups sunned rice,staple,0,1,0.8
+BDR-016,2,F695,120,"2/3 cup date palm jaggery, grated",sweetener,0,1,1
+BDR-016,3,F256,120,1.5 cups grated coconut,filling,0,1,1
+BDR-016,4,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-017,1,F037,350,1.75 cups sunned rice,staple,0,1,0.8
+BDR-017,2,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-018,1,F037,200,1 cup sunned rice,staple,0,1,0.8
+BDR-018,2,F047,60,1/2 cup refined flour,staple,0,1,0.8
+BDR-018,3,F040,40,1/3 cup semolina,staple,0,1,0.8
+BDR-018,4,F256,200,2.5 cups grated coconut,filling,0,1,1
+BDR-018,5,F695,150,3/4 cup date palm jaggery,sweetener,0,1,1
+BDR-018,6,F654,200,1 cup milk,liquid,0,1,1
+BDR-018,7,F679,20,1.5 tbsp oil for the pan,oil,0,1,1
+BDR-018,8,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-019,1,F037,300,1.5 cups sunned rice,staple,0,1,0.8
+BDR-019,2,F256,200,2.5 cups grated coconut,filling,0,1,1
+BDR-019,3,F695,130,2/3 cup date palm jaggery,sweetener,0,1,1
+BDR-019,4,F285,1,"2 cardamom, crushed",spice,0,1,1
+BDR-019,5,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-020,1,F037,300,1.5 cups sunned rice,staple,0,1,0.8
+BDR-020,2,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-021,1,F064,150,3/4 cup red lentil,protein,0,1,0.8
+BDR-021,2,F153,50,"1 small onion, sliced",aromatic,0,1,0.8
+BDR-021,3,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-021,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-021,5,F124,10,2 green chillies,spice,0,1,0.8
+BDR-021,6,F287,2,1 dried chilli for tempering,spice,0,1,1
+BDR-021,7,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-021,8,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-021,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-022,1,F064,180,1 cup red lentil,protein,0,1,0.8
+BDR-022,2,F153,80,"1.5 onions, sliced",aromatic,0,1,0.85
+BDR-022,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-022,4,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-022,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-022,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-022,7,F287,3,2 dried chillies,spice,0,1,1
+BDR-022,8,F169,80,1 small tomato,vegetable,0,1,0.85
+BDR-022,9,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-022,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-023,1,F061,180,1 cup mung dal,protein,0,1,0.8
+BDR-023,2,F153,70,"1 onion, sliced",aromatic,0,1,0.85
+BDR-023,3,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-023,4,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-023,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-023,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-023,7,F283,1,1 bay leaf,spice,0,1,1
+BDR-023,8,F124,12,3 green chillies,spice,0,1,0.85
+BDR-023,9,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-023,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-024,1,F050,200,1 cup bengal gram dal,protein,0,1,0.8
+BDR-024,2,F256,50,1/2 cup coconut slivers,garnish,0,1,1
+BDR-024,3,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-024,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-024,5,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-024,6,F285,1,2 cardamom,spice,0,1,1
+BDR-024,7,F297,2,1 cinnamon stick,spice,0,1,1
+BDR-024,8,F283,1,1 bay leaf,spice,0,1,1
+BDR-024,9,F124,10,2 green chillies,spice,0,1,0.8
+BDR-024,10,F698,12,2.5 tsp sugar,sweetener,0,1,1
+BDR-024,11,F666,20,1.5 tbsp ghee,oil,0,1,1
+BDR-024,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-025,1,F054,170,1 cup black gram dal,protein,0,1,0.8
+BDR-025,2,F153,60,1 onion,aromatic,0,1,0.8
+BDR-025,3,F134,15,4 cloves garlic,aromatic,0,1,0.8
+BDR-025,4,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-025,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-025,6,F287,3,2 dried chillies,spice,0,1,1
+BDR-025,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-025,8,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-025,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-026,1,F059,160,1 cup grass pea dal,protein,0,1,0.8
+BDR-026,2,F153,50,1 small onion,aromatic,0,1,0.8
+BDR-026,3,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-026,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-026,5,F287,3,2 dried chillies,spice,0,1,1
+BDR-026,6,F124,8,2 green chillies,spice,0,1,0.8
+BDR-026,7,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-026,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-027,1,F064,120,2/3 cup red lentil,protein,0,1,0.8
+BDR-027,2,F139,300,2 cups diced bottle gourd,vegetable,0,1,0.8
+BDR-027,3,F153,50,1 small onion,aromatic,0,1,0.8
+BDR-027,4,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-027,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-027,6,F124,10,2 green chillies,spice,0,1,0.8
+BDR-027,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-027,8,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-027,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-028,1,F061,140,3/4 cup mung dal,protein,0,1,0.8
+BDR-028,2,F216,250,1 large bunch spinach,vegetable,0,1,0.6
+BDR-028,3,F153,50,1 small onion,aromatic,0,1,0.8
+BDR-028,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-028,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-028,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-028,7,F124,10,2 green chillies,spice,0,1,0.8
+BDR-028,8,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-028,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-029,1,F067,180,1 cup dried peas,protein,0,1,0.8
+BDR-029,2,F153,70,1 onion,aromatic,0,1,0.8
+BDR-029,3,F134,12,3 cloves garlic,aromatic,0,1,0.8
+BDR-029,4,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-029,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-029,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-029,7,F287,3,2 dried chillies,spice,0,1,1
+BDR-029,8,F679,20,1.5 tbsp oil,oil,0,1,1
+BDR-029,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-030,1,F071,160,1 cup pigeon pea dal,protein,0,1,0.8
+BDR-030,2,F153,50,1 small onion,aromatic,0,1,0.8
+BDR-030,3,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-030,4,F169,80,1 small tomato,vegetable,0,1,0.8
+BDR-030,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-030,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-030,7,F287,2,1 dried chilli,spice,0,1,1
+BDR-030,8,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-030,9,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-030,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-031,1,F052,250,1.5 cups whole chickpeas,protein,0,1,0.8
+BDR-031,2,F234,150,"1 potato, diced",vegetable,0,1,0.8
+BDR-031,3,F153,100,"2 onions, sliced",aromatic,0,1,0.85
+BDR-031,4,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-031,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-031,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-031,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-031,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-031,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-031,10,F334,20,1.5 tbsp tamarind pulp,souring,0,1,1
+BDR-031,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-031,12,F124,12,3 green chillies,spice,0,1,0.85
+BDR-031,13,F679,30,2 tbsp oil,oil,0,1,1
+BDR-031,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-032,1,F234,400,3 medium potatoes,main,0,1,0.75
+BDR-032,2,F153,60,1 medium onion,aromatic,0,1,0.75
+BDR-032,3,F287,4,"3 dried chillies, roasted",spice,0,1,1
+BDR-032,4,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-032,5,F672,20,1.5 tbsp raw mustard oil,oil,0,1,1
+BDR-032,6,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-033,1,F089,400,1 large aubergine,main,0,0.95,0.7
+BDR-033,2,F153,70,1 medium onion,aromatic,0,0.95,0.7
+BDR-033,3,F134,10,"3 cloves garlic, roasted",aromatic,0,0.95,0.7
+BDR-033,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-033,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-033,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-033,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-034,1,F169,400,4 medium ripe tomatoes,main,0,0.95,0.7
+BDR-034,2,F153,60,1 onion,aromatic,0,0.95,0.7
+BDR-034,3,F134,8,"2 cloves garlic, roasted",aromatic,0,0.95,0.7
+BDR-034,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-034,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-034,6,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-034,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-035,1,F412,100,1 cup dried anchovy,main,0,1,0.75
+BDR-035,2,F153,120,2 onions,aromatic,0,1,0.85
+BDR-035,3,F134,20,5 cloves garlic,aromatic,0,1,0.85
+BDR-035,4,F287,6,5 dried chillies,spice,0,1,1
+BDR-035,5,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-035,6,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-035,7,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-035,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-036,1,F552,200,"1 cup small shrimp, cleaned",main,0,1,0.8
+BDR-036,2,F153,100,2 onions,aromatic,0,1,0.85
+BDR-036,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-036,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-036,5,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-036,6,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-036,7,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-036,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-037,1,F559,300,2 medium taki fish,main,0,1,0.75
+BDR-037,2,F153,120,2 onions,aromatic,0,1,0.85
+BDR-037,3,F134,15,4 cloves garlic,aromatic,0,1,0.85
+BDR-037,4,F124,15,4 green chillies,spice,0,1,0.85
+BDR-037,5,F287,3,2 dried chillies,spice,0,1,1
+BDR-037,6,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-037,7,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-037,8,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-037,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-038,1,F064,150,3/4 cup red lentil,main,0,1,0.8
+BDR-038,2,F153,70,1 onion,aromatic,0,1,0.75
+BDR-038,3,F134,8,"2 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-038,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-038,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-038,6,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-038,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-039,1,F318,40,4 tbsp nigella seed,main,0,1,1
+BDR-039,2,F134,20,"5 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-039,3,F287,5,4 dried chillies,spice,0,1,1
+BDR-039,4,F153,40,1 small onion,aromatic,0,1,0.75
+BDR-039,5,F672,12,2.5 tsp mustard oil,oil,0,1,1
+BDR-039,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-040,1,F268,50,5 tbsp mustard seed,main,0,1,1
+BDR-040,2,F124,15,4 green chillies,spice,0,1,0.75
+BDR-040,3,F134,10,3 cloves garlic,aromatic,0,1,0.75
+BDR-040,4,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-040,5,F672,12,2.5 tsp mustard oil,oil,0,1,1
+BDR-040,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-041,1,F274,60,6 tbsp sesame seed,main,0,1,1
+BDR-041,2,F134,15,"4 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-041,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-041,4,F153,50,1 small onion,aromatic,0,1,0.75
+BDR-041,5,F672,10,2 tsp mustard oil,oil,0,1,1
+BDR-041,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-042,1,F262,80,2/3 cup peanuts,main,0,1,1
+BDR-042,2,F134,12,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-042,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-042,4,F153,50,1 small onion,aromatic,0,1,0.75
+BDR-042,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-042,6,F672,10,2 tsp mustard oil,oil,0,1,1
+BDR-042,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-043,1,F162,400,3 cups diced pumpkin,main,0,1,0.75
+BDR-043,2,F153,60,1 onion,aromatic,0,1,0.75
+BDR-043,3,F134,10,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-043,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-043,5,F124,8,2 green chillies,spice,0,1,0.75
+BDR-043,6,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-043,7,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-043,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-044,1,F135,450,3 cups diced ash gourd,main,0,1,0.75
+BDR-044,2,F153,60,1 onion,aromatic,0,1,0.75
+BDR-044,3,F134,10,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-044,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-044,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-044,6,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-044,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-045,1,F152,350,3 cups okra,main,0,1,0.75
+BDR-045,2,F153,60,1 onion,aromatic,0,1,0.75
+BDR-045,3,F134,10,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-045,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-045,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-045,6,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-045,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-046,1,F225,400,3 cups taro corm,main,0,1,0.75
+BDR-046,2,F153,60,1 onion,aromatic,0,1,0.75
+BDR-046,3,F134,12,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-046,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-046,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-046,6,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-046,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-047,1,F153,150,3 medium onions,main,0,1,0.75
+BDR-047,2,F287,5,"4 dried chillies, roasted",spice,0,1,1
+BDR-047,3,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-047,4,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-047,5,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-048,1,F234,450,"4 medium potatoes, cubed",main,0,1,0.8
+BDR-048,2,F153,80,"1.5 onions, sliced",aromatic,0,1,0.85
+BDR-048,3,F124,12,3 green chillies,spice,0,1,0.85
+BDR-048,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-048,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-048,6,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-048,7,F679,25,1.75 tbsp oil,oil,0,1,1
+BDR-048,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-049,1,F121,400,"1 small cauliflower, florets",main,0,1,0.8
+BDR-049,2,F234,250,"2 potatoes, cubed",main,0,1,0.75
+BDR-049,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-049,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-049,5,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-049,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-049,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-049,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-049,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-049,10,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-049,11,F283,1,1 bay leaf,spice,0,1,1
+BDR-049,12,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-049,13,F679,25,1.75 tbsp oil,oil,0,1,1
+BDR-049,14,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-050,1,F114,500,"1/2 medium cabbage, shredded",main,0,1,0.85
+BDR-050,2,F234,150,"1 potato, matchsticks",vegetable,0,1,0.8
+BDR-050,3,F158,80,2/3 cup green peas,vegetable,0,1,0.85
+BDR-050,4,F153,70,1 onion,aromatic,0,1,0.85
+BDR-050,5,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-050,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-050,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-050,8,F283,1,1 bay leaf,spice,0,1,1
+BDR-050,9,F124,10,2 green chillies,spice,0,1,0.85
+BDR-050,10,F679,22,1.5 tbsp oil,oil,0,1,1
+BDR-050,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-051,1,F089,400,"1 large aubergine, thick slices",main,0,1,0.85
+BDR-051,2,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-051,3,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-051,4,F672,40,estimated absorbed oil,oil,0,1,1
+BDR-051,5,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-052,1,F156,450,3 cups grated green papaya,main,0,1,0.85
+BDR-052,2,F153,70,1 onion,aromatic,0,1,0.85
+BDR-052,3,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-052,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-052,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-052,6,F124,12,3 green chillies,spice,0,1,0.85
+BDR-052,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-052,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-053,1,F141,400,"8 pointed gourds, halved",main,0,1,0.85
+BDR-053,2,F234,150,"1 potato, wedges",vegetable,0,1,0.8
+BDR-053,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-053,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-053,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-053,6,F124,10,2 green chillies,spice,0,1,0.85
+BDR-053,7,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-053,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-054,1,F142,400,3 cups diced ridge gourd,main,0,1,0.85
+BDR-054,2,F234,150,"1 potato, diced",vegetable,0,1,0.8
+BDR-054,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-054,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-054,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-054,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-054,7,F124,10,2 green chillies,spice,0,1,0.85
+BDR-054,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-054,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-055,1,F152,400,"3.5 cups okra, cut",main,0,1,0.85
+BDR-055,2,F153,70,1 onion,aromatic,0,1,0.85
+BDR-055,3,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-055,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-055,5,F287,2,1/3 tsp chilli powder,spice,0,1,1
+BDR-055,6,F124,10,2 green chillies,spice,0,1,0.85
+BDR-055,7,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-055,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-056,1,F080,400,3 cups sliced country beans,main,0,1,0.85
+BDR-056,2,F234,120,1 small potato,vegetable,0,1,0.8
+BDR-056,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-056,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-056,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-056,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-056,7,F124,12,3 green chillies,spice,0,1,0.85
+BDR-056,8,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-056,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-057,1,F129,400,"3 cups yard long beans, cut",main,0,1,0.85
+BDR-057,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-057,3,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-057,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-057,5,F287,2,1/3 tsp chilli powder,spice,0,1,1
+BDR-057,6,F124,10,2 green chillies,spice,0,1,0.85
+BDR-057,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-057,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-058,1,F162,500,4 cups diced pumpkin,main,0,1,0.85
+BDR-058,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-058,3,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-058,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-058,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-058,6,F306,1,1/4 tsp fenugreek,spice,0,1,1
+BDR-058,7,F124,10,2 green chillies,spice,0,1,0.85
+BDR-058,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-058,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-059,1,F139,500,4 cups diced bottle gourd,main,0,1,0.8
+BDR-059,2,F552,120,3/4 cup small shrimp,protein,0,1,0.75
+BDR-059,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-059,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-059,5,F308,6,3/4 tsp ginger paste,aromatic,0,1,1
+BDR-059,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-059,7,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-059,8,F124,12,3 green chillies,spice,0,1,0.8
+BDR-059,9,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-059,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-060,1,F225,400,3 cups taro corms,main,0,1,0.75
+BDR-060,2,F552,150,1 cup small shrimp,protein,0,1,0.75
+BDR-060,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-060,4,F134,12,3 cloves garlic,aromatic,0,1,0.8
+BDR-060,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-060,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-060,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-060,8,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-060,9,F124,12,3 green chillies,spice,0,1,0.8
+BDR-060,10,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-060,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-061,1,F164,450,3 cups diced radish,main,0,1,0.85
+BDR-061,2,F234,120,1 small potato,vegetable,0,1,0.8
+BDR-061,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-061,4,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-061,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-061,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-061,7,F124,12,3 green chillies,spice,0,1,0.85
+BDR-061,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-061,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-062,1,F138,300,"3 medium bitter gourds, sliced",main,0,1,0.85
+BDR-062,2,F234,120,1 small potato,vegetable,0,1,0.8
+BDR-062,3,F153,70,1 onion,aromatic,0,1,0.85
+BDR-062,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-062,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-062,6,F287,2,1/3 tsp chilli powder,spice,0,1,1
+BDR-062,7,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-062,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-063,1,F234,150,1 potato,main,0,1,0.75
+BDR-063,2,F119,120,1 carrot,main,0,1,0.8
+BDR-063,3,F121,150,1 cup cauliflower florets,main,0,1,0.8
+BDR-063,4,F080,120,1 cup country beans,main,0,1,0.8
+BDR-063,5,F129,100,1 cup yard long beans,main,0,1,0.8
+BDR-063,6,F158,80,2/3 cup peas,main,0,1,0.8
+BDR-063,7,F153,70,1 onion,aromatic,0,1,0.8
+BDR-063,8,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-063,9,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-063,10,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-063,11,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-063,12,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-063,13,F283,1,1 bay leaf,spice,0,1,1
+BDR-063,14,F124,12,3 green chillies,spice,0,1,0.8
+BDR-063,15,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-063,16,F679,25,1.75 tbsp oil,oil,0,1,1
+BDR-063,17,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-064,1,F139,200,1.5 cups bottle gourd,main,0,1,0.8
+BDR-064,2,F162,200,1.5 cups pumpkin,main,0,1,0.8
+BDR-064,3,F234,150,1 potato,main,0,1,0.75
+BDR-064,4,F089,150,1 small aubergine,main,0,1,0.8
+BDR-064,5,F164,120,1 small radish,main,0,1,0.8
+BDR-064,6,F080,100,1 cup country beans,main,0,1,0.8
+BDR-064,7,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-064,8,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-064,9,F301,2,1/3 tsp cumin seed,spice,0,1,1
+BDR-064,10,F305,2,1/3 tsp fennel seed,spice,0,1,1
+BDR-064,11,F306,1,1/4 tsp fenugreek seed,spice,0,1,1
+BDR-064,12,F318,2,1/3 tsp nigella seed,spice,0,1,1
+BDR-064,13,F268,2,1/3 tsp mustard seed,spice,0,1,1
+BDR-064,14,F283,1,1 bay leaf,spice,0,1,1
+BDR-064,15,F287,3,2 dried chillies,spice,0,1,1
+BDR-064,16,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-064,17,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-065,1,F138,120,1 bitter gourd,main,0,1,0.8
+BDR-065,2,F139,200,1.5 cups bottle gourd,main,0,1,0.8
+BDR-065,3,F160,150,1 green plantain,main,0,1,0.8
+BDR-065,4,F234,150,1 potato,main,0,1,0.75
+BDR-065,5,F089,120,1 small aubergine,main,0,1,0.8
+BDR-065,6,F131,100,2 drumsticks,main,0,1,0.8
+BDR-065,7,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-065,8,F317,8,1.5 tsp mustard paste,spice,0,1,1
+BDR-065,9,F327,10,2 tsp poppy seed paste,spice,0,1,1
+BDR-065,10,F306,2,1/3 tsp fenugreek,spice,0,1,1
+BDR-065,11,F654,100,1/2 cup milk,liquid,0,1,1
+BDR-065,12,F666,12,1 tbsp ghee,oil,0,1,1
+BDR-065,13,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-065,14,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-066,1,F141,350,7 pointed gourds,main,0,1,0.8
+BDR-066,2,F234,250,2 potatoes,main,0,1,0.75
+BDR-066,3,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-066,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-066,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-066,6,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-066,7,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-066,8,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-066,9,F283,1,1 bay leaf,spice,0,1,1
+BDR-066,10,F124,10,2 green chillies,spice,0,1,0.8
+BDR-066,11,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-066,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-067,1,F131,350,"8 drumstick pods, cut in lengths",main,0,1,0.8
+BDR-067,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-067,3,F089,120,1 small aubergine,vegetable,0,1,0.8
+BDR-067,4,F153,60,1 onion,aromatic,0,1,0.8
+BDR-067,5,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-067,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-067,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-067,8,F317,8,1.5 tsp mustard paste,spice,0,1,1
+BDR-067,9,F124,12,3 green chillies,spice,0,1,0.8
+BDR-067,10,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-067,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-068,1,F216,450,2 large bunches spinach,main,0,0.9,0.85
+BDR-068,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-068,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-068,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-068,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-068,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-068,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-069,1,F180,400,2 bunches red amaranth,main,0,0.9,0.85
+BDR-069,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-069,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-069,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-069,5,F124,10,2 green chillies,spice,0,1,0.85
+BDR-069,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-069,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-070,1,F203,450,2 bunches Malabar spinach,main,0,0.9,0.85
+BDR-070,2,F552,120,3/4 cup small shrimp,protein,0,1,0.8
+BDR-070,3,F234,100,1 small potato,vegetable,0,1,0.8
+BDR-070,4,F153,70,1 onion,aromatic,0,1,0.85
+BDR-070,5,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-070,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-070,7,F124,12,3 green chillies,spice,0,1,0.85
+BDR-070,8,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-070,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-071,1,F222,400,2 bunches water spinach,main,0,0.9,0.85
+BDR-071,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-071,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-071,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-071,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-071,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-071,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-072,1,F204,400,2 bunches jute leaves,main,0,0.9,0.85
+BDR-072,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-072,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-072,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-072,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-072,6,F375,15,wedge of lemon,garnish,0,1,0.85
+BDR-072,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-072,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-073,1,F187,400,2 bunches gourd leaves and shoots,main,0,0.9,0.85
+BDR-073,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-073,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-073,4,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-073,5,F287,3,2 dried chillies,spice,0,1,1
+BDR-073,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-073,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-073,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-074,1,F211,400,2 bunches radish leaves,main,0,0.9,0.85
+BDR-074,2,F234,100,1 small potato,vegetable,0,1,0.8
+BDR-074,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-074,4,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-074,5,F287,3,2 dried chillies,spice,0,1,1
+BDR-074,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-074,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-074,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-075,1,F196,300,"4 cups moringa leaves, stripped",main,0,0.9,0.85
+BDR-075,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-075,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-075,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-075,5,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-075,6,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-075,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-076,1,F465,500,6 hilsa steaks,main,0,1,0.8
+BDR-076,2,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-076,3,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-076,4,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-076,5,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-077,1,F465,500,6 hilsa steaks,main,0,1,0.75
+BDR-077,2,F317,25,2 tbsp mustard paste,spice,0,1,1
+BDR-077,3,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-077,4,F124,25,8 green chillies,spice,0,1,0.8
+BDR-077,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-077,6,F672,40,3 tbsp mustard oil,oil,0,1,1
+BDR-077,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-078,1,F465,500,6 hilsa steaks,main,0,1,0.8
+BDR-078,2,F317,25,2 tbsp mustard paste,spice,0,1,1
+BDR-078,3,F648,60,1/4 cup yoghurt,dairy,0,1,1
+BDR-078,4,F256,40,1/2 cup grated coconut,flavouring,0,1,1
+BDR-078,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-078,6,F124,25,8 green chillies,spice,0,1,0.85
+BDR-078,7,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-078,8,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-079,1,F542,500,6 rohu steaks,main,0,1,0.75
+BDR-079,2,F234,200,"2 potatoes, wedges",vegetable,0,1,0.75
+BDR-079,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-079,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-079,5,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-079,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-079,7,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-079,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-079,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-079,10,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-079,11,F124,12,3 green chillies,spice,0,1,0.8
+BDR-079,12,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-079,13,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-079,14,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-080,1,F542,600,6 large rohu steaks,main,0,1,0.75
+BDR-080,2,F234,200,2 potatoes,vegetable,0,1,0.8
+BDR-080,3,F153,120,"2 onions, paste",aromatic,0,1,0.85
+BDR-080,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-080,5,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-080,6,F648,80,1/3 cup yoghurt,dairy,0,1,1
+BDR-080,7,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-080,8,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-080,9,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-080,10,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-080,11,F285,2,3 cardamom,spice,0,1,1
+BDR-080,12,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-080,13,F283,1,1 bay leaf,spice,0,1,1
+BDR-080,14,F666,12,1 tbsp ghee,oil,0,1,1
+BDR-080,15,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-080,16,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-081,1,F431,500,5 catla steaks,main,0,1,0.75
+BDR-081,2,F121,250,2 cups cauliflower florets,vegetable,0,1,0.8
+BDR-081,3,F234,150,1 potato,vegetable,0,1,0.75
+BDR-081,4,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-081,5,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-081,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-081,7,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-081,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-081,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-081,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-081,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-081,12,F672,32,2.25 tbsp mustard oil,oil,0,1,1
+BDR-081,13,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-082,1,F542,500,5 rohu steaks,main,0,1,0.75
+BDR-082,2,F648,150,2/3 cup yoghurt,dairy,0,1,1
+BDR-082,3,F153,100,"2 onions, paste",aromatic,0,1,0.8
+BDR-082,4,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-082,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-082,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-082,7,F285,2,3 cardamom,spice,0,1,1
+BDR-082,8,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-082,9,F283,1,1 bay leaf,spice,0,1,1
+BDR-082,10,F124,15,4 green chillies,spice,0,1,0.8
+BDR-082,11,F666,12,1 tbsp ghee,oil,0,1,1
+BDR-082,12,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-082,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-083,1,F527,500,8 large river prawns,main,0,1,0.75
+BDR-083,2,F254,250,1 cup coconut milk,liquid,0,1,1
+BDR-083,3,F153,100,"2 onions, paste",aromatic,0,1,0.8
+BDR-083,4,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-083,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-083,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-083,7,F285,2,4 cardamom,spice,0,1,1
+BDR-083,8,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-083,9,F283,1,1 bay leaf,spice,0,1,1
+BDR-083,10,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-083,11,F124,15,4 green chillies,spice,0,1,0.8
+BDR-083,12,F698,5,1 tsp sugar,sweetener,0,1,1
+BDR-083,13,F666,15,1 tbsp ghee,oil,0,1,1
+BDR-083,14,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-083,15,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-084,1,F528,450,2 cups tiger prawns,main,0,1,0.8
+BDR-084,2,F153,120,"2 onions, sliced",aromatic,0,1,0.85
+BDR-084,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-084,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-084,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-084,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-084,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-084,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-084,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-084,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-084,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-084,12,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-084,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-085,1,F430,450,6 whole pabda fish,main,0,1,0.75
+BDR-085,2,F153,70,1 onion,aromatic,0,1,0.8
+BDR-085,3,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-085,4,F317,12,2 tsp mustard paste,spice,0,1,1
+BDR-085,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-085,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-085,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-085,8,F124,18,5 green chillies,spice,0,1,0.8
+BDR-085,9,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-085,10,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-085,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-086,1,F446,400,12 small tengra fish,main,0,1,0.75
+BDR-086,2,F234,150,"1 potato, matchsticks",vegetable,0,1,0.75
+BDR-086,3,F089,120,1 small aubergine,vegetable,0,1,0.8
+BDR-086,4,F153,70,1 onion,aromatic,0,1,0.8
+BDR-086,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-086,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-086,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-086,8,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-086,9,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-086,10,F124,15,4 green chillies,spice,0,1,0.8
+BDR-086,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-086,12,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-086,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-087,1,F439,450,6 koi fish,main,0,1,0.75
+BDR-087,2,F317,20,1.5 tbsp mustard paste,spice,0,1,1
+BDR-087,3,F153,60,1 onion,aromatic,0,1,0.8
+BDR-087,4,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-087,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-087,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-087,7,F124,20,6 green chillies,spice,0,1,0.8
+BDR-087,8,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-087,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-088,1,F563,400,6 shing fish,main,0,1,0.75
+BDR-088,2,F180,250,1 bunch red amaranth,vegetable,0,1,0.6
+BDR-088,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-088,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-088,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-088,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-088,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-088,8,F124,15,4 green chillies,spice,0,1,0.8
+BDR-088,9,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-088,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-089,1,F577,450,5 magur pieces,main,0,1,0.75
+BDR-089,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-089,3,F153,60,1 onion,aromatic,0,1,0.8
+BDR-089,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-089,5,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-089,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-089,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-089,8,F124,15,4 green chillies,spice,0,1,0.8
+BDR-089,9,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-089,10,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-089,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-090,1,F566,500,6 shol steaks,main,0,1,0.75
+BDR-090,2,F234,180,1.5 potatoes,vegetable,0,1,0.75
+BDR-090,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-090,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-090,5,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-090,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-090,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-090,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-090,9,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-090,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-090,11,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-090,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-091,1,F424,500,5 boal steaks,main,0,1,0.75
+BDR-091,2,F153,150,"3 onions, sliced",aromatic,0,1,0.85
+BDR-091,3,F134,15,4 cloves garlic,aromatic,0,1,0.85
+BDR-091,4,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-091,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-091,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-091,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-091,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-091,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-091,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-091,11,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-091,12,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-092,1,F440,500,"500 g knife fish, flesh scraped",main,0,1,0.75
+BDR-092,2,F234,150,"1 potato, boiled",binder,0,1,0.75
+BDR-092,3,F153,150,3 onions,aromatic,0,1,0.8
+BDR-092,4,F134,15,4 cloves garlic,aromatic,0,1,0.8
+BDR-092,5,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-092,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-092,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-092,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-092,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-092,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-092,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-092,12,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-092,13,F672,45,3 tbsp mustard oil,oil,0,1,1
+BDR-092,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-093,1,F513,500,5 pangas steaks,main,0,1,0.75
+BDR-093,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-093,3,F153,90,1.5 onions,aromatic,0,1,0.8
+BDR-093,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-093,5,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-093,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-093,7,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-093,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-093,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-093,10,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-093,11,F124,12,3 green chillies,spice,0,1,0.8
+BDR-093,12,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-093,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-094,1,F571,500,"2 whole tilapia, scored",main,0,1,0.8
+BDR-094,2,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-094,3,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-094,4,F134,10,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-094,5,F375,20,juice of half a lemon,souring,0,1,0.85
+BDR-094,6,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-094,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-095,1,F524,500,2 whole pomfret,main,0,1,0.8
+BDR-095,2,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-095,3,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-095,4,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-095,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-095,6,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-095,7,F375,20,juice of half a lemon,souring,0,1,0.85
+BDR-095,8,F679,35,2.5 tbsp oil,oil,0,1,1
+BDR-095,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-096,1,F523,130,1.5 cups dried pomfret,main,0,1,0.75
+BDR-096,2,F153,150,3 onions,aromatic,0,1,0.85
+BDR-096,3,F134,20,5 cloves garlic,aromatic,0,1,0.85
+BDR-096,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-096,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-096,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-096,7,F287,6,1 tsp chilli powder,spice,0,1,1
+BDR-096,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-096,9,F124,15,4 green chillies,spice,0,1,0.85
+BDR-096,10,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-096,11,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-096,12,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-097,1,F453,300,2 cups small sprat fish,main,0,1,0.75
+BDR-097,2,F234,120,"1 small potato, matchsticks",vegetable,0,1,0.8
+BDR-097,3,F153,100,2 onions,aromatic,0,1,0.85
+BDR-097,4,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-097,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-097,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-097,7,F124,15,4 green chillies,spice,0,1,0.85
+BDR-097,8,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-097,9,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-097,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-098,1,F496,300,2 cups mola fish,main,0,1,0.75
+BDR-098,2,F089,120,1 small aubergine,vegetable,0,1,0.85
+BDR-098,3,F153,100,2 onions,aromatic,0,1,0.85
+BDR-098,4,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-098,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-098,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-098,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-098,8,F124,15,4 green chillies,spice,0,1,0.85
+BDR-098,9,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-098,10,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-098,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-099,1,F458,450,4 barramundi fillets,main,0,1,0.8
+BDR-099,2,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-099,3,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-099,4,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-099,5,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-099,6,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-099,7,F375,25,juice of half a lemon,souring,0,1,0.85
+BDR-099,8,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-099,9,F679,30,2 tbsp oil,oil,0,1,1
+BDR-099,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-100,1,F582,900,"900 g beef with some fat, cubed",main,0,1,0.8
+BDR-100,2,F153,200,"4 onions, sliced",aromatic,0,1,0.85
+BDR-100,3,F134,25,6 cloves garlic paste,aromatic,0,1,0.85
+BDR-100,4,F308,30,4 tsp ginger paste,aromatic,0,1,1
+BDR-100,5,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-100,6,F301,5,1 tsp cumin,spice,0,1,1
+BDR-100,7,F300,6,1 tsp coriander powder,spice,0,1,1
+BDR-100,8,F287,6,1 tsp chilli powder,spice,0,1,1
+BDR-100,9,F285,3,5 cardamom,spice,0,1,1
+BDR-100,10,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-100,11,F283,1,2 bay leaves,spice,0,1,1
+BDR-100,12,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-100,13,F124,15,4 green chillies,spice,0,1,0.85
+BDR-100,14,F672,60,4 tbsp mustard oil,oil,0,1,1
+BDR-100,15,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-101,1,F582,1000,"1 kg beef, cubed",main,0,1,0.8
+BDR-101,2,F153,250,"5 onions, sliced",aromatic,0,1,0.85
+BDR-101,3,F134,30,8 cloves garlic paste,aromatic,0,1,0.85
+BDR-101,4,F308,30,4 tsp ginger paste,aromatic,0,1,1
+BDR-101,5,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-101,6,F301,6,1 tsp roasted cumin,spice,0,1,1
+BDR-101,7,F300,6,1 tsp coriander powder,spice,0,1,1
+BDR-101,8,F287,8,1.5 tsp chilli powder,spice,0,1,1
+BDR-101,9,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-101,10,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-101,11,F285,3,5 cardamom,spice,0,1,1
+BDR-101,12,F298,2,5 cloves,spice,0,1,1
+BDR-101,13,F283,1,2 bay leaves,spice,0,1,1
+BDR-101,14,F124,20,6 green chillies,spice,0,1,0.85
+BDR-101,15,F672,80,5.5 tbsp mustard oil,oil,0,1,1
+BDR-101,16,F697,9,1.5 tsp salt,seasoning,0,1,1
+BDR-102,1,F583,700,"700 g lean beef, cubed",main,0,1,0.8
+BDR-102,2,F234,400,"4 potatoes, halved",vegetable,0,1,0.75
+BDR-102,3,F153,180,3.5 onions,aromatic,0,1,0.8
+BDR-102,4,F134,20,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-102,5,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-102,6,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-102,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-102,8,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-102,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-102,10,F283,1,2 bay leaves,spice,0,1,1
+BDR-102,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-102,12,F285,2,4 cardamom,spice,0,1,1
+BDR-102,13,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-102,14,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-103,1,F582,900,"900 g beef, cubed",main,0,1,0.8
+BDR-103,2,F648,250,1 cup yoghurt,dairy,0,1,1
+BDR-103,3,F153,180,"3.5 onions, paste and fried",aromatic,0,1,0.8
+BDR-103,4,F134,20,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-103,5,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-103,6,F252,40,1/3 cup cashew paste,thickener,0,1,1
+BDR-103,7,F324,3,3/4 tsp white pepper,spice,0,1,1
+BDR-103,8,F285,3,6 cardamom,spice,0,1,1
+BDR-103,9,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-103,10,F283,1,2 bay leaves,spice,0,1,1
+BDR-103,11,F319,1,1/4 nutmeg,spice,0,1,1
+BDR-103,12,F124,25,8 green chillies,spice,0,1,0.8
+BDR-103,13,F652,25,2.5 tbsp milk powder,dairy,0,1,1
+BDR-103,14,F666,40,3 tbsp ghee,oil,0,1,1
+BDR-103,15,F672,25,1.75 tbsp oil,oil,0,1,1
+BDR-103,16,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-104,1,F584,600,600 g lean beef mince,main,0,1,0.8
+BDR-104,2,F153,150,3 onions,aromatic,0,1,0.85
+BDR-104,3,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-104,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-104,5,F158,100,3/4 cup green peas,vegetable,0,1,0.85
+BDR-104,6,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-104,7,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-104,8,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-104,9,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-104,10,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-104,11,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-104,12,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-104,13,F679,35,2.5 tbsp oil,oil,0,1,1
+BDR-104,14,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-105,1,F584,500,500 g beef mince,main,0,1,0.8
+BDR-105,2,F050,150,3/4 cup bengal gram dal,binder,0,1,0.8
+BDR-105,3,F153,120,2 onions,aromatic,0,1,0.85
+BDR-105,4,F134,15,4 cloves garlic,aromatic,0,1,0.85
+BDR-105,5,F308,15,2 tsp ginger,aromatic,0,1,1
+BDR-105,6,F640,55,1 egg,binder,0,1,0.8
+BDR-105,7,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-105,8,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-105,9,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-105,10,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-105,11,F285,2,4 cardamom,spice,0,1,1
+BDR-105,12,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-105,13,F124,12,3 green chillies,spice,0,1,0.85
+BDR-105,14,F679,45,3 tbsp oil for frying,oil,0,1,1
+BDR-105,15,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-106,1,F584,600,600 g beef mince,main,0,1,1
+BDR-106,2,F153,100,"2 onions, grated and squeezed",aromatic,0,0.95,0.7
+BDR-106,3,F134,15,4 cloves garlic paste,aromatic,0,0.95,0.7
+BDR-106,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-106,5,F262,30,"3 tbsp roasted peanut, ground",binder,0,1,1
+BDR-106,6,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-106,7,F301,4,3/4 tsp roasted cumin,spice,0,1,1
+BDR-106,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-106,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-106,10,F285,2,"4 cardamom, ground",spice,0,1,1
+BDR-106,11,F375,20,juice of half a lemon,souring,0,0.95,0.7
+BDR-106,12,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-106,13,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-107,1,F581,500,"500 g beef liver, cubed",main,0,1,0.75
+BDR-107,2,F153,150,3 onions,aromatic,0,1,0.85
+BDR-107,3,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-107,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-107,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-107,6,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-107,7,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-107,8,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-107,9,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-107,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-107,11,F124,12,3 green chillies,spice,0,1,0.85
+BDR-107,12,F672,40,3 tbsp mustard oil,oil,0,1,1
+BDR-107,13,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-108,1,F602,900,900 g goat meat on bone,main,0,1,0.8
+BDR-108,2,F234,350,"3 potatoes, halved",vegetable,0,1,0.75
+BDR-108,3,F153,180,3.5 onions,aromatic,0,1,0.8
+BDR-108,4,F134,22,6 cloves garlic paste,aromatic,0,1,0.8
+BDR-108,5,F308,28,3.5 tsp ginger paste,aromatic,0,1,1
+BDR-108,6,F648,100,1/2 cup yoghurt,dairy,0,1,1
+BDR-108,7,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-108,8,F301,5,1 tsp cumin,spice,0,1,1
+BDR-108,9,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-108,10,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-108,11,F285,3,5 cardamom,spice,0,1,1
+BDR-108,12,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-108,13,F283,1,2 bay leaves,spice,0,1,1
+BDR-108,14,F672,55,4 tbsp mustard oil,oil,0,1,1
+BDR-108,15,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-109,1,F602,900,900 g goat meat,main,0,1,0.8
+BDR-109,2,F648,250,1 cup yoghurt,dairy,0,1,1
+BDR-109,3,F153,180,3.5 onions,aromatic,0,1,0.8
+BDR-109,4,F134,20,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-109,5,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-109,6,F252,40,1/3 cup cashew paste,thickener,0,1,1
+BDR-109,7,F327,15,1 tbsp poppy seed paste,thickener,0,1,1
+BDR-109,8,F324,3,3/4 tsp white pepper,spice,0,1,1
+BDR-109,9,F285,3,6 cardamom,spice,0,1,1
+BDR-109,10,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-109,11,F283,1,2 bay leaves,spice,0,1,1
+BDR-109,12,F124,25,8 green chillies,spice,0,1,0.8
+BDR-109,13,F652,25,2.5 tbsp milk powder,dairy,0,1,1
+BDR-109,14,F666,45,3 tbsp ghee,oil,0,1,1
+BDR-109,15,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-110,1,F607,1200,"4 goat trotters, cleaned and cut",main,0,1,0.8
+BDR-110,2,F153,200,4 onions,aromatic,0,1,0.8
+BDR-110,3,F134,30,8 cloves garlic paste,aromatic,0,1,0.8
+BDR-110,4,F308,30,4 tsp ginger paste,aromatic,0,1,1
+BDR-110,5,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-110,6,F301,5,1 tsp cumin,spice,0,1,1
+BDR-110,7,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-110,8,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-110,9,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-110,10,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-110,11,F285,3,5 cardamom,spice,0,1,1
+BDR-110,12,F283,1,2 bay leaves,spice,0,1,1
+BDR-110,13,F046,30,3 tbsp wheat flour slurry,thickener,0,1,0.8
+BDR-110,14,F299,15,4 tbsp coriander leaf,garnish,0,1,1
+BDR-110,15,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-110,16,F697,9,1.5 tsp salt,seasoning,0,1,1
+BDR-111,1,F596,800,"1 whole country chicken, 8 pieces",main,0,1,0.8
+BDR-111,2,F234,300,3 potatoes,vegetable,0,1,0.75
+BDR-111,3,F153,150,3 onions,aromatic,0,1,0.8
+BDR-111,4,F134,18,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-111,5,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-111,6,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-111,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-111,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-111,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-111,10,F283,1,2 bay leaves,spice,0,1,1
+BDR-111,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-111,12,F124,12,3 green chillies,spice,0,1,0.8
+BDR-111,13,F672,45,3 tbsp mustard oil,oil,0,1,1
+BDR-111,14,F697,7,1.1 tsp salt,seasoning,0,1,1
+BDR-112,1,F596,800,"800 g chicken, skinless pieces",main,0,1,0.8
+BDR-112,2,F153,180,"3.5 onions, sliced",aromatic,0,1,0.85
+BDR-112,3,F134,18,5 cloves garlic paste,aromatic,0,1,0.85
+BDR-112,4,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-112,5,F169,120,1 tomato,vegetable,0,1,0.85
+BDR-112,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-112,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-112,8,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-112,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-112,10,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-112,11,F285,2,4 cardamom,spice,0,1,1
+BDR-112,12,F283,1,2 bay leaves,spice,0,1,1
+BDR-112,13,F124,15,4 green chillies,spice,0,1,0.85
+BDR-112,14,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-112,15,F679,40,3 tbsp oil,oil,0,1,1
+BDR-112,16,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-113,1,F596,900,5 whole chicken legs,main,0,1,0.8
+BDR-113,2,F648,150,2/3 cup yoghurt,dairy,0,1,1
+BDR-113,3,F153,180,"3.5 onions, fried and ground",aromatic,0,1,0.8
+BDR-113,4,F134,15,4 cloves garlic paste,aromatic,0,1,0.8
+BDR-113,5,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-113,6,F252,40,1/3 cup cashew paste,thickener,0,1,1
+BDR-113,7,F652,25,2.5 tbsp milk powder,dairy,0,1,1
+BDR-113,8,F285,3,5 cardamom,spice,0,1,1
+BDR-113,9,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-113,10,F324,2,1/2 tsp pepper,spice,0,1,1
+BDR-113,11,F319,1,1/4 nutmeg,spice,0,1,1
+BDR-113,12,F124,20,6 green chillies,spice,0,1,0.8
+BDR-113,13,F698,8,1.5 tsp sugar,sweetener,0,1,1
+BDR-113,14,F666,35,2.5 tbsp ghee,oil,0,1,1
+BDR-113,15,F679,30,2 tbsp oil,oil,0,1,1
+BDR-113,16,F697,7,1.1 tsp salt,seasoning,0,1,1
+BDR-114,1,F596,800,800 g chicken pieces,main,0,1,0.8
+BDR-114,2,F648,180,3/4 cup yoghurt,dairy,0,1,1
+BDR-114,3,F153,150,"3 onions, paste",aromatic,0,1,0.8
+BDR-114,4,F134,15,4 cloves garlic paste,aromatic,0,1,0.8
+BDR-114,5,F308,18,2 tsp ginger paste,aromatic,0,1,1
+BDR-114,6,F247,35,1/4 cup almond paste,thickener,0,1,1
+BDR-114,7,F254,150,2/3 cup coconut milk,liquid,0,1,1
+BDR-114,8,F285,3,5 cardamom,spice,0,1,1
+BDR-114,9,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-114,10,F283,1,2 bay leaves,spice,0,1,1
+BDR-114,11,F324,2,1/2 tsp white pepper,spice,0,1,1
+BDR-114,12,F124,20,6 green chillies,spice,0,1,0.8
+BDR-114,13,F666,35,2.5 tbsp ghee,oil,0,1,1
+BDR-114,14,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-115,1,F600,900,"1 duck, cut into pieces",main,0,1,0.8
+BDR-115,2,F256,80,1 cup grated coconut,flavouring,0,1,1
+BDR-115,3,F153,200,4 onions,aromatic,0,1,0.85
+BDR-115,4,F134,25,6 cloves garlic paste,aromatic,0,1,0.85
+BDR-115,5,F308,28,3.5 tsp ginger paste,aromatic,0,1,1
+BDR-115,6,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-115,7,F301,5,1 tsp cumin,spice,0,1,1
+BDR-115,8,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-115,9,F287,6,1 tsp chilli powder,spice,0,1,1
+BDR-115,10,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-115,11,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-115,12,F285,3,5 cardamom,spice,0,1,1
+BDR-115,13,F283,1,2 bay leaves,spice,0,1,1
+BDR-115,14,F124,20,6 green chillies,spice,0,1,0.85
+BDR-115,15,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-115,16,F697,8,1.25 tsp salt,seasoning,0,1,1
+BDR-116,1,F640,330,6 eggs,main,0,0.85,0.8
+BDR-116,2,F153,150,"3 onions, sliced",aromatic,0,1,0.85
+BDR-116,3,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-116,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-116,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-116,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-116,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-116,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-116,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-116,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-116,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-116,12,F679,30,2 tbsp oil,oil,0,1,1
+BDR-116,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-117,1,F640,275,5 eggs,main,0,0.85,0.8
+BDR-117,2,F234,350,3 potatoes,main,0,1,0.75
+BDR-117,3,F153,120,2 onions,aromatic,0,1,0.8
+BDR-117,4,F134,12,3 cloves garlic paste,aromatic,0,1,0.8
+BDR-117,5,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-117,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-117,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-117,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-117,9,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-117,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-117,11,F124,10,2 green chillies,spice,0,1,0.8
+BDR-117,12,F679,28,2 tbsp oil,oil,0,1,1
+BDR-117,13,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-118,1,F640,220,4 eggs,main,0,0.85,0.8
+BDR-118,2,F153,80,1.5 onions,aromatic,0,1,0.75
+BDR-118,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-118,4,F134,8,"2 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-118,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-118,6,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-118,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-119,1,F640,165,3 eggs,main,0,1,0.8
+BDR-119,2,F153,50,"1 small onion, chopped",aromatic,0,1,0.85
+BDR-119,3,F124,10,2 green chillies,spice,0,1,0.85
+BDR-119,4,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-119,5,F324,1,1/4 tsp black pepper,spice,0,1,1
+BDR-119,6,F679,12,2.5 tsp oil,oil,0,1,1
+BDR-119,7,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-120,1,F645,350,5 duck eggs,main,0,0.85,0.8
+BDR-120,2,F234,250,2 potatoes,vegetable,0,1,0.75
+BDR-120,3,F153,120,2 onions,aromatic,0,1,0.8
+BDR-120,4,F134,12,3 cloves garlic paste,aromatic,0,1,0.8
+BDR-120,5,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-120,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-120,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-120,8,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-120,9,F283,1,1 bay leaf,spice,0,1,1
+BDR-120,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-120,11,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-120,12,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-121,1,F640,275,5 eggs,main,0,0.85,0.8
+BDR-121,2,F153,250,"5 onions, half sliced late",aromatic,0,1,0.85
+BDR-121,3,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-121,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-121,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-121,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-121,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-121,8,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-121,9,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-121,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-121,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-121,12,F679,30,2 tbsp oil,oil,0,1,1
+BDR-121,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-122,1,F064,200,1 cup red lentil,main,0,1,0.8
+BDR-122,2,F153,200,"4 onions, finely sliced",main,0,1,0.85
+BDR-122,3,F124,20,6 green chillies,spice,0,1,0.85
+BDR-122,4,F299,15,4 tbsp coriander leaf,garnish,0,1,1
+BDR-122,5,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-122,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-122,7,F679,70,estimated absorbed oil,oil,0,1,1
+BDR-122,8,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-123,1,F089,400,"1 large aubergine, thin slices",main,0,1,0.85
+BDR-123,2,F050,150,3/4 cup bengal gram dal,batter,0,1,0.8
+BDR-123,3,F037,30,3 tbsp rice,batter,0,1,0.8
+BDR-123,4,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-123,5,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-123,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-123,7,F679,75,estimated absorbed oil,oil,0,1,1
+BDR-123,8,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-124,1,F234,600,"5 potatoes, boiled and mashed",main,0,1,0.8
+BDR-124,2,F153,100,2 onions,aromatic,0,1,0.85
+BDR-124,3,F124,15,4 green chillies,spice,0,1,0.85
+BDR-124,4,F299,15,4 tbsp coriander leaf,garnish,0,1,1
+BDR-124,5,F301,4,3/4 tsp roasted cumin,spice,0,1,1
+BDR-124,6,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-124,7,F050,100,1/2 cup bengal gram dal,batter,0,1,0.8
+BDR-124,8,F679,65,estimated absorbed oil,oil,0,1,1
+BDR-124,9,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-125,1,F640,275,"5 eggs, boiled and halved",main,0,1,0.8
+BDR-125,2,F234,450,"4 potatoes, boiled",coating,0,1,0.8
+BDR-125,3,F153,100,2 onions,aromatic,0,1,0.85
+BDR-125,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-125,5,F124,12,3 green chillies,spice,0,1,0.85
+BDR-125,6,F301,4,3/4 tsp roasted cumin,spice,0,1,1
+BDR-125,7,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-125,8,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-125,9,F040,50,1/3 cup semolina for coating,coating,0,1,0.8
+BDR-125,10,F679,60,estimated absorbed oil,oil,0,1,1
+BDR-125,11,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-126,1,F047,300,2.5 cups refined flour,pastry,0,1,0.8
+BDR-126,2,F234,400,"3 potatoes, diced",filling,0,1,0.8
+BDR-126,3,F121,120,1 cup cauliflower,filling,0,1,0.85
+BDR-126,4,F158,60,1/2 cup peas,filling,0,1,0.85
+BDR-126,5,F262,40,1/3 cup peanuts,filling,0,1,1
+BDR-126,6,F153,60,1 onion,aromatic,0,1,0.85
+BDR-126,7,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-126,8,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-126,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-126,10,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-126,11,F124,12,3 green chillies,spice,0,1,0.85
+BDR-126,12,F679,90,dough fat plus estimated absorbed oil,oil,0,1,1
+BDR-126,13,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-127,1,F047,300,2.5 cups refined flour,pastry,0,1,0.8
+BDR-127,2,F584,350,350 g beef mince,filling,0,1,0.8
+BDR-127,3,F153,120,2 onions,aromatic,0,1,0.85
+BDR-127,4,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-127,5,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-127,6,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-127,7,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-127,8,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-127,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-127,10,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-127,11,F679,95,dough fat plus estimated absorbed oil,oil,0,1,1
+BDR-127,12,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-128,1,F052,300,2 cups whole chickpeas,main,0,1,0.8
+BDR-128,2,F234,250,"2 potatoes, diced",main,0,1,0.75
+BDR-128,3,F640,165,"3 eggs, boiled and chopped",topping,0,0.85,0.8
+BDR-128,4,F153,120,"2 onions, raw and chopped",topping,0,1,0.8
+BDR-128,5,F334,60,4 tbsp tamarind pulp,souring,0,1,1
+BDR-128,6,F301,6,1 tsp roasted cumin powder,spice,0,1,1
+BDR-128,7,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-128,8,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-128,9,F299,15,4 tbsp coriander leaf,garnish,0,1,1
+BDR-128,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-128,11,F679,20,1.5 tbsp oil,oil,0,1,1
+BDR-128,12,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-129,1,F033,120,6 cups puffed rice,main,0,1,1
+BDR-129,2,F153,80,"1.5 onions, chopped",aromatic,0,1,1
+BDR-129,3,F130,80,"1/2 cucumber, diced",vegetable,0,1,1
+BDR-129,4,F169,60,1 small tomato,vegetable,0,1,1
+BDR-129,5,F262,40,1/3 cup roasted peanuts,protein,0,1,1
+BDR-129,6,F124,10,2 green chillies,spice,0,1,1
+BDR-129,7,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-129,8,F301,3,1/2 tsp roasted cumin,spice,0,1,1
+BDR-129,9,F375,20,juice of half a lemon,souring,0,1,1
+BDR-129,10,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-129,11,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-130,1,F049,200,1.5 cups cracked wheat,main,0,1,0.8
+BDR-130,2,F583,700,"700 g beef, small cubes",protein,0,1,0.8
+BDR-130,3,F064,60,1/3 cup red lentil,protein,0,1,0.8
+BDR-130,4,F061,60,1/3 cup mung dal,protein,0,1,0.8
+BDR-130,5,F050,60,1/3 cup bengal gram dal,protein,0,1,0.8
+BDR-130,6,F054,50,1/4 cup black gram dal,protein,0,1,0.8
+BDR-130,7,F153,200,"4 onions, fried",aromatic,0,1,0.8
+BDR-130,8,F134,25,6 cloves garlic paste,aromatic,0,1,0.8
+BDR-130,9,F308,45,4 tsp ginger paste + julienned ginger to top,aromatic,0,1,1
+BDR-130,10,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-130,11,F301,5,1 tsp cumin,spice,0,1,1
+BDR-130,12,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-130,13,F287,6,1 tsp chilli powder,spice,0,1,1
+BDR-130,14,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-130,15,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-130,16,F285,3,5 cardamom,spice,0,1,1
+BDR-130,17,F283,1,2 bay leaves,spice,0,1,1
+BDR-130,18,F375,30,lemon wedges,garnish,0,1,0.8
+BDR-130,19,F299,20,5 tbsp coriander leaf,garnish,0,1,1
+BDR-130,20,F679,60,4 tbsp oil,oil,0,1,1
+BDR-130,21,F697,10,1.6 tsp salt,seasoning,0,1,1
+BDR-131,1,F050,180,1 cup bengal gram dal,batter,0,1,0.8
+BDR-131,2,F153,150,"3 onions, sliced",main,0,1,0.85
+BDR-131,3,F234,150,"1 potato, matchsticks",main,0,1,0.8
+BDR-131,4,F114,100,1 cup shredded cabbage,main,0,1,0.85
+BDR-131,5,F216,60,1 cup chopped spinach,main,0,0.9,0.85
+BDR-131,6,F124,15,4 green chillies,spice,0,1,0.85
+BDR-131,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-131,8,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-131,9,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-131,10,F679,70,estimated absorbed oil,oil,0,1,1
+BDR-131,11,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-132,1,F005,180,6 slices white bread,main,0,1,0.8
+BDR-132,2,F640,165,3 eggs,main,0,1,0.8
+BDR-132,3,F153,40,"1 small onion, finely chopped",aromatic,0,1,0.85
+BDR-132,4,F124,8,2 green chillies,spice,0,1,0.85
+BDR-132,5,F324,1,1/4 tsp black pepper,spice,0,1,1
+BDR-132,6,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-132,7,F679,18,1.25 tbsp oil,oil,0,1,1
+BDR-132,8,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-133,1,F654,1500,6 cups full-fat milk,main,0,1,1
+BDR-133,2,F035,80,1/3 cup aromatic rice,main,0,1,0.8
+BDR-133,3,F698,120,2/3 cup sugar,sweetener,0,1,1
+BDR-133,4,F285,2,4 cardamom,spice,0,1,1
+BDR-133,5,F283,1,1 bay leaf,spice,0,1,1
+BDR-133,6,F247,25,"3 tbsp almonds, slivered",garnish,0,1,1
+BDR-133,7,F360,30,"4 dates, chopped",garnish,0,1,0.8
+BDR-134,1,F654,1200,5 cups full-fat milk,main,0,1,1
+BDR-134,2,F035,70,1/3 cup aromatic rice,main,0,1,0.8
+BDR-134,3,F698,110,1/2 cup sugar,sweetener,0,1,1
+BDR-134,4,F285,2,4 cardamom,spice,0,1,1
+BDR-134,5,F652,30,3 tbsp milk powder,dairy,0,1,1
+BDR-134,6,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-134,7,F360,25,3 dates,garnish,0,1,0.8
+BDR-135,1,F045,150,1.5 cups wheat vermicelli,main,0,1,0.8
+BDR-135,2,F654,1200,5 cups full-fat milk,main,0,1,1
+BDR-135,3,F698,120,2/3 cup sugar,sweetener,0,1,1
+BDR-135,4,F285,2,4 cardamom,spice,0,1,1
+BDR-135,5,F283,1,1 bay leaf,spice,0,1,1
+BDR-135,6,F666,20,1.5 tbsp ghee,oil,0,1,1
+BDR-135,7,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-135,8,F360,30,4 dates,garnish,0,1,0.8
+BDR-136,1,F040,250,1.5 cups semolina,main,0,1,0.8
+BDR-136,2,F698,180,1 cup sugar,sweetener,0,1,1
+BDR-136,3,F654,400,1.5 cups milk,liquid,0,1,1
+BDR-136,4,F666,80,6 tbsp ghee,oil,0,1,1
+BDR-136,5,F285,2,4 cardamom,spice,0,1,1
+BDR-136,6,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-136,7,F283,1,1 bay leaf,spice,0,1,1
+BDR-136,8,F247,30,4 tbsp almonds,garnish,0,1,1
+BDR-136,9,F360,30,4 dates,garnish,0,1,0.8
+BDR-137,1,F119,800,"6 large carrots, grated",main,0,1,0.8
+BDR-137,2,F654,700,3 cups full-fat milk,main,0,1,1
+BDR-137,3,F698,150,3/4 cup sugar,sweetener,0,1,1
+BDR-137,4,F666,60,4 tbsp ghee,oil,0,1,1
+BDR-137,5,F652,40,4 tbsp milk powder,dairy,0,1,1
+BDR-137,6,F285,2,4 cardamom,spice,0,1,1
+BDR-137,7,F247,30,4 tbsp almonds,garnish,0,1,1
+BDR-137,8,F252,25,3 tbsp cashews,garnish,0,1,1
+BDR-138,1,F659,500,500 g fresh chena,main,0,1,1
+BDR-138,2,F040,20,2 tbsp semolina,binder,0,1,0.8
+BDR-138,3,F698,400,2 cups sugar,sweetener,0,1,1
+BDR-138,4,F285,2,4 cardamom,spice,0,1,1
+BDR-139,1,F659,500,500 g fresh chena,main,0,1,1
+BDR-139,2,F698,150,3/4 cup sugar,sweetener,0,1,1
+BDR-139,3,F649,80,1/3 cup khoa,dairy,0,1,1
+BDR-139,4,F285,2,"4 cardamom, ground",spice,0,1,1
+BDR-139,5,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-140,1,F654,1200,5 cups full-fat milk,main,0,1,1
+BDR-140,2,F698,180,1 cup sugar,sweetener,0,1,1
+BDR-140,3,F652,40,4 tbsp milk powder,dairy,0,1,1
+BDR-140,4,F648,60,1/4 cup live yoghurt as starter,culture,0,1,1
+BDR-141,1,F256,400,5 cups grated coconut,main,0,1,1
+BDR-141,2,F695,200,1 cup date palm jaggery,sweetener,0,1,1
+BDR-141,3,F285,2,"4 cardamom, ground",spice,0,1,1
+BDR-142,1,F648,500,2 cups thick yoghurt,main,0,1,1
+BDR-142,2,F655,300,1 cup condensed milk,sweetener,0,1,1
+BDR-142,3,F654,150,2/3 cup milk,liquid,0,1,1
+BDR-142,4,F285,2,"4 cardamom, ground",spice,0,1,1
+BDR-142,5,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-142,6,F360,25,3 dates,garnish,0,1,0.8
+BDR-143,1,F689,8,2 tsp tea leaves,main,0,1,1
+BDR-143,2,F654,400,1.5 cups milk,main,0,1,1
+BDR-143,3,F698,40,3 tsp sugar,sweetener,0,1,1
+BDR-143,4,F285,1,2 cardamom,spice,1,1,1
+BDR-144,1,F689,8,2 tsp tea leaves,main,0,1,1
+BDR-144,2,F698,24,2 tsp sugar,sweetener,1,1,1
+BDR-144,3,F375,20,2 lemon wedges,souring,0,1,0.8
+BDR-144,4,F308,5,a slice of ginger,spice,1,1,1
+BDR-145,1,F648,700,3 cups yoghurt,main,0,1,1
+BDR-145,2,F316,15,4 tbsp mint leaves,flavouring,0,1,1
+BDR-145,3,F299,10,3 tbsp coriander leaf,flavouring,0,1,1
+BDR-145,4,F124,10,2 green chillies,spice,0,1,1
+BDR-145,5,F301,5,1 tsp roasted cumin powder,spice,0,1,1
+BDR-145,6,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-145,7,F268,4,3/4 tsp mustard seed powder,spice,0,1,1
+BDR-145,8,F698,20,1.5 tsp sugar,sweetener,0,1,1
+BDR-145,9,F375,20,juice of half a lemon,souring,0,1,1
+BDR-145,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-146,1,F375,80,juice of 3 lemons,main,0,1,1
+BDR-146,2,F698,60,5 tsp sugar,sweetener,0,1,1
+BDR-146,3,F316,10,3 tbsp mint leaves,flavouring,0,1,1
+BDR-146,4,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-147,1,F380,400,"2 ripe mangoes, pulped",main,0,1,1
+BDR-147,2,F648,400,1.5 cups yoghurt,main,0,1,1
+BDR-147,3,F654,200,1 cup milk,liquid,0,1,1
+BDR-147,4,F698,30,2.5 tsp sugar,sweetener,0,1,1
+BDR-147,5,F285,1,"2 cardamom, ground",spice,0,1,1
+BDR-148,1,F130,250,2 cucumbers,main,0,1,1
+BDR-148,2,F169,200,2 tomatoes,main,0,1,1
+BDR-148,3,F153,80,1.5 onions,main,0,1,1
+BDR-148,4,F124,10,2 green chillies,spice,0,1,1
+BDR-148,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-148,6,F375,25,juice of half a lemon,souring,0,1,1
+BDR-148,7,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-149,1,F169,600,6 ripe tomatoes,main,0,1,0.8
+BDR-149,2,F698,120,2/3 cup sugar,sweetener,0,1,1
+BDR-149,3,F360,60,"8 dates, chopped",sweetener,0,1,0.8
+BDR-149,4,F308,10,1.25 tsp ginger,aromatic,0,1,1
+BDR-149,5,F287,3,2 dried chillies,spice,0,1,1
+BDR-149,6,F305,2,1/3 tsp fennel,spice,0,1,1
+BDR-149,7,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-149,8,F318,2,1/3 tsp nigella,spice,0,1,1
+BDR-149,9,F306,1,1/4 tsp fenugreek,spice,0,1,1
+BDR-149,10,F268,2,1/3 tsp mustard,spice,0,1,1
+BDR-149,11,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-149,12,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-150,1,F406,150,1 cup ripe tamarind pulp,main,0,1,0.8
+BDR-150,2,F695,100,1/2 cup date palm jaggery,sweetener,0,1,1
+BDR-150,3,F360,50,6 dates,sweetener,0,1,0.8
+BDR-150,4,F301,5,1 tsp roasted cumin powder,spice,0,1,1
+BDR-150,5,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-150,6,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-150,7,F308,8,1 tsp ginger,aromatic,0,1,1
+BDR-150,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-151,1,F035,500,2.5 cups aromatic rice,staple,0,1,0.8
+BDR-151,2,F666,45,3 tbsp ghee,oil,0,1,1
+BDR-151,3,F698,40,3 tbsp sugar,sweetener,0,1,1
+BDR-151,4,F252,30,3 tbsp cashews,garnish,0,1,1
+BDR-151,5,F360,30,"4 dates, slivered",garnish,0,1,0.85
+BDR-151,6,F336,2,1/3 tsp turmeric for colour,spice,0,1,1
+BDR-151,7,F285,2,4 cardamom,spice,0,1,1
+BDR-151,8,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-151,9,F283,1,2 bay leaves,spice,0,1,1
+BDR-151,10,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-152,1,F035,450,2.25 cups aromatic rice,staple,0,1,0.8
+BDR-152,2,F666,35,2.5 tbsp ghee,oil,0,1,1
+BDR-152,3,F153,60,"1 onion, fried",aromatic,0,1,0.85
+BDR-152,4,F285,2,3 cardamom,spice,0,1,1
+BDR-152,5,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-152,6,F283,1,1 bay leaf,spice,0,1,1
+BDR-152,7,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-153,1,F542,300,1 large fish head/portion,protein,0,1,0.75
+BDR-153,2,F061,150,3/4 cup roasted mung dal,protein,0,1,0.8
+BDR-153,3,F035,120,2/3 cup aromatic rice,staple,0,1,0.8
+BDR-153,4,F153,100,2 onions,aromatic,0,1,0.85
+BDR-153,5,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-153,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-153,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-153,8,F285,2,3 cardamom,spice,0,1,1
+BDR-153,9,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-153,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-153,11,F124,12,3 green chillies,spice,0,1,0.85
+BDR-153,12,F666,12,1 tbsp ghee,oil,0,1,1
+BDR-153,13,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-153,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-154,1,F035,250,"1.25 cups rice, cooked and cooled",staple,0,1,0.8
+BDR-154,2,F640,110,2 eggs,protein,0,1,0.8
+BDR-154,3,F119,70,"1 carrot, diced",vegetable,0,1,0.85
+BDR-154,4,F158,60,1/2 cup peas,vegetable,0,1,0.85
+BDR-154,5,F321,30,3 tbsp spring onion,garnish,0,1,1
+BDR-154,6,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-154,7,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-154,8,F679,25,2 tbsp oil,oil,0,1,1
+BDR-154,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-155,1,F017,150,2.5 cups flattened rice,staple,0,1,1
+BDR-155,2,F648,300,1.25 cups yoghurt,dairy,0,1,1
+BDR-155,3,F347,200,2 ripe bananas,fruit,0,1,1
+BDR-155,4,F695,40,3 tbsp date palm jaggery,sweetener,0,1,1
+BDR-155,5,F256,30,1/3 cup grated coconut,garnish,0,1,1
+BDR-156,1,F037,250,1.25 cups sunned rice,staple,0,1,0.8
+BDR-156,2,F046,60,1/2 cup wheat flour,staple,0,1,0.8
+BDR-156,3,F695,150,3/4 cup date palm jaggery,sweetener,0,1,1
+BDR-156,4,F256,60,3/4 cup grated coconut,flavouring,0,1,1
+BDR-156,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-156,6,F679,60,estimated absorbed oil,oil,0,1,1
+BDR-156,7,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-157,1,F037,250,1.25 cups sunned rice,staple,0,1,0.8
+BDR-157,2,F256,150,2 cups grated coconut,filling,0,1,1
+BDR-157,3,F695,100,1/2 cup date palm jaggery,sweetener,0,1,1
+BDR-157,4,F654,1000,4 cups full-fat milk,main,0,1,1
+BDR-157,5,F698,40,3 tbsp sugar,sweetener,0,1,1
+BDR-157,6,F285,2,3 cardamom,spice,0,1,1
+BDR-157,7,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-158,1,F037,200,1 cup sunned rice,staple,0,1,0.8
+BDR-158,2,F040,80,2/3 cup semolina,staple,0,1,0.8
+BDR-158,3,F695,150,3/4 cup date palm jaggery,sweetener,0,1,1
+BDR-158,4,F285,1,2 cardamom,spice,0,1,1
+BDR-158,5,F679,55,estimated absorbed oil,oil,0,1,1
+BDR-158,6,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-159,1,F047,300,2.5 cups refined flour,staple,0,1,0.8
+BDR-159,2,F640,165,3 eggs,protein,0,1,0.8
+BDR-159,3,F153,50,"1 small onion, finely chopped",aromatic,0,1,0.85
+BDR-159,4,F124,10,2 green chillies,spice,0,1,0.85
+BDR-159,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-159,6,F679,40,3 tbsp oil,oil,0,1,1
+BDR-159,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-160,1,F134,80,2 whole garlic bulbs,main,0,1,0.75
+BDR-160,2,F287,5,4 dried chillies,spice,0,1,1
+BDR-160,3,F153,40,1 small onion,aromatic,0,1,0.75
+BDR-160,4,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-160,5,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-160,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-161,1,F124,50,12 green chillies,main,0,1,0.75
+BDR-161,2,F134,15,4 cloves garlic,aromatic,0,1,0.75
+BDR-161,3,F153,50,1 small onion,aromatic,0,1,0.75
+BDR-161,4,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-161,5,F672,12,2.5 tsp mustard oil,oil,0,1,1
+BDR-161,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-162,1,F080,350,3 cups country beans,main,0,1,0.75
+BDR-162,2,F134,12,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-162,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-162,4,F153,60,1 onion,aromatic,0,1,0.75
+BDR-162,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-162,6,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-162,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-163,1,F299,80,2 bunches coriander leaf,main,0,1,1
+BDR-163,2,F134,15,"4 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-163,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-163,4,F153,50,1 small onion,aromatic,0,1,0.75
+BDR-163,5,F672,12,2.5 tsp mustard oil,oil,0,1,1
+BDR-163,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-164,1,F234,300,2 potatoes,main,0,1,0.75
+BDR-164,2,F640,165,3 eggs,main,0,0.85,0.8
+BDR-164,3,F153,70,1 onion,aromatic,0,1,0.75
+BDR-164,4,F287,4,3 dried chillies,spice,0,1,1
+BDR-164,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-164,6,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-164,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-165,1,F164,400,3 cups radish,main,0,1,0.75
+BDR-165,2,F134,12,"3 cloves garlic, roasted",aromatic,0,1,0.75
+BDR-165,3,F287,4,3 dried chillies,spice,0,1,1
+BDR-165,4,F153,60,1 onion,aromatic,0,1,0.75
+BDR-165,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-165,6,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-165,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-166,1,F067,250,1.5 cups dried peas,main,0,1,0.8
+BDR-166,2,F234,150,"1 potato, diced",vegetable,0,1,0.75
+BDR-166,3,F153,100,2 onions,aromatic,0,1,0.8
+BDR-166,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-166,5,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-166,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-166,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-166,8,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-166,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-166,10,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-166,11,F299,12,3 tbsp coriander leaf,garnish,0,1,1
+BDR-166,12,F124,12,3 green chillies,spice,0,1,0.8
+BDR-166,13,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-166,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-167,1,F234,250,"2 potatoes, cubed",main,0,1,0.75
+BDR-167,2,F089,250,"1 aubergine, cubed",main,0,1,0.8
+BDR-167,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-167,4,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-167,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-167,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-167,7,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-167,8,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-167,9,F124,10,2 green chillies,spice,0,1,0.8
+BDR-167,10,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-167,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-168,1,F234,500,16 baby potatoes,main,0,1,0.75
+BDR-168,2,F153,100,"2 onions, paste",aromatic,0,1,0.8
+BDR-168,3,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-168,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-168,5,F648,80,1/3 cup yoghurt,dairy,0,1,1
+BDR-168,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-168,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-168,8,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-168,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-168,10,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-168,11,F283,1,1 bay leaf,spice,0,1,1
+BDR-168,12,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-168,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-169,1,F160,400,"3 green bananas, cubed",main,0,1,0.85
+BDR-169,2,F234,100,1 small potato,vegetable,0,1,0.8
+BDR-169,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-169,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-169,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-169,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-169,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-169,8,F124,10,2 green chillies,spice,0,1,0.85
+BDR-169,9,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-169,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-170,1,F160,400,"4 green bananas, boiled",main,0,1,0.8
+BDR-170,2,F050,60,1/2 cup bengal gram dal,binder,0,1,0.8
+BDR-170,3,F153,100,2 onions,aromatic,0,1,0.8
+BDR-170,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-170,5,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-170,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-170,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-170,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-170,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-170,10,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-170,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-170,12,F679,35,2.5 tbsp oil,oil,0,1,1
+BDR-170,13,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-171,1,F139,500,4 cups diced bottle gourd,main,0,1,0.8
+BDR-171,2,F234,100,1 small potato,vegetable,0,1,0.75
+BDR-171,3,F158,60,1/2 cup peas,vegetable,0,1,0.8
+BDR-171,4,F153,60,1 onion,aromatic,0,1,0.8
+BDR-171,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-171,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-171,7,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-171,8,F283,1,1 bay leaf,spice,0,1,1
+BDR-171,9,F124,10,2 green chillies,spice,0,1,0.8
+BDR-171,10,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-171,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-172,1,F135,500,4 cups diced ash gourd,main,0,1,0.8
+BDR-172,2,F234,100,1 small potato,vegetable,0,1,0.75
+BDR-172,3,F153,60,1 onion,aromatic,0,1,0.8
+BDR-172,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-172,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-172,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-172,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-172,8,F124,10,2 green chillies,spice,0,1,0.8
+BDR-172,9,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-172,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-173,1,F158,250,2 cups green peas,main,0,1,0.8
+BDR-173,2,F234,250,"2 potatoes, cubed",main,0,1,0.75
+BDR-173,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-173,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-173,5,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-173,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-173,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-173,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-173,9,F283,1,1 bay leaf,spice,0,1,1
+BDR-173,10,F124,10,2 green chillies,spice,0,1,0.8
+BDR-173,11,F679,22,1.5 tbsp oil,oil,0,1,1
+BDR-173,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-174,1,F263,200,1.5 cups jackfruit seeds,main,0,1,1
+BDR-174,2,F139,300,2 cups diced bottle gourd,vegetable,0,1,0.8
+BDR-174,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-174,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-174,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-174,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-174,7,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-174,8,F124,10,2 green chillies,spice,0,1,0.8
+BDR-174,9,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-174,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-175,1,F076,350,"3 cups amaranth stems, cut",main,0,1,0.85
+BDR-175,2,F234,120,"1 potato, matchsticks",vegetable,0,1,0.8
+BDR-175,3,F089,120,1 small aubergine,vegetable,0,1,0.85
+BDR-175,4,F153,60,1 onion,aromatic,0,1,0.85
+BDR-175,5,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-175,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-175,7,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-175,8,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-175,9,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-175,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-176,1,F192,400,2 bunches taro leaves,main,0,0.9,0.85
+BDR-176,2,F552,120,3/4 cup small shrimp,protein,0,1,0.8
+BDR-176,3,F153,70,1 onion,aromatic,0,1,0.85
+BDR-176,4,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-176,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-176,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-176,7,F334,15,1 tbsp tamarind pulp,souring,0,1,1
+BDR-176,8,F124,12,3 green chillies,spice,0,1,0.85
+BDR-176,9,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-176,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-177,1,F217,400,2 bunches sweet potato leaves,main,0,0.9,0.85
+BDR-177,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-177,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-177,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-177,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-177,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-177,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-178,1,F178,400,2 bunches green amaranth,main,0,0.9,0.85
+BDR-178,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-178,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-178,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-178,5,F124,10,2 green chillies,spice,0,1,0.85
+BDR-178,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-178,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-179,1,F442,500,"2 whole crabs, cut",main,0,1,0.8
+BDR-179,2,F153,120,2 onions,aromatic,0,1,0.85
+BDR-179,3,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-179,4,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-179,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-179,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-179,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-179,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-179,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-179,10,F124,15,4 green chillies,spice,0,1,0.85
+BDR-179,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-179,12,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-179,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-180,1,F542,500,6 rohu steaks,main,0,1,0.8
+BDR-180,2,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-180,3,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-180,4,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-180,5,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-181,1,F419,300,2 cups small barb fish,main,0,1,0.75
+BDR-181,2,F234,120,"1 potato, matchsticks",vegetable,0,1,0.8
+BDR-181,3,F153,100,2 onions,aromatic,0,1,0.85
+BDR-181,4,F134,10,3 cloves garlic,aromatic,0,1,0.85
+BDR-181,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-181,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-181,7,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-181,8,F124,15,4 green chillies,spice,0,1,0.85
+BDR-181,9,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-181,10,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-181,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-182,1,F552,250,"1.5 cups shrimp, cleaned",main,0,1,0.75
+BDR-182,2,F234,250,"2 potatoes, cubed",vegetable,0,1,0.75
+BDR-182,3,F153,90,1.5 onions,aromatic,0,1,0.8
+BDR-182,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-182,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-182,6,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-182,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-182,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-182,9,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-182,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-182,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-182,12,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-182,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-183,1,F542,250,1 fish head/portion,protein,0,1,0.75
+BDR-183,2,F061,180,1 cup roasted mung dal,main,0,1,0.8
+BDR-183,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-183,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-183,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-183,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-183,7,F283,1,1 bay leaf,spice,0,1,1
+BDR-183,8,F124,12,3 green chillies,spice,0,1,0.8
+BDR-183,9,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-183,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-184,1,F425,450,6 fresh Bombay duck,main,0,1,0.75
+BDR-184,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-184,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-184,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-184,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-184,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-184,7,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-184,8,F124,15,4 green chillies,spice,0,1,0.8
+BDR-184,9,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-184,10,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-184,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-185,1,F596,700,700 g chicken pieces,main,0,1,0.8
+BDR-185,2,F234,300,3 potatoes,vegetable,0,1,0.75
+BDR-185,3,F153,120,2 onions,aromatic,0,1,0.8
+BDR-185,4,F134,15,4 cloves garlic paste,aromatic,0,1,0.8
+BDR-185,5,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-185,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-185,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-185,8,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-185,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-185,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-185,11,F124,12,3 green chillies,spice,0,1,0.8
+BDR-185,12,F679,30,2 tbsp oil,oil,0,1,1
+BDR-185,13,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-186,1,F597,400,400 g chicken liver,main,0,1,0.75
+BDR-186,2,F153,120,2 onions,aromatic,0,1,0.85
+BDR-186,3,F134,12,3 cloves garlic paste,aromatic,0,1,0.85
+BDR-186,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-186,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-186,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-186,7,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-186,8,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-186,9,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-186,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-186,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-186,12,F679,30,2 tbsp oil,oil,0,1,1
+BDR-186,13,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-187,1,F596,700,6 chicken pieces,main,0,1,0.8
+BDR-187,2,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-187,3,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-187,4,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-187,5,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-187,6,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-187,7,F301,3,1/2 tsp roasted cumin,spice,0,1,1
+BDR-187,8,F375,20,juice of half a lemon,souring,0,1,0.85
+BDR-187,9,F640,30,"half an egg, beaten",binder,0,1,0.8
+BDR-187,10,F679,45,estimated absorbed oil,oil,0,1,1
+BDR-187,11,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-188,1,F602,800,800 g goat meat on bone,main,0,1,0.8
+BDR-188,2,F153,180,3.5 onions,aromatic,0,1,0.85
+BDR-188,3,F134,20,5 cloves garlic paste,aromatic,0,1,0.85
+BDR-188,4,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-188,5,F648,100,1/2 cup yoghurt,dairy,0,1,1
+BDR-188,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-188,7,F301,5,1 tsp cumin,spice,0,1,1
+BDR-188,8,F300,5,1 tsp coriander powder,spice,0,1,1
+BDR-188,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-188,10,F285,3,5 cardamom,spice,0,1,1
+BDR-188,11,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-188,12,F283,1,2 bay leaves,spice,0,1,1
+BDR-188,13,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-188,14,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-188,15,F697,7,1.1 tsp salt,seasoning,0,1,1
+BDR-189,1,F640,220,4 eggs,main,0,1,0.8
+BDR-189,2,F153,100,"2 onions, sliced",aromatic,0,1,0.85
+BDR-189,3,F124,12,3 green chillies,spice,0,1,0.85
+BDR-189,4,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-189,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-189,6,F679,18,1.25 tbsp oil,oil,0,1,1
+BDR-189,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-190,1,F640,220,4 eggs,main,0,0.85,0.8
+BDR-190,2,F234,250,2 potatoes,vegetable,0,1,0.75
+BDR-190,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-190,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-190,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-190,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-190,7,F287,2,1/3 tsp chilli powder,spice,0,1,1
+BDR-190,8,F283,1,1 bay leaf,spice,0,1,1
+BDR-190,9,F124,10,2 green chillies,spice,0,1,0.8
+BDR-190,10,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-190,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-191,1,F017,200,3 cups flattened rice,main,0,1,0.8
+BDR-191,2,F695,180,1 cup date palm jaggery,sweetener,0,1,1
+BDR-191,3,F256,60,3/4 cup grated coconut,flavouring,0,1,1
+BDR-191,4,F285,1,"2 cardamom, ground",spice,0,1,1
+BDR-192,1,F033,150,8 cups puffed rice,main,0,1,0.8
+BDR-192,2,F695,180,1 cup date palm jaggery,sweetener,0,1,1
+BDR-192,3,F285,1,"2 cardamom, ground",spice,0,1,1
+BDR-193,1,F274,150,1 cup sesame seeds,main,0,1,1
+BDR-193,2,F695,150,3/4 cup date palm jaggery,sweetener,0,1,1
+BDR-193,3,F256,50,1/2 cup grated coconut,flavouring,0,1,1
+BDR-193,4,F285,1,"2 cardamom, ground",spice,0,1,1
+BDR-194,1,F654,1400,6 cups full-fat milk,main,0,1,1
+BDR-194,2,F035,80,1/3 cup aromatic rice,main,0,1,0.8
+BDR-194,3,F695,150,3/4 cup date palm jaggery,sweetener,0,1,1
+BDR-194,4,F285,2,4 cardamom,spice,0,1,1
+BDR-194,5,F283,1,1 bay leaf,spice,0,1,1
+BDR-194,6,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-195,1,F139,700,5 cups grated bottle gourd,main,0,1,0.8
+BDR-195,2,F654,500,2 cups full-fat milk,main,0,1,1
+BDR-195,3,F698,120,2/3 cup sugar,sweetener,0,1,1
+BDR-195,4,F666,40,3 tbsp ghee,oil,0,1,1
+BDR-195,5,F652,30,3 tbsp milk powder,dairy,0,1,1
+BDR-195,6,F285,2,4 cardamom,spice,0,1,1
+BDR-195,7,F247,25,3 tbsp almonds,garnish,0,1,1
+BDR-196,1,F648,500,2 cups yoghurt,main,0,1,1
+BDR-196,2,F654,200,1 cup milk,liquid,0,1,1
+BDR-196,3,F698,30,2.5 tsp sugar,sweetener,0,1,1
+BDR-196,4,F285,1,"2 cardamom, ground",spice,0,1,1
+BDR-197,1,F646,500,2 cups buttermilk,main,0,1,1
+BDR-197,2,F316,10,3 tbsp mint leaves,flavouring,0,1,1
+BDR-197,3,F301,4,3/4 tsp roasted cumin powder,spice,0,1,1
+BDR-197,4,F124,6,1 green chilli,spice,0,1,1
+BDR-197,5,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-198,1,F346,300,"1 ripe wood apple, pulp",main,0,1,1
+BDR-198,2,F698,50,4 tsp sugar,sweetener,0,1,1
+BDR-198,3,F697,1,a pinch of salt,seasoning,0,1,1
+BDR-199,1,F397,400,"1/2 pineapple, diced",main,0,1,0.8
+BDR-199,2,F698,80,1/2 cup sugar,sweetener,0,1,1
+BDR-199,3,F287,3,2 dried chillies,spice,0,1,1
+BDR-199,4,F268,2,1/3 tsp mustard seed,spice,0,1,1
+BDR-199,5,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-200,1,F156,200,1.5 cups grated green papaya,main,0,1,1
+BDR-200,2,F119,150,"2 carrots, grated",main,0,1,1
+BDR-200,3,F153,50,1 small onion,aromatic,0,1,1
+BDR-200,4,F124,8,2 green chillies,spice,0,1,1
+BDR-200,5,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-200,6,F375,25,juice of half a lemon,souring,0,1,1
+BDR-200,7,F262,20,2 tbsp roasted peanuts,garnish,0,1,1
+BDR-200,8,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-201,1,F035,600,3 cups aromatic rice,staple,0,1,0.8
+BDR-201,2,F582,700,"700 g beef, cubed",protein,0,1,0.8
+BDR-201,3,F234,300,"3 potatoes, halved",vegetable,0,1,0.8
+BDR-201,4,F153,200,"4 onions, sliced",aromatic,0,1,0.85
+BDR-201,5,F308,25,3 tsp ginger paste,aromatic,0,1,1
+BDR-201,6,F134,20,5 cloves garlic paste,aromatic,0,1,0.85
+BDR-201,7,F648,100,1/2 cup yoghurt,dairy,0,1,1
+BDR-201,8,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-201,9,F301,5,1 tsp cumin (incl. panch phoron share),spice,0,1,1
+BDR-201,10,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-201,11,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-201,12,F305,2,1/3 tsp fennel seed,spice,0,1,1
+BDR-201,13,F306,1,1/4 tsp fenugreek seed,spice,0,1,1
+BDR-201,14,F318,2,1/3 tsp nigella,spice,0,1,1
+BDR-201,15,F268,2,1/3 tsp mustard seed,spice,0,1,1
+BDR-201,16,F285,3,5 cardamom,spice,0,1,1
+BDR-201,17,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-201,18,F298,1,4 cloves,spice,0,1,1
+BDR-201,19,F283,1,2 bay leaves,spice,0,1,1
+BDR-201,20,F124,20,6 green chillies,spice,0,1,0.85
+BDR-201,21,F672,70,5 tbsp mustard oil,oil,0,1,1
+BDR-201,22,F666,20,1.5 tbsp ghee,oil,0,1,1
+BDR-201,23,F697,10,1.6 tsp salt,seasoning,0,1,1
+BDR-202,1,F037,200,1 cup sunned rice,staple,0,1,0.8
+BDR-202,2,F061,60,1/3 cup mung dal,protein,0,1,0.8
+BDR-202,3,F064,40,1/4 cup red lentil,protein,0,1,0.8
+BDR-202,4,F153,60,1 onion,aromatic,0,1,0.8
+BDR-202,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-202,6,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-202,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-202,8,F306,3,1/2 tsp fenugreek seed,spice,0,1,1
+BDR-202,9,F124,10,2 green chillies,spice,0,1,0.8
+BDR-202,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-202,11,F679,20,1.5 tbsp oil,oil,0,1,1
+BDR-202,12,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-203,1,F023,300,"1.5 cups rice, cooked the night before",staple,0,1,0.8
+BDR-203,2,F465,400,4 hilsa steaks,protein,0,1,0.8
+BDR-203,3,F153,80,"1.5 onions, sliced",aromatic,0,1,0.85
+BDR-203,4,F124,15,4 green chillies,spice,0,1,0.85
+BDR-203,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-203,6,F287,4,"3 dried chillies, fried",spice,0,1,1
+BDR-203,7,F672,40,3 tbsp mustard oil,oil,0,1,1
+BDR-203,8,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-204,1,F035,250,1.25 cups aromatic rice,staple,0,1,0.8
+BDR-204,2,F061,120,2/3 cup roasted mung dal,protein,0,1,0.8
+BDR-204,3,F640,275,"5 eggs, boiled",protein,0,0.85,0.8
+BDR-204,4,F234,150,"1 potato, cubed",vegetable,0,1,0.75
+BDR-204,5,F153,100,2 onions,aromatic,0,1,0.8
+BDR-204,6,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-204,7,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-204,8,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-204,9,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-204,10,F283,1,1 bay leaf,spice,0,1,1
+BDR-204,11,F285,1,2 cardamom,spice,0,1,1
+BDR-204,12,F297,2,1 cinnamon stick,spice,0,1,1
+BDR-204,13,F124,12,3 green chillies,spice,0,1,0.8
+BDR-204,14,F666,10,2 tsp ghee,oil,0,1,1
+BDR-204,15,F679,30,2 tbsp oil,oil,0,1,1
+BDR-204,16,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-205,1,F033,60,3 cups puffed rice,staple,0,1,1
+BDR-205,2,F654,400,1.5 cups milk,dairy,0,1,1
+BDR-205,3,F347,120,1 ripe banana,fruit,0,1,1
+BDR-205,4,F695,30,2 tbsp date palm jaggery,sweetener,0,1,1
+BDR-206,1,F054,200,1 cup black gram,staple,0,1,0.8
+BDR-206,2,F037,100,1/2 cup sunned rice,staple,0,1,0.8
+BDR-206,3,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-207,1,F037,300,1.5 cups sunned rice,staple,0,1,0.8
+BDR-207,2,F695,200,1 cup date palm jaggery,sweetener,0,1,1
+BDR-207,3,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-207,4,F679,60,estimated absorbed oil,oil,0,1,1
+BDR-207,5,F697,2,1/3 tsp salt,seasoning,0,1,1
+BDR-208,1,F347,300,"3 ripe bananas, mashed",main,0,1,0.85
+BDR-208,2,F037,150,3/4 cup sunned rice,staple,0,1,0.8
+BDR-208,3,F046,50,1/2 cup wheat flour,staple,0,1,0.8
+BDR-208,4,F695,60,1/3 cup date palm jaggery,sweetener,0,1,1
+BDR-208,5,F256,40,1/2 cup grated coconut,flavouring,0,1,1
+BDR-208,6,F285,1,2 cardamom,spice,0,1,1
+BDR-208,7,F679,55,estimated absorbed oil,oil,0,1,1
+BDR-208,8,F697,1,a pinch of salt,seasoning,0,1,1
+BDR-209,1,F391,300,1.5 cups ripe palmyra pulp,main,0,1,0.85
+BDR-209,2,F037,200,1 cup sunned rice,staple,0,1,0.8
+BDR-209,3,F698,60,1/3 cup sugar,sweetener,0,1,1
+BDR-209,4,F256,50,2/3 cup grated coconut,flavouring,0,1,1
+BDR-209,5,F679,60,estimated absorbed oil,oil,0,1,1
+BDR-209,6,F697,1,a pinch of salt,seasoning,0,1,1
+BDR-210,1,F037,200,1 cup sunned rice,staple,0,1,0.8
+BDR-210,2,F654,1000,4 cups full-fat milk,main,0,1,1
+BDR-210,3,F695,120,2/3 cup date palm jaggery,sweetener,0,1,1
+BDR-210,4,F285,2,4 cardamom,spice,0,1,1
+BDR-210,5,F283,1,1 bay leaf,spice,0,1,1
+BDR-210,6,F697,1,a pinch of salt,seasoning,0,1,1
+BDR-211,1,F310,100,2 cups pennywort leaves,main,0,1,1
+BDR-211,2,F134,12,"3 cloves garlic, roasted",aromatic,0,1,1
+BDR-211,3,F124,10,2 green chillies,spice,0,1,1
+BDR-211,4,F153,40,1 small onion,aromatic,0,1,1
+BDR-211,5,F672,10,2 tsp mustard oil,oil,0,1,1
+BDR-211,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-212,1,F367,300,"6 hog plums, grated",main,0,1,1
+BDR-212,2,F698,15,1 tbsp sugar,sweetener,0,1,1
+BDR-212,3,F287,3,"2 dried chillies, crushed",spice,0,1,1
+BDR-212,4,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-212,5,F672,8,2 tsp mustard oil,oil,0,1,1
+BDR-212,6,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-213,1,F355,300,"3 star fruits, sliced",main,0,1,1
+BDR-213,2,F698,15,1 tbsp sugar,sweetener,0,1,1
+BDR-213,3,F287,3,"2 dried chillies, crushed",spice,0,1,1
+BDR-213,4,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-213,5,F672,8,2 tsp mustard oil,oil,0,1,1
+BDR-213,6,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-214,1,F366,300,"3 green guavas, chopped",main,0,1,1
+BDR-214,2,F124,5,1 green chilli,spice,0,1,1
+BDR-214,3,F287,3,"2 dried chillies, crushed",spice,0,1,1
+BDR-214,4,F698,10,2 tsp sugar,sweetener,0,1,1
+BDR-214,5,F299,8,2 tbsp coriander leaf,garnish,0,1,1
+BDR-214,6,F672,8,2 tsp mustard oil,oil,0,1,1
+BDR-214,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-215,1,F064,150,3/4 cup red lentil,protein,0,1,0.8
+BDR-215,2,F169,150,2 tomatoes,vegetable,0,1,0.8
+BDR-215,3,F334,20,1.5 tbsp tamarind pulp,souring,0,1,1
+BDR-215,4,F153,40,1 small onion,aromatic,0,1,0.8
+BDR-215,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-215,6,F287,3,2 dried chillies,spice,0,1,1
+BDR-215,7,F268,2,1/3 tsp mustard seed,spice,0,1,1
+BDR-215,8,F318,1,1/4 tsp nigella,spice,0,1,1
+BDR-215,9,F698,8,1.5 tsp sugar,sweetener,0,1,1
+BDR-215,10,F672,15,1 tbsp mustard oil,oil,0,1,1
+BDR-215,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-216,1,F064,150,3/4 cup red lentil,protein,0,1,0.8
+BDR-216,2,F162,150,1 cup pumpkin,vegetable,0,1,0.8
+BDR-216,3,F139,150,1 cup bottle gourd,vegetable,0,1,0.8
+BDR-216,4,F234,100,1 small potato,vegetable,0,1,0.75
+BDR-216,5,F119,80,1 carrot,vegetable,0,1,0.8
+BDR-216,6,F153,60,1 onion,aromatic,0,1,0.8
+BDR-216,7,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-216,8,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-216,9,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-216,10,F124,10,2 green chillies,spice,0,1,0.8
+BDR-216,11,F672,18,1.25 tbsp mustard oil,oil,0,1,1
+BDR-216,12,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-217,1,F064,50,1/4 cup red lentil,protein,0,1,0.8
+BDR-217,2,F061,50,1/4 cup mung dal,protein,0,1,0.8
+BDR-217,3,F054,40,1/4 cup black gram,protein,0,1,0.8
+BDR-217,4,F050,40,1/4 cup bengal gram,protein,0,1,0.8
+BDR-217,5,F071,40,1/4 cup pigeon pea,protein,0,1,0.8
+BDR-217,6,F153,60,1 onion,aromatic,0,1,0.8
+BDR-217,7,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-217,8,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-217,9,F169,80,1 small tomato,vegetable,0,1,0.8
+BDR-217,10,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-217,11,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-217,12,F287,3,2 dried chillies,spice,0,1,1
+BDR-217,13,F666,10,2 tsp ghee,oil,0,1,1
+BDR-217,14,F679,15,1 tbsp oil,oil,0,1,1
+BDR-217,15,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-218,1,F152,350,"3 cups okra, cut",main,0,1,0.85
+BDR-218,2,F169,200,2 tomatoes,main,0,1,0.85
+BDR-218,3,F153,70,1 onion,aromatic,0,1,0.85
+BDR-218,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-218,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-218,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-218,7,F124,8,2 green chillies,spice,0,1,0.85
+BDR-218,8,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-218,9,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-219,1,F146,400,"6 teasle gourds, sliced",main,0,1,0.85
+BDR-219,2,F050,20,2 tbsp bengal gram,coating,0,1,0.8
+BDR-219,3,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-219,4,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-219,5,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-219,6,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-220,1,F146,350,5 teasle gourds,main,0,1,0.8
+BDR-220,2,F234,200,2 potatoes,main,0,1,0.75
+BDR-220,3,F153,60,1 onion,aromatic,0,1,0.8
+BDR-220,4,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-220,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-220,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-220,7,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-220,8,F124,10,2 green chillies,spice,0,1,0.8
+BDR-220,9,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-220,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-221,1,F143,450,"3 cups snake gourd, sliced",main,0,1,0.8
+BDR-221,2,F552,120,3/4 cup small shrimp,protein,0,1,0.75
+BDR-221,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-221,4,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-221,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-221,6,F301,2,1/3 tsp cumin,spice,0,1,1
+BDR-221,7,F124,12,3 green chillies,spice,0,1,0.8
+BDR-221,8,F672,22,1.5 tbsp mustard oil,oil,0,1,1
+BDR-221,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-222,1,F144,450,3 cups sponge gourd,main,0,1,0.85
+BDR-222,2,F234,100,1 small potato,vegetable,0,1,0.8
+BDR-222,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-222,4,F134,8,2 cloves garlic,aromatic,0,1,0.85
+BDR-222,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-222,6,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-222,7,F124,10,2 green chillies,spice,0,1,0.85
+BDR-222,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-222,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-223,1,F147,400,"2 knol-khol, cubed",main,0,1,0.8
+BDR-223,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-223,3,F158,60,1/2 cup peas,vegetable,0,1,0.8
+BDR-223,4,F153,60,1 onion,aromatic,0,1,0.8
+BDR-223,5,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-223,6,F169,80,1 small tomato,vegetable,0,1,0.8
+BDR-223,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-223,8,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-223,9,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-223,10,F124,10,2 green chillies,spice,0,1,0.8
+BDR-223,11,F679,22,1.5 tbsp oil,oil,0,1,1
+BDR-223,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-224,1,F236,400,"2 sweet potatoes, sliced",main,0,1,0.8
+BDR-224,2,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-224,3,F287,2,1/3 tsp chilli powder,spice,0,1,1
+BDR-224,4,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-224,5,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-225,1,F204,200,1 bunch jute leaves,main,0,1,0.6
+BDR-225,2,F210,150,1 bunch pumpkin leaves,main,0,1,0.6
+BDR-225,3,F180,100,1/2 bunch red amaranth,main,0,1,0.6
+BDR-225,4,F496,100,2/3 cup small fish,protein,0,1,0.75
+BDR-225,5,F134,15,4 cloves garlic,aromatic,0,1,0.8
+BDR-225,6,F153,50,1 small onion,aromatic,0,1,0.8
+BDR-225,7,F124,12,3 green chillies,spice,0,1,0.8
+BDR-225,8,F691,2,1/2 tsp,alkali,0,1,1
+BDR-225,9,F672,12,2.5 tsp mustard oil,oil,0,1,1
+BDR-225,10,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-226,1,F412,80,2/3 cup dried anchovy,protein,0,1,0.75
+BDR-226,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-226,3,F080,150,1 cup country beans,vegetable,0,1,0.8
+BDR-226,4,F089,120,1 small aubergine,vegetable,0,1,0.8
+BDR-226,5,F169,100,1 tomato,vegetable,0,1,0.8
+BDR-226,6,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-226,7,F134,15,4 cloves garlic,aromatic,0,1,0.8
+BDR-226,8,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-226,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-226,10,F124,12,3 green chillies,spice,0,1,0.8
+BDR-226,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-226,12,F672,8,2 tsp mustard oil,oil,0,1,1
+BDR-226,13,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-227,1,F077,150,1 cup bamboo shoot,vegetable,0,1,0.8
+BDR-227,2,F160,150,1 green plantain,vegetable,0,1,0.8
+BDR-227,3,F162,150,1 cup pumpkin,vegetable,0,1,0.8
+BDR-227,4,F129,100,1 cup yard long beans,vegetable,0,1,0.8
+BDR-227,5,F089,100,1 small aubergine,vegetable,0,1,0.8
+BDR-227,6,F139,150,1 cup bottle gourd,vegetable,0,1,0.8
+BDR-227,7,F156,100,1 cup green papaya,vegetable,0,1,0.8
+BDR-227,8,F412,40,1/3 cup dried anchovy,protein,0,1,0.75
+BDR-227,9,F311,5,1 stalk lemongrass,flavouring,0,1,1
+BDR-227,10,F134,15,4 cloves garlic,aromatic,0,1,0.8
+BDR-227,11,F124,15,4 green chillies,spice,0,1,0.8
+BDR-227,12,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-227,13,F679,10,2 tsp oil,oil,0,1,1
+BDR-227,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-228,1,F077,350,"2.5 cups bamboo shoot, sliced",main,0,1,0.85
+BDR-228,2,F552,120,3/4 cup small shrimp,protein,0,1,0.8
+BDR-228,3,F153,70,1 onion,aromatic,0,1,0.85
+BDR-228,4,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-228,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-228,6,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-228,7,F124,12,3 green chillies,spice,0,1,0.85
+BDR-228,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-228,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-229,1,F198,400,2 bunches fern tips,main,0,0.9,0.85
+BDR-229,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-229,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-229,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-229,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-229,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-229,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-230,1,F223,400,2 bunches helencha,main,0,0.9,0.85
+BDR-230,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-230,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-230,4,F124,10,2 green chillies,spice,0,1,0.85
+BDR-230,5,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-230,6,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-230,7,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-231,1,F214,400,2 bunches notey shak,main,0,0.9,0.85
+BDR-231,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-231,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-231,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-231,5,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-231,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-232,1,F210,400,2 bunches pumpkin leaves,main,0,0.9,0.85
+BDR-232,2,F234,80,1 small potato,vegetable,0,1,0.8
+BDR-232,3,F153,60,1 onion,aromatic,0,1,0.85
+BDR-232,4,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-232,5,F318,2,1/2 tsp nigella,spice,0,1,1
+BDR-232,6,F124,10,2 green chillies,spice,0,1,0.85
+BDR-232,7,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-232,8,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-233,1,F183,400,2 bunches bathua,main,0,0.9,0.85
+BDR-233,2,F153,60,1 onion,aromatic,0,1,0.85
+BDR-233,3,F134,12,3 cloves garlic,aromatic,0,1,0.85
+BDR-233,4,F287,3,2 dried chillies,spice,0,1,1
+BDR-233,5,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-233,6,F697,3,1/2 tsp salt,seasoning,0,1,1
+BDR-234,1,F453,300,2 cups kachki fish,main,0,1,0.8
+BDR-234,2,F153,60,"1 onion, sliced",aromatic,0,1,0.85
+BDR-234,3,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-234,4,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-234,5,F124,8,2 green chillies,spice,0,1,0.85
+BDR-234,6,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-234,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-235,1,F466,400,12 chapila fish,main,0,1,0.8
+BDR-235,2,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-235,3,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-235,4,F672,30,2 tbsp mustard oil,oil,0,1,1
+BDR-235,5,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-236,1,F487,600,6 ayre steaks,main,0,1,0.75
+BDR-236,2,F153,150,3 onions,aromatic,0,1,0.85
+BDR-236,3,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-236,4,F308,12,1.5 tsp ginger paste,aromatic,0,1,1
+BDR-236,5,F169,100,1 tomato,vegetable,0,1,0.85
+BDR-236,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-236,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-236,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-236,9,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-236,10,F124,12,3 green chillies,spice,0,1,0.85
+BDR-236,11,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-236,12,F672,40,3 tbsp mustard oil,oil,0,1,1
+BDR-236,13,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-237,1,F452,450,450 g eel pieces,main,0,1,0.75
+BDR-237,2,F153,120,2 onions,aromatic,0,1,0.85
+BDR-237,3,F134,15,4 cloves garlic,aromatic,0,1,0.85
+BDR-237,4,F308,10,1.25 tsp ginger paste,aromatic,0,1,1
+BDR-237,5,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-237,6,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-237,7,F300,3,1/2 tsp coriander powder,spice,0,1,1
+BDR-237,8,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-237,9,F124,10,2 green chillies,spice,0,1,0.85
+BDR-237,10,F672,35,2.5 tbsp mustard oil,oil,0,1,1
+BDR-237,11,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-238,1,F458,450,4 barramundi fillets,main,0,1,0.8
+BDR-238,2,F317,25,2 tbsp mustard paste,spice,0,1,1
+BDR-238,3,F256,50,2/3 cup grated coconut,flavouring,0,1,1
+BDR-238,4,F124,15,4 green chillies,spice,0,1,0.85
+BDR-238,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-238,6,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-238,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-239,1,F527,400,"8 river prawns, cleaned",main,0,1,0.75
+BDR-239,2,F254,150,2/3 cup coconut milk,liquid,0,1,1
+BDR-239,3,F256,80,1 cup coconut flesh,flavouring,0,1,1
+BDR-239,4,F317,15,1 tbsp mustard paste,spice,0,1,1
+BDR-239,5,F153,60,"1 onion, paste",aromatic,0,1,0.85
+BDR-239,6,F124,12,3 green chillies,spice,0,1,0.85
+BDR-239,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-239,8,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-239,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-240,1,F528,400,2 cups tiger prawns,main,0,1,0.75
+BDR-240,2,F317,20,1.5 tbsp mustard paste,spice,0,1,1
+BDR-240,3,F327,15,1 tbsp poppy seed paste,spice,0,1,1
+BDR-240,4,F256,50,2/3 cup grated coconut,flavouring,0,1,1
+BDR-240,5,F648,40,3 tbsp yoghurt,dairy,0,1,1
+BDR-240,6,F124,15,4 green chillies,spice,0,1,0.85
+BDR-240,7,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-240,8,F672,25,1.75 tbsp mustard oil,oil,0,1,1
+BDR-240,9,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-241,1,F429,450,4 bacha pieces,main,0,1,0.75
+BDR-241,2,F234,150,1 potato,vegetable,0,1,0.75
+BDR-241,3,F153,70,1 onion,aromatic,0,1,0.8
+BDR-241,4,F308,8,1 tsp ginger paste,aromatic,0,1,1
+BDR-241,5,F134,8,2 cloves garlic,aromatic,0,1,0.8
+BDR-241,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-241,7,F301,3,1/2 tsp cumin,spice,0,1,1
+BDR-241,8,F287,3,1/2 tsp chilli powder,spice,0,1,1
+BDR-241,9,F124,12,3 green chillies,spice,0,1,0.8
+BDR-241,10,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-241,11,F672,28,2 tbsp mustard oil,oil,0,1,1
+BDR-241,12,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-242,1,F582,1000,"1 kg beef, cubed",main,0,1,0.8
+BDR-242,2,F153,250,5 onions,aromatic,0,1,0.8
+BDR-242,3,F134,30,8 cloves garlic paste,aromatic,0,1,0.8
+BDR-242,4,F308,30,4 tsp ginger paste,aromatic,0,1,1
+BDR-242,5,F287,12,2 tsp chilli powder,spice,0,1,1
+BDR-242,6,F336,5,1 tsp turmeric,spice,0,1,1
+BDR-242,7,F301,6,1 tsp cumin,spice,0,1,1
+BDR-242,8,F300,6,1 tsp coriander powder,spice,0,1,1
+BDR-242,9,F324,3,3/4 tsp black pepper,spice,0,1,1
+BDR-242,10,F313,1,1/4 tsp mace,spice,0,1,1
+BDR-242,11,F319,1,1/4 nutmeg,spice,0,1,1
+BDR-242,12,F285,3,5 cardamom,spice,0,1,1
+BDR-242,13,F297,3,3 cinnamon sticks,spice,0,1,1
+BDR-242,14,F298,2,5 cloves,spice,0,1,1
+BDR-242,15,F333,1,1 star anise,spice,0,1,1
+BDR-242,16,F283,1,2 bay leaves,spice,0,1,1
+BDR-242,17,F672,80,5.5 tbsp mustard oil,oil,0,1,1
+BDR-242,18,F697,10,1.6 tsp salt,seasoning,0,1,1
+BDR-243,1,F582,800,"800 g beef, cubed",main,0,1,0.8
+BDR-243,2,F312,40,citrus rind pieces,flavouring,0,1,1
+BDR-243,3,F153,180,3.5 onions,aromatic,0,1,0.8
+BDR-243,4,F134,20,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-243,5,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-243,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-243,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-243,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-243,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-243,10,F285,2,4 cardamom,spice,0,1,1
+BDR-243,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-243,12,F283,1,1 bay leaf,spice,0,1,1
+BDR-243,13,F124,12,3 green chillies,spice,0,1,0.8
+BDR-243,14,F672,55,4 tbsp mustard oil,oil,0,1,1
+BDR-243,15,F697,7,1.1 tsp salt,seasoning,0,1,1
+BDR-244,1,F582,700,"700 g beef, cubed",main,0,1,0.8
+BDR-244,2,F648,150,2/3 cup yoghurt,dairy,0,1,1
+BDR-244,3,F153,150,3 onions,aromatic,0,1,0.85
+BDR-244,4,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-244,5,F134,20,5 cloves garlic paste,aromatic,0,1,0.85
+BDR-244,6,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-244,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-244,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-244,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-244,10,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-244,11,F285,2,4 cardamom,spice,0,1,1
+BDR-244,12,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-244,13,F124,12,3 green chillies,spice,0,1,0.85
+BDR-244,14,F679,50,3.5 tbsp oil,oil,0,1,1
+BDR-244,15,F697,6,1 tsp salt,seasoning,0,1,1
+BDR-245,1,F600,800,"1 duck, cut",main,0,1,0.8
+BDR-245,2,F077,300,2 cups bamboo shoot,vegetable,0,1,0.8
+BDR-245,3,F153,150,3 onions,aromatic,0,1,0.8
+BDR-245,4,F134,20,5 cloves garlic paste,aromatic,0,1,0.8
+BDR-245,5,F308,20,2.5 tsp ginger paste,aromatic,0,1,1
+BDR-245,6,F336,4,3/4 tsp turmeric,spice,0,1,1
+BDR-245,7,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-245,8,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-245,9,F287,5,1 tsp chilli powder,spice,0,1,1
+BDR-245,10,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-245,11,F124,12,3 green chillies,spice,0,1,0.8
+BDR-245,12,F672,50,3.5 tbsp mustard oil,oil,0,1,1
+BDR-245,13,F697,7,1.1 tsp salt,seasoning,0,1,1
+BDR-246,1,F623,600,"2 pigeons, cut",main,0,1,0.8
+BDR-246,2,F153,150,3 onions,aromatic,0,1,0.85
+BDR-246,3,F134,15,4 cloves garlic paste,aromatic,0,1,0.85
+BDR-246,4,F308,15,2 tsp ginger paste,aromatic,0,1,1
+BDR-246,5,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-246,6,F301,4,3/4 tsp cumin,spice,0,1,1
+BDR-246,7,F300,4,3/4 tsp coriander powder,spice,0,1,1
+BDR-246,8,F287,4,3/4 tsp chilli powder,spice,0,1,1
+BDR-246,9,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-246,10,F285,2,4 cardamom,spice,0,1,1
+BDR-246,11,F297,2,2 cinnamon sticks,spice,0,1,1
+BDR-246,12,F283,1,1 bay leaf,spice,0,1,1
+BDR-246,13,F672,40,3 tbsp mustard oil,oil,0,1,1
+BDR-246,14,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-247,1,F595,400,2 chicken breasts,main,0,1,0.8
+BDR-247,2,F153,80,"1.5 onions, sliced",aromatic,0,1,0.75
+BDR-247,3,F124,20,5 green chillies,spice,0,1,0.75
+BDR-247,4,F299,15,4 tbsp coriander leaf,garnish,0,1,1
+BDR-247,5,F134,10,3 cloves garlic,aromatic,0,1,0.75
+BDR-247,6,F375,25,juice of half a lemon,souring,0,1,0.8
+BDR-247,7,F697,4,2/3 tsp salt,seasoning,0,1,1
+BDR-248,1,F596,400,400 g chicken pieces,main,0,1,0.8
+BDR-248,2,F119,100,1 carrot,vegetable,0,1,0.8
+BDR-248,3,F153,80,1.5 onions,aromatic,0,1,0.8
+BDR-248,4,F308,10,1.25 tsp ginger,aromatic,0,1,1
+BDR-248,5,F134,10,3 cloves garlic,aromatic,0,1,0.8
+BDR-248,6,F324,2,1/2 tsp black pepper,spice,0,1,1
+BDR-248,7,F336,2,1/3 tsp turmeric,spice,0,1,1
+BDR-248,8,F299,10,3 tbsp coriander leaf,garnish,0,1,1
+BDR-248,9,F697,5,3/4 tsp salt,seasoning,0,1,1
+BDR-249,1,F268,100,2/3 cup mustard seed,main,0,1,1
+BDR-249,2,F338,60,1/4 cup vinegar,souring,0,1,1
+BDR-249,3,F336,3,1/2 tsp turmeric,spice,0,1,1
+BDR-249,4,F124,10,2 green chillies,spice,0,1,1
+BDR-249,5,F672,20,1.5 tbsp mustard oil,oil,0,1,1
+BDR-249,6,F697,10,1.6 tsp salt,seasoning,0,1,1
+BDR-250,1,F640,110,2 eggs,main,0,1,0.8
+BDR-250,2,F679,8,2 tsp oil,oil,0,1,1
+BDR-250,3,F324,1,a pinch of black pepper,spice,0,1,1
+BDR-250,4,F697,1,a pinch of salt,seasoning,0,1,1

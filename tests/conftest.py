@@ -15,14 +15,16 @@ from src.diet import recommender
 def _no_trained_model(monkeypatch):
     """Pin the whole suite to the deterministic scoring fallback by default.
 
-    Without this, tests/test_deficiency_match.py and tests/test_meal_plan.py
-    (which assert exact linear-formula properties) would pass only by
-    accident of whether data/models/food_recommender.joblib happens to exist
-    on whoever's machine is running pytest — true today, but not once the
-    training script has ever been run locally. tests/test_recommender.py
-    overrides this per-test via monkeypatch (last set wins).
+    Without this, tests/test_deficiency_match.py, tests/test_meal_plan.py and
+    tests/test_recipe_ranking.py (which assert exact deterministic-formula
+    properties) would pass only by accident of whether the trained models in
+    data/models/ happen to exist on whoever's machine is running pytest —
+    true once the training script has ever been run locally.
+    tests/test_recommender.py overrides this per-test via monkeypatch (last
+    set wins).
     """
     monkeypatch.setattr(recommender, "load_model", lambda: None)
+    monkeypatch.setattr(recommender, "load_recipe_model", lambda: None)
 
 
 @pytest.fixture()

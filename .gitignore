@@ -5,7 +5,7 @@ __pycache__/
 .venv/
 .pytest_cache/
 
-# Trained models (regenerable build artifact — run scripts/train_food_recommender.py)
+# Trained models (regenerable build artifacts — run scripts/train_recommenders.py)
 data/models/
 
 # Environment & secrets

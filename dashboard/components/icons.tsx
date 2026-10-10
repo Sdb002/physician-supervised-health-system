@@ -40,15 +40,6 @@ export const IconUsers = (p: IconProps) => (
   </Svg>
 );
 
-export const IconUserPlus = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M2 21a8 8 0 0 1 13.292-6" />
-    <circle cx="10" cy="8" r="5" />
-    <path d="M19 16v6" />
-    <path d="M22 19h-6" />
-  </Svg>
-);
-
 export const IconClipboard = (p: IconProps) => (
   <Svg {...p}>
     <rect x="8" y="2" width="8" height="4" rx="1" />
@@ -164,9 +155,12 @@ export const IconUtensils = (p: IconProps) => (
   </Svg>
 );
 
-export const IconFlame = (p: IconProps) => (
+export const IconCookingPot = (p: IconProps) => (
   <Svg {...p}>
-    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+    <path d="M2 12h20" />
+    <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" />
+    <path d="m4 8 16-4" />
+    <path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8" />
   </Svg>
 );
 
@@ -195,13 +189,6 @@ export const IconStar = (p: IconProps) => (
   </Svg>
 );
 
-export const IconArrowRight = (p: IconProps) => (
-  <Svg {...p}>
-    <path d="M5 12h14" />
-    <path d="m12 5 7 7-7 7" />
-  </Svg>
-);
-
 export const IconSun = (p: IconProps) => (
   <Svg {...p}>
     <circle cx="12" cy="12" r="4" />
@@ -215,9 +202,40 @@ export const IconMoon = (p: IconProps) => (
   </Svg>
 );
 
-export const IconMonitor = (p: IconProps) => (
+export const IconChevronLeft = (p: IconProps) => (
   <Svg {...p}>
-    <rect width="20" height="14" x="2" y="3" rx="2" />
-    <path d="M8 21h8M12 17v4" />
+    <path d="m15 18-6-6 6-6" />
+  </Svg>
+);
+
+/** The prescription mark: an R whose leg is crossed, drawn as strokes so it
+ * matches the rest of the set instead of depending on a font's ℞ glyph. */
+export const IconRx = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M7 20V4h5.5a4 4 0 0 1 0 8H7" />
+    <path d="m10.5 12 8 9" />
+    <path d="m13 20.5 5.5-5.5" />
+  </Svg>
+);
+
+export const IconPrinter = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M6 9V3h12v6" />
+    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+    <rect width="12" height="7" x="6" y="14" rx="1" />
+  </Svg>
+);
+
+export const IconAlert = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+    <path d="M12 9v4M12 17h.01" />
+  </Svg>
+);
+
+export const IconHome = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 10.5 12 3l9 7.5" />
+    <path d="M5 9v11a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9" />
   </Svg>
 );

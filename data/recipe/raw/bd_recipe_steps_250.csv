@@ -1,0 +1,1106 @@
+﻿recipe_id,recipe_name_en,step_no,instruction
+BDR-001,Plain Boiled Rice,1,Wash the rice in 2-3 changes of water until it runs clear.
+BDR-001,Plain Boiled Rice,2,"Boil plenty of water, add rice, cook uncovered 18-20 min until grains are soft."
+BDR-001,Plain Boiled Rice,3,Drain the starchy water (mar) completely in a strainer.
+BDR-001,Plain Boiled Rice,4,Rest covered for 5 minutes before serving.
+BDR-002,Brown Parboiled Rice,1,Rinse the brown rice and soak 20 minutes to shorten cooking.
+BDR-002,Brown Parboiled Rice,2,Boil in ample water for 28-32 minutes until tender but chewy.
+BDR-002,Brown Parboiled Rice,3,Drain and rest covered 5 minutes.
+BDR-003,Rice and Lentil Porridge (thin),1,"Dry-roast the lentil lightly, then wash with the rice."
+BDR-003,Rice and Lentil Porridge (thin),2,Temper bay leaf and onion in the oil until golden.
+BDR-003,Rice and Lentil Porridge (thin),3,"Add turmeric, ginger, potato and stir for a minute."
+BDR-003,Rice and Lentil Porridge (thin),4,"Add rice, lentil, water and salt; simmer 25 min until soft and porridge-like."
+BDR-003,Rice and Lentil Porridge (thin),5,Finish with slit green chillies.
+BDR-004,Dry Spiced Khichuri,1,"Dry-roast mung dal until fragrant, then wash with the rice and drain."
+BDR-004,Dry Spiced Khichuri,2,Fry whole spices and onion in oil until deep golden.
+BDR-004,Dry Spiced Khichuri,3,Add ginger-garlic and powdered spices; cook until oil separates.
+BDR-004,Dry Spiced Khichuri,4,"Add rice and dal, toss 3 minutes, pour in hot water and salt."
+BDR-004,Dry Spiced Khichuri,5,"Cover and cook on low 20 min; fold in ghee and green chillies, rest 10 min."
+BDR-005,Chicken Pilaf,1,"Marinate chicken with yoghurt, ginger-garlic, pepper and salt for 30 minutes."
+BDR-005,Chicken Pilaf,2,Fry onions in ghee and oil until golden; reserve half as beresta.
+BDR-005,Chicken Pilaf,3,Cook the chicken with whole spices until the water dries and oil separates.
+BDR-005,Chicken Pilaf,4,"Add washed rice, toss, then add hot water, milk powder, sugar and salt."
+BDR-005,Chicken Pilaf,5,"Cover on very low heat 20 min; rest 10 min, garnish with beresta and chillies."
+BDR-006,Beef Tehari,1,"Marinate beef with yoghurt, ginger-garlic, spices and salt for 1 hour."
+BDR-006,Beef Tehari,2,Brown the onions in mustard oil and set some aside.
+BDR-006,Beef Tehari,3,Cook the marinated beef covered until tender and the masala is thick.
+BDR-006,Beef Tehari,4,"Add drained rice, toss well, add hot water and salt."
+BDR-006,Beef Tehari,5,"Cook covered on low 20 min, add green chillies, rest 10 min before serving."
+BDR-007,Mutton Kacchi Biryani,1,"Marinate the goat meat with yoghurt, fried onion, ginger-garlic and all spices for 4 hours."
+BDR-007,Mutton Kacchi Biryani,2,Par-boil the rice to 70 percent in salted water and drain.
+BDR-007,Mutton Kacchi Biryani,3,Layer marinated meat and lightly fried potatoes at the bottom of a heavy pot.
+BDR-007,Mutton Kacchi Biryani,4,"Spread the rice over it, drizzle ghee, milk powder and almonds."
+BDR-007,Mutton Kacchi Biryani,5,Seal the lid with dough and dum-cook on very low heat for 60-75 minutes.
+BDR-008,Hilsa Pilaf,1,"Marinate hilsa steaks with turmeric, mustard paste, yoghurt and salt for 20 minutes."
+BDR-008,Hilsa Pilaf,2,"Fry onions in mustard oil until golden, add ginger-garlic."
+BDR-008,Hilsa Pilaf,3,Add the fish and cook gently 8 minutes; lift the pieces out carefully.
+BDR-008,Hilsa Pilaf,4,"Add rice to the masala, toss, pour hot water and salt, cook covered 18 min."
+BDR-008,Hilsa Pilaf,5,"Layer the fish and green chillies back on top, add ghee and dum 10 min."
+BDR-009,Vegetable Fried Rice,1,Cook and cool the rice ahead so the grains stay separate.
+BDR-009,Vegetable Fried Rice,2,Stir-fry garlic in hot oil for 30 seconds.
+BDR-009,Vegetable Fried Rice,3,"Add carrot, cabbage, peas and capsicum; toss on high heat 3-4 minutes."
+BDR-009,Vegetable Fried Rice,4,"Fold in the rice, salt and pepper; toss 3 minutes."
+BDR-009,Vegetable Fried Rice,5,Finish with spring onion.
+BDR-010,Fermented Water Rice,1,Cover the previous night's cooked rice with clean water and leave 8-10 hours.
+BDR-010,Fermented Water Rice,2,"In the morning, loosen the grains by hand."
+BDR-010,Fermented Water Rice,3,"Serve with salt, raw onion and green chilli."
+BDR-011,Flattened Rice Pilaf,1,Rinse the flattened rice quickly and drain in a colander for 10 minutes.
+BDR-011,Flattened Rice Pilaf,2,Fry peanuts in oil and set aside; fry potato until cooked.
+BDR-011,Flattened Rice Pilaf,3,"Add onion, chilli and turmeric, then fold in the drained chira and salt."
+BDR-011,Flattened Rice Pilaf,4,"Toss 3 minutes on low heat, finish with peanuts, coriander and lemon."
+BDR-012,Wholewheat Flatbread,1,"Mix flour and salt, add warm water gradually to a soft dough."
+BDR-012,Wholewheat Flatbread,2,Knead 8 minutes and rest covered 20 minutes.
+BDR-012,Wholewheat Flatbread,3,Divide into 8 balls and roll thin.
+BDR-012,Wholewheat Flatbread,4,Cook on a hot dry tawa 45 seconds each side until it puffs.
+BDR-013,Layered Fried Flatbread,1,"Make a soft dough with flour, salt and water; rest 30 minutes."
+BDR-013,Layered Fried Flatbread,2,"Roll out each ball, brush with oil, dust with flour and coil into a spiral."
+BDR-013,Layered Fried Flatbread,3,Flatten and roll again to a round.
+BDR-013,Layered Fried Flatbread,4,Shallow-fry on a tawa with a little oil until golden with visible layers.
+BDR-014,Puffed Fried Bread,1,"Rub ghee into the flour with salt, then make a stiff dough with water."
+BDR-014,Puffed Fried Bread,2,Rest 30 minutes and divide into 12 balls.
+BDR-014,Puffed Fried Bread,3,Roll into small discs without dusting too heavily.
+BDR-014,Puffed Fried Bread,4,Slide into hot oil and press gently until they puff; drain on paper.
+BDR-015,Leavened Yoghurt Flatbread,1,"Mix flour, baking powder, sugar and salt; add yoghurt and milk to a soft dough."
+BDR-015,Leavened Yoghurt Flatbread,2,Rest covered in a warm place 1-2 hours.
+BDR-015,Leavened Yoghurt Flatbread,3,"Shape into ovals, press nigella seeds on top."
+BDR-015,Leavened Yoghurt Flatbread,4,"Cook on a very hot tawa, flipping once, then brush with ghee."
+BDR-016,Steamed Rice Cake with Jaggery,1,Grind the sunned rice to a fine flour and sieve it.
+BDR-016,Steamed Rice Cake with Jaggery,2,Sprinkle salted water in and rub until the flour just holds shape.
+BDR-016,Steamed Rice Cake with Jaggery,3,"Fill small bowls with flour, jaggery and coconut, then top with more flour."
+BDR-016,Steamed Rice Cake with Jaggery,4,Invert onto a cloth over a steamer and steam 5-7 minutes each.
+BDR-017,Griddled Rice Pancake,1,"Soak the rice 4 hours, grind with water to a pourable batter and salt it."
+BDR-017,Griddled Rice Pancake,2,Rest the batter 1 hour.
+BDR-017,Griddled Rice Pancake,3,Heat a small clay or iron mould and pour in a ladle of batter.
+BDR-017,Griddled Rice Pancake,4,Cover and cook 3-4 minutes until set with a lacy top; lift out.
+BDR-018,Coconut Filled Crepe,1,Cook coconut with jaggery until thick and sticky; cool this filling.
+BDR-018,Coconut Filled Crepe,2,"Whisk rice flour, maida, semolina, milk, water and salt into a thin batter; rest 30 min."
+BDR-018,Coconut Filled Crepe,3,Pour a thin layer on a lightly oiled pan and cook until the edges lift.
+BDR-018,Coconut Filled Crepe,4,Place filling along one edge and roll up; serve warm.
+BDR-019,Steamed Coconut Dumpling,1,"Cook coconut, jaggery and cardamom to a thick filling and cool."
+BDR-019,Steamed Coconut Dumpling,2,"Boil salted water, stir in the rice flour and knead to a hot dough."
+BDR-019,Steamed Coconut Dumpling,3,"Shape small cups, fill and seal the edges into a crescent."
+BDR-019,Steamed Coconut Dumpling,4,Steam 12-15 minutes.
+BDR-020,Rice Flour Flatbread,1,Bring salted water to a boil and stir in the rice flour off the heat.
+BDR-020,Rice Flour Flatbread,2,"Knead the hot dough until smooth, keeping it covered."
+BDR-020,Rice Flour Flatbread,3,Pat or roll into thin rounds.
+BDR-020,Rice Flour Flatbread,4,Cook on a hot tawa about a minute each side until white and puffed.
+BDR-021,Thin Red Lentil Soup,1,Boil washed lentils with turmeric and salt until fully broken down.
+BDR-021,Thin Red Lentil Soup,2,Whisk smooth and thin with hot water.
+BDR-021,Thin Red Lentil Soup,3,"Temper garlic, onion and dried chilli in mustard oil until golden."
+BDR-021,Thin Red Lentil Soup,4,"Pour the tempering over the dal, add green chilli and coriander."
+BDR-022,Thick Spiced Red Lentil,1,"Boil the lentil with turmeric until soft, keeping it thick."
+BDR-022,Thick Spiced Red Lentil,2,"Fry onion, garlic and ginger in mustard oil until brown."
+BDR-022,Thick Spiced Red Lentil,3,"Add cumin, dried chilli and tomato; cook until the oil separates."
+BDR-022,Thick Spiced Red Lentil,4,Fold the dal in and simmer 8 minutes until glossy and thick.
+BDR-023,Dry Mung Lentil,1,"Dry-roast the dal until it smells nutty, then wash and boil until just tender."
+BDR-023,Dry Mung Lentil,2,"Temper bay leaf, cumin, onion, garlic and ginger in oil."
+BDR-023,Dry Mung Lentil,3,"Add turmeric and the drained dal, season and stir."
+BDR-023,Dry Mung Lentil,4,"Cook uncovered until dry, finishing with green chillies."
+BDR-024,Bengal Gram Dal with Coconut,1,Boil the soaked dal with turmeric and salt until soft but whole.
+BDR-024,Bengal Gram Dal with Coconut,2,Fry coconut slivers in ghee until golden and set aside.
+BDR-024,Bengal Gram Dal with Coconut,3,"Temper whole spices and cumin, add ginger."
+BDR-024,Bengal Gram Dal with Coconut,4,"Add the dal, sugar and green chilli; simmer 10 minutes and top with coconut."
+BDR-025,Black Gram Dal,1,Boil the washed dal with turmeric and salt until creamy.
+BDR-025,Black Gram Dal,2,Mash lightly with a wooden whisk.
+BDR-025,Black Gram Dal,3,"Temper nigella, dried chilli, garlic and onion in mustard oil."
+BDR-025,Black Gram Dal,4,Stir the tempering through and simmer 5 minutes.
+BDR-026,Grass Pea Dal,1,Wash the dal well and boil with turmeric and salt until soft.
+BDR-026,Grass Pea Dal,2,Whisk to the consistency you like.
+BDR-026,Grass Pea Dal,3,"Temper garlic, onion and dried chilli in mustard oil."
+BDR-026,Grass Pea Dal,4,Combine and simmer briefly with green chillies.
+BDR-027,Bottle Gourd with Red Lentil,1,Boil the lentil with turmeric until half done.
+BDR-027,Bottle Gourd with Red Lentil,2,Add the diced bottle gourd and salt; cook until translucent.
+BDR-027,Bottle Gourd with Red Lentil,3,"Temper nigella, garlic and onion in mustard oil."
+BDR-027,Bottle Gourd with Red Lentil,4,Stir the tempering and green chillies through and simmer 5 minutes.
+BDR-028,Spinach with Mung Dal,1,"Roast, wash and boil the mung dal with turmeric until tender."
+BDR-028,Spinach with Mung Dal,2,Add chopped spinach and cook 5 minutes only.
+BDR-028,Spinach with Mung Dal,3,"Temper cumin, garlic and onion in mustard oil."
+BDR-028,Spinach with Mung Dal,4,"Combine, season and simmer 5 minutes with green chillies."
+BDR-029,Dried Pea Dal,1,Boil the soaked peas with turmeric and salt until they collapse.
+BDR-029,Dried Pea Dal,2,Mash roughly with a whisk.
+BDR-029,Dried Pea Dal,3,"Temper cumin, dried chilli, garlic, ginger and onion in oil."
+BDR-029,Dried Pea Dal,4,Stir together and simmer until thick.
+BDR-030,Pigeon Pea Dal,1,"Boil the dal with turmeric, tomato and salt until soft."
+BDR-030,Pigeon Pea Dal,2,Whisk to a smooth consistency.
+BDR-030,Pigeon Pea Dal,3,"Temper cumin, dried chilli, garlic and onion in oil."
+BDR-030,Pigeon Pea Dal,4,Combine and finish with coriander leaf.
+BDR-031,Spiced Whole Chickpeas,1,Boil the soaked chickpeas with salt until tender but not mushy.
+BDR-031,Spiced Whole Chickpeas,2,"Fry onion, garlic and ginger in oil until brown."
+BDR-031,Spiced Whole Chickpeas,3,Add powdered spices with a splash of water and cook until oil separates.
+BDR-031,Spiced Whole Chickpeas,4,"Add chickpeas and potato, simmer until thick."
+BDR-031,Spiced Whole Chickpeas,5,"Finish with tamarind pulp, green chilli and coriander leaf."
+BDR-032,Mashed Potato Bhorta,1,"Boil the potatoes whole until a knife slides through, then peel."
+BDR-032,Mashed Potato Bhorta,2,Roast the dried chillies on a dry pan.
+BDR-032,Mashed Potato Bhorta,3,"Mash the potato with salt, chilli and onion by hand."
+BDR-032,Mashed Potato Bhorta,4,Work in raw mustard oil and coriander leaf.
+BDR-033,Roasted Aubergine Bhorta,1,Rub the aubergine with a little oil and char it over an open flame until collapsed.
+BDR-033,Roasted Aubergine Bhorta,2,"Cool, peel off the blackened skin and drain the liquid."
+BDR-033,Roasted Aubergine Bhorta,3,"Mash with roasted garlic, chilli, onion and salt."
+BDR-033,Roasted Aubergine Bhorta,4,Fold in raw mustard oil and coriander leaf.
+BDR-034,Tomato Bhorta,1,Roast the tomatoes over a flame until the skin blisters and peels.
+BDR-034,Tomato Bhorta,2,Roast garlic and dried chilli on a dry pan.
+BDR-034,Tomato Bhorta,3,Mash everything together with salt and onion.
+BDR-034,Tomato Bhorta,4,Finish with mustard oil and coriander leaf.
+BDR-035,Dried Anchovy Bhorta,1,"Soak the dried fish in hot water 15 minutes, rinse twice and squeeze dry."
+BDR-035,Dried Anchovy Bhorta,2,"Roast it on a dry pan until crisp, then pound coarsely."
+BDR-035,Dried Anchovy Bhorta,3,"Fry onion, garlic and dried chilli in mustard oil until brown."
+BDR-035,Dried Anchovy Bhorta,4,Pound everything together into a coarse paste and finish with coriander.
+BDR-036,Shrimp Bhorta,1,Toss the shrimp with turmeric and salt.
+BDR-036,Shrimp Bhorta,2,Fry in mustard oil until dry and slightly crisp; lift out.
+BDR-036,Shrimp Bhorta,3,"In the same oil brown the onion, garlic and dried chilli."
+BDR-036,Shrimp Bhorta,4,Pound the shrimp with the fried aromatics and finish with coriander leaf.
+BDR-037,Snakehead Fish Bhorta,1,"Boil the fish with turmeric and salt, then flake and remove every bone."
+BDR-037,Snakehead Fish Bhorta,2,"Fry onion, garlic and chillies in mustard oil until soft and brown."
+BDR-037,Snakehead Fish Bhorta,3,Add the flaked fish and fry until dry and fluffy.
+BDR-037,Snakehead Fish Bhorta,4,Mash together and finish with coriander leaf.
+BDR-038,Lentil Bhorta,1,Boil the lentil with very little water until thick and dry.
+BDR-038,Lentil Bhorta,2,Roast garlic and dried chilli on a dry pan.
+BDR-038,Lentil Bhorta,3,"Mash the lentil with the roasted aromatics, onion and salt."
+BDR-038,Lentil Bhorta,4,Work in raw mustard oil.
+BDR-039,Nigella Seed Bhorta,1,Dry-roast the nigella seeds until aromatic.
+BDR-039,Nigella Seed Bhorta,2,Roast garlic and dried chillies on the same pan.
+BDR-039,Nigella Seed Bhorta,3,Pound everything with salt to a coarse paste.
+BDR-039,Nigella Seed Bhorta,4,Mix in onion and raw mustard oil.
+BDR-040,Mustard Seed Bhorta,1,Soak the mustard seeds 30 minutes.
+BDR-040,Mustard Seed Bhorta,2,"Grind with green chilli, garlic and salt to a smooth paste."
+BDR-040,Mustard Seed Bhorta,3,Rest 10 minutes to let the pungency develop.
+BDR-040,Mustard Seed Bhorta,4,Stir in mustard oil and coriander leaf.
+BDR-041,Sesame Bhorta,1,Dry-roast the sesame until it begins to pop.
+BDR-041,Sesame Bhorta,2,Roast garlic and chilli separately.
+BDR-041,Sesame Bhorta,3,Grind together with salt to a coarse paste.
+BDR-041,Sesame Bhorta,4,Mix in onion and a little mustard oil.
+BDR-042,Peanut Bhorta,1,Roast the peanuts and rub off the skins.
+BDR-042,Peanut Bhorta,2,Roast garlic and dried chilli.
+BDR-042,Peanut Bhorta,3,"Pound peanuts, garlic, chilli and salt to a coarse crumb."
+BDR-042,Peanut Bhorta,4,"Mix with onion, mustard oil and coriander leaf."
+BDR-043,Pumpkin Bhorta,1,Steam or boil the pumpkin until soft and drain well.
+BDR-043,Pumpkin Bhorta,2,Roast garlic and dried chilli.
+BDR-043,Pumpkin Bhorta,3,"Mash the pumpkin with salt, chilli, garlic and onion."
+BDR-043,Pumpkin Bhorta,4,Finish with mustard oil and coriander leaf.
+BDR-044,Ash Gourd Bhorta,1,Boil the diced ash gourd until translucent.
+BDR-044,Ash Gourd Bhorta,2,Drain and squeeze out as much water as possible.
+BDR-044,Ash Gourd Bhorta,3,"Mash with roasted garlic, chilli, onion and salt."
+BDR-044,Ash Gourd Bhorta,4,Stir in mustard oil and coriander leaf.
+BDR-045,Okra Bhorta,1,Steam the whole okra 8 minutes until just tender.
+BDR-045,Okra Bhorta,2,Roast garlic and dried chilli on a dry pan.
+BDR-045,Okra Bhorta,3,"Chop and mash the okra with the roasted aromatics, onion and salt."
+BDR-045,Okra Bhorta,4,Finish with mustard oil and coriander leaf.
+BDR-046,Taro Bhorta,1,"Boil the taro corms until completely soft, then peel."
+BDR-046,Taro Bhorta,2,Roast garlic and dried chilli.
+BDR-046,Taro Bhorta,3,"Mash while warm with salt, onion and the roasted aromatics."
+BDR-046,Taro Bhorta,4,Work in raw mustard oil and coriander leaf.
+BDR-047,Onion and Chilli Bhorta,1,Roast the dried chillies on a dry pan.
+BDR-047,Onion and Chilli Bhorta,2,Pound them with salt.
+BDR-047,Onion and Chilli Bhorta,3,Add sliced onion and crush by hand until juicy.
+BDR-047,Onion and Chilli Bhorta,4,Mix in mustard oil and coriander leaf.
+BDR-048,Spiced Potato Stir-fry,1,Temper nigella seeds in hot oil.
+BDR-048,Spiced Potato Stir-fry,2,"Add onion and green chilli, fry until translucent."
+BDR-048,Spiced Potato Stir-fry,3,"Add potato, turmeric and salt; toss to coat."
+BDR-048,Spiced Potato Stir-fry,4,"Sprinkle a little water, cover and cook 12 minutes until tender."
+BDR-048,Spiced Potato Stir-fry,5,Finish uncovered with coriander leaf.
+BDR-049,Potato and Cauliflower Curry,1,Lightly fry the cauliflower florets and set aside.
+BDR-049,Potato and Cauliflower Curry,2,"Temper bay leaf and cumin, then fry onion, ginger and garlic."
+BDR-049,Potato and Cauliflower Curry,3,"Add powdered spices and tomato, cook until the oil separates."
+BDR-049,Potato and Cauliflower Curry,4,"Add potato and water, cook 10 minutes, then return the cauliflower."
+BDR-049,Potato and Cauliflower Curry,5,Simmer until both are tender and finish with coriander leaf.
+BDR-050,Cabbage Stir-fry,1,Temper bay leaf and cumin in oil.
+BDR-050,Cabbage Stir-fry,2,"Fry onion and ginger, add potato and cook 5 minutes."
+BDR-050,Cabbage Stir-fry,3,"Add cabbage, peas, turmeric and salt."
+BDR-050,Cabbage Stir-fry,4,"Cover and cook on low 12 minutes, stirring so nothing catches."
+BDR-050,Cabbage Stir-fry,5,Uncover and dry off any liquid before serving.
+BDR-051,Fried Aubergine Slices,1,Slice the aubergine into thick rounds.
+BDR-051,Fried Aubergine Slices,2,"Rub with turmeric, chilli powder and salt; rest 10 minutes."
+BDR-051,Fried Aubergine Slices,3,Shallow-fry in mustard oil over medium heat until brown on both sides.
+BDR-051,Fried Aubergine Slices,4,Drain on paper before serving.
+BDR-052,Green Papaya Stir-fry,1,"Peel, deseed and grate or julienne the green papaya."
+BDR-052,Green Papaya Stir-fry,2,Temper nigella and garlic in mustard oil.
+BDR-052,Green Papaya Stir-fry,3,"Add onion and green chilli, fry 2 minutes."
+BDR-052,Green Papaya Stir-fry,4,"Add papaya, turmeric and salt; cover and cook 12 minutes."
+BDR-052,Green Papaya Stir-fry,5,Uncover and stir until dry.
+BDR-053,Pointed Gourd Stir-fry,1,Scrape the gourd skin lightly and halve lengthwise.
+BDR-053,Pointed Gourd Stir-fry,2,"Temper nigella in mustard oil, add onion."
+BDR-053,Pointed Gourd Stir-fry,3,Add potato and gourd with turmeric and salt.
+BDR-053,Pointed Gourd Stir-fry,4,"Cover and cook 12-14 minutes, turning once."
+BDR-053,Pointed Gourd Stir-fry,5,Finish with green chilli.
+BDR-054,Ridge Gourd with Potato,1,Peel the ridges off the gourd and dice.
+BDR-054,Ridge Gourd with Potato,2,"Temper nigella, garlic and onion in mustard oil."
+BDR-054,Ridge Gourd with Potato,3,Add potato and cook 5 minutes.
+BDR-054,Ridge Gourd with Potato,4,"Add gourd, turmeric and salt; cover and cook 10 minutes."
+BDR-054,Ridge Gourd with Potato,5,Uncover and reduce until nearly dry.
+BDR-055,Okra Stir-fry,1,Wash and dry the okra thoroughly before cutting.
+BDR-055,Okra Stir-fry,2,Fry garlic and onion in mustard oil.
+BDR-055,Okra Stir-fry,3,"Add okra, turmeric, chilli powder and salt."
+BDR-055,Okra Stir-fry,4,Stir-fry uncovered 12-14 minutes until the edges brown.
+BDR-055,Okra Stir-fry,5,Add green chilli in the last minute.
+BDR-056,Country Bean Stir-fry,1,String the beans and slice them on the diagonal.
+BDR-056,Country Bean Stir-fry,2,Temper nigella and garlic in mustard oil.
+BDR-056,Country Bean Stir-fry,3,"Add onion, then potato and beans with turmeric and salt."
+BDR-056,Country Bean Stir-fry,4,"Cover and cook 15 minutes, sprinkling water if needed."
+BDR-056,Country Bean Stir-fry,5,Finish with green chillies.
+BDR-057,Yard Long Bean Stir-fry,1,Cut the beans into short lengths.
+BDR-057,Yard Long Bean Stir-fry,2,Fry garlic and onion in mustard oil until soft.
+BDR-057,Yard Long Bean Stir-fry,3,"Add beans, turmeric, chilli powder and salt."
+BDR-057,Yard Long Bean Stir-fry,4,Cover and cook 12 minutes until tender-crisp.
+BDR-057,Yard Long Bean Stir-fry,5,"Uncover, dry off and add green chilli."
+BDR-058,Pumpkin Stir-fry,1,Temper nigella and fenugreek in mustard oil.
+BDR-058,Pumpkin Stir-fry,2,"Add garlic and onion, fry until soft."
+BDR-058,Pumpkin Stir-fry,3,"Add pumpkin, turmeric and salt."
+BDR-058,Pumpkin Stir-fry,4,Cover and cook 15 minutes until it collapses slightly.
+BDR-058,Pumpkin Stir-fry,5,Mash a little against the pan and finish with green chilli.
+BDR-059,Bottle Gourd with Shrimp,1,Clean the shrimp and toss with turmeric and salt.
+BDR-059,Bottle Gourd with Shrimp,2,Fry the shrimp briefly in mustard oil and lift out.
+BDR-059,Bottle Gourd with Shrimp,3,"Fry onion, garlic and ginger, add cumin and turmeric."
+BDR-059,Bottle Gourd with Shrimp,4,"Add the diced gourd, cover and let it cook in its own water 12 minutes."
+BDR-059,Bottle Gourd with Shrimp,5,"Return the shrimp, add green chillies and simmer 5 minutes."
+BDR-060,Taro with Shrimp,1,"Peel and halve the taro corms, then par-boil with salt."
+BDR-060,Taro with Shrimp,2,Fry the shrimp in mustard oil and lift out.
+BDR-060,Taro with Shrimp,3,"Fry onion, garlic and ginger, add the powdered spices with a splash of water."
+BDR-060,Taro with Shrimp,4,"Add the taro and water, simmer 15 minutes until soft."
+BDR-060,Taro with Shrimp,5,"Return the shrimp, add green chillies and reduce to a thick gravy."
+BDR-061,Radish Stir-fry,1,"Temper nigella in mustard oil, then fry garlic and onion."
+BDR-061,Radish Stir-fry,2,Add radish and potato with turmeric and salt.
+BDR-061,Radish Stir-fry,3,Cover and cook 15 minutes in the radish's own water.
+BDR-061,Radish Stir-fry,4,"Uncover, raise the heat and stir until dry."
+BDR-061,Radish Stir-fry,5,Finish with green chillies.
+BDR-062,Bitter Gourd Stir-fry,1,Slice the bitter gourd thin and rub with a little salt; rest 10 minutes.
+BDR-062,Bitter Gourd Stir-fry,2,Squeeze out the bitter juice and pat dry.
+BDR-062,Bitter Gourd Stir-fry,3,Fry garlic and onion in mustard oil.
+BDR-062,Bitter Gourd Stir-fry,4,"Add potato, gourd, turmeric and chilli powder."
+BDR-062,Bitter Gourd Stir-fry,5,Stir-fry uncovered 12 minutes until the edges are crisp.
+BDR-063,Mixed Five-Vegetable Curry,1,Cut all vegetables to a similar size so they cook evenly.
+BDR-063,Mixed Five-Vegetable Curry,2,"Temper bay leaf and cumin, fry onion, ginger and garlic."
+BDR-063,Mixed Five-Vegetable Curry,3,Add turmeric and coriander powder with a splash of water.
+BDR-063,Mixed Five-Vegetable Curry,4,"Add the hard vegetables first, then the softer ones after 8 minutes."
+BDR-063,Mixed Five-Vegetable Curry,5,"Add water and salt, cover and simmer until tender; finish with coriander."
+BDR-064,Bengali Mixed Vegetable Medley,1,"Mix cumin, fennel, fenugreek, nigella and mustard seed to make panch phoron."
+BDR-064,Bengali Mixed Vegetable Medley,2,Temper it with bay leaf and dried chilli in hot mustard oil.
+BDR-064,Bengali Mixed Vegetable Medley,3,"Add ginger, turmeric and all the vegetables."
+BDR-064,Bengali Mixed Vegetable Medley,4,"Cover and cook on low, letting the vegetables release their own water."
+BDR-064,Bengali Mixed Vegetable Medley,5,Stir occasionally for 25 minutes until soft and merged.
+BDR-065,Bitter Mixed Vegetable Stew,1,Fry the bitter gourd slices separately and set aside.
+BDR-065,Bitter Mixed Vegetable Stew,2,"Temper fenugreek in mustard oil, add ginger."
+BDR-065,Bitter Mixed Vegetable Stew,3,Add the remaining vegetables and cook briefly.
+BDR-065,Bitter Mixed Vegetable Stew,4,"Add water, mustard and poppy paste; simmer until tender."
+BDR-065,Bitter Mixed Vegetable Stew,5,"Stir in milk, return the bitter gourd, finish with ghee."
+BDR-066,Potato and Pointed Gourd Curry,1,Fry the scraped gourd and potato pieces until golden; set aside.
+BDR-066,Potato and Pointed Gourd Curry,2,Temper bay leaf and cumin in the same oil.
+BDR-066,Potato and Pointed Gourd Curry,3,"Add ginger, tomato and powdered spices; cook until oil separates."
+BDR-066,Potato and Pointed Gourd Curry,4,"Return the vegetables, add water and salt."
+BDR-066,Potato and Pointed Gourd Curry,5,Simmer covered 15 minutes until the gravy thickens.
+BDR-067,Drumstick Curry,1,Scrape the tough skin off the drumsticks and cut into finger lengths.
+BDR-067,Drumstick Curry,2,Fry onion and garlic in mustard oil.
+BDR-067,Drumstick Curry,3,"Add turmeric, cumin and mustard paste with a splash of water."
+BDR-067,Drumstick Curry,4,"Add the vegetables and water, cover and cook 15 minutes."
+BDR-067,Drumstick Curry,5,Finish with green chillies and a drizzle of raw mustard oil.
+BDR-068,Spinach Stir-fry,1,Wash the spinach in several changes of water and chop.
+BDR-068,Spinach Stir-fry,2,Temper nigella and dried chilli in hot mustard oil.
+BDR-068,Spinach Stir-fry,3,Add garlic and onion and fry until golden.
+BDR-068,Spinach Stir-fry,4,"Add the spinach and salt, stir-fry uncovered 6-8 minutes until the water dries."
+BDR-069,Red Amaranth Stir-fry,1,"Pick, wash and chop the amaranth leaves and tender stems."
+BDR-069,Red Amaranth Stir-fry,2,Fry garlic and dried chilli in mustard oil until fragrant.
+BDR-069,Red Amaranth Stir-fry,3,"Add onion, then the greens and salt."
+BDR-069,Red Amaranth Stir-fry,4,"Stir-fry uncovered until the released water evaporates, about 8 minutes."
+BDR-070,Malabar Spinach with Shrimp,1,Separate the stems from the leaves and chop both.
+BDR-070,Malabar Spinach with Shrimp,2,Fry the turmeric-rubbed shrimp in mustard oil and lift out.
+BDR-070,Malabar Spinach with Shrimp,3,"Fry garlic and onion, add potato and the stems."
+BDR-070,Malabar Spinach with Shrimp,4,After 6 minutes add the leaves and salt.
+BDR-070,Malabar Spinach with Shrimp,5,"Return the shrimp, add green chilli and cook until dry."
+BDR-071,Water Spinach Stir-fry,1,Wash the greens in at least three changes of water.
+BDR-071,Water Spinach Stir-fry,2,Temper nigella and dried chilli in mustard oil.
+BDR-071,Water Spinach Stir-fry,3,Add garlic and onion and fry until golden.
+BDR-071,Water Spinach Stir-fry,4,Add the chopped greens and salt; stir-fry 8 minutes until dry.
+BDR-072,Jute Leaf Stir-fry,1,Strip the leaves from the stalks and wash well.
+BDR-072,Jute Leaf Stir-fry,2,"Temper nigella, garlic and dried chilli in mustard oil."
+BDR-072,Jute Leaf Stir-fry,3,"Add onion, then the leaves and salt."
+BDR-072,Jute Leaf Stir-fry,4,Stir-fry 10 minutes until soft; squeeze lemon over before serving.
+BDR-073,Bottle Gourd Leaf Stir-fry,1,Peel the fibrous skin off the tender vines and chop with the leaves.
+BDR-073,Bottle Gourd Leaf Stir-fry,2,Temper nigella and dried chilli in mustard oil.
+BDR-073,Bottle Gourd Leaf Stir-fry,3,"Fry garlic and onion, add turmeric."
+BDR-073,Bottle Gourd Leaf Stir-fry,4,"Add the greens and salt, cover 5 minutes, then dry off uncovered."
+BDR-074,Radish Leaf Stir-fry,1,Chop the radish leaves finely and wash.
+BDR-074,Radish Leaf Stir-fry,2,Temper nigella and dried chilli in mustard oil.
+BDR-074,Radish Leaf Stir-fry,3,"Fry garlic, onion and diced potato until half done."
+BDR-074,Radish Leaf Stir-fry,4,"Add the greens and salt, cook uncovered 10 minutes until dry."
+BDR-075,Drumstick Leaf Stir-fry,1,Strip the leaves from the stalks; this is the slow part.
+BDR-075,Drumstick Leaf Stir-fry,2,Wash and drain thoroughly.
+BDR-075,Drumstick Leaf Stir-fry,3,"Fry garlic, onion and dried chilli in mustard oil."
+BDR-075,Drumstick Leaf Stir-fry,4,"Add the leaves, turmeric and salt; stir-fry 6-8 minutes only."
+BDR-076,Fried Hilsa,1,"Rub the steaks with turmeric, chilli powder and salt; rest 15 minutes."
+BDR-076,Fried Hilsa,2,"Heat mustard oil until it just smokes, then lower the heat."
+BDR-076,Fried Hilsa,3,Fry the pieces 4-5 minutes per side until crisp at the edges.
+BDR-076,Fried Hilsa,4,Drain and serve with plain rice.
+BDR-077,Hilsa in Mustard Gravy,1,"Soak mustard seed with a little salt and green chilli, then grind to a smooth paste."
+BDR-077,Hilsa in Mustard Gravy,2,Rub the fish with turmeric and salt.
+BDR-077,Hilsa in Mustard Gravy,3,"Warm mustard oil, temper nigella, then add the mustard paste with water."
+BDR-077,Hilsa in Mustard Gravy,4,Slide in the fish and simmer 10-12 minutes without stirring.
+BDR-077,Hilsa in Mustard Gravy,5,Add whole green chillies and raw mustard oil at the end.
+BDR-078,Steamed Hilsa,1,"Grind mustard seed, coconut and green chilli to a paste."
+BDR-078,Steamed Hilsa,2,"Mix with yoghurt, turmeric, salt and mustard oil."
+BDR-078,Steamed Hilsa,3,Coat the fish steaks and place them in a sealed tiffin box.
+BDR-078,Steamed Hilsa,4,Set the box in a pan of simmering water and steam 20-25 minutes.
+BDR-079,Rohu Fish Light Curry,1,Rub the fish with turmeric and salt and fry lightly; set aside.
+BDR-079,Rohu Fish Light Curry,2,"In the same oil fry onion, ginger and garlic."
+BDR-079,Rohu Fish Light Curry,3,"Add tomato and powdered spices, cook until the oil separates."
+BDR-079,Rohu Fish Light Curry,4,"Add potato and water, simmer 10 minutes."
+BDR-079,Rohu Fish Light Curry,5,"Return the fish, simmer 8 minutes, finish with chilli and coriander."
+BDR-080,Rich Rohu Curry,1,Fry the turmeric-and-salt rubbed fish until golden; set aside.
+BDR-080,Rich Rohu Curry,2,Fry the potatoes in the same oil.
+BDR-080,Rich Rohu Curry,3,"Temper whole spices, add onion paste and cook until deep brown."
+BDR-080,Rich Rohu Curry,4,"Add ginger, garlic, yoghurt and powdered spices; cook until oil separates."
+BDR-080,Rich Rohu Curry,5,"Return fish and potato with a little water, simmer 12 minutes, finish with ghee."
+BDR-081,Catla Curry with Cauliflower,1,Fry the seasoned fish lightly and lift out.
+BDR-081,Catla Curry with Cauliflower,2,Fry cauliflower and potato in the same oil until spotted brown.
+BDR-081,Catla Curry with Cauliflower,3,"Fry onion and ginger, add tomato and spices."
+BDR-081,Catla Curry with Cauliflower,4,"Add water and vegetables, simmer 12 minutes."
+BDR-081,Catla Curry with Cauliflower,5,Return the fish and cook 8 minutes more; finish with coriander.
+BDR-082,Rohu in Yoghurt Gravy,1,Fry the turmeric-rubbed fish lightly and set aside.
+BDR-082,Rohu in Yoghurt Gravy,2,"Temper whole spices, fry onion paste and ginger until pale gold."
+BDR-082,Rohu in Yoghurt Gravy,3,Take the pan off the heat and whisk in the yoghurt.
+BDR-082,Rohu in Yoghurt Gravy,4,"Return to low heat, add the fish and a little water."
+BDR-082,Rohu in Yoghurt Gravy,5,"Simmer gently 12 minutes, finish with ghee and green chilli."
+BDR-083,Prawn in Coconut Gravy,1,"Devein the prawns, keeping the heads on, and rub with turmeric and salt."
+BDR-083,Prawn in Coconut Gravy,2,Sear them briefly in mustard oil and lift out.
+BDR-083,Prawn in Coconut Gravy,3,"Temper whole spices, fry onion paste and ginger until golden."
+BDR-083,Prawn in Coconut Gravy,4,"Add powdered spices, then the coconut milk and sugar."
+BDR-083,Prawn in Coconut Gravy,5,"Return the prawns, simmer 8 minutes only, finish with ghee and chillies."
+BDR-084,Dry Spiced Prawns,1,"Clean and devein the prawns, toss with turmeric and salt."
+BDR-084,Dry Spiced Prawns,2,Sear in hot mustard oil for 2 minutes and lift out.
+BDR-084,Dry Spiced Prawns,3,"Brown the onion, garlic and ginger."
+BDR-084,Dry Spiced Prawns,4,"Add tomato and powdered spices, cook until the oil separates."
+BDR-084,Dry Spiced Prawns,5,"Return the prawns, cook 6 minutes until dry, finish with coriander."
+BDR-085,Pabda Fish Curry,1,Clean the fish whole and rub with turmeric and salt.
+BDR-085,Pabda Fish Curry,2,Fry very briefly in mustard oil and lift out carefully.
+BDR-085,Pabda Fish Curry,3,"Temper nigella, add onion, ginger, cumin and mustard paste."
+BDR-085,Pabda Fish Curry,4,"Add water and bring to a simmer, then slide the fish in."
+BDR-085,Pabda Fish Curry,5,Cook 8 minutes without stirring; finish with chilli and coriander.
+BDR-086,Tengra Fish Curry,1,Clean the small fish and rub with turmeric and salt.
+BDR-086,Tengra Fish Curry,2,"Temper nigella in mustard oil, fry onion and ginger."
+BDR-086,Tengra Fish Curry,3,"Add powdered spices, potato and aubergine, then water."
+BDR-086,Tengra Fish Curry,4,"When the vegetables are half cooked, slide in the fish."
+BDR-086,Tengra Fish Curry,5,"Simmer 10 minutes, finish with green chilli and coriander."
+BDR-087,Climbing Perch in Mustard,1,"Scale and clean the fish, score the sides, rub with turmeric and salt."
+BDR-087,Climbing Perch in Mustard,2,"Fry in hot mustard oil until firm, then set aside."
+BDR-087,Climbing Perch in Mustard,3,"Temper nigella, add onion and the mustard paste with water."
+BDR-087,Climbing Perch in Mustard,4,"Simmer the gravy 5 minutes, then return the fish."
+BDR-087,Climbing Perch in Mustard,5,Cook 10 minutes and finish with whole green chillies.
+BDR-088,Stinging Catfish with Red Amaranth,1,Clean the fish thoroughly and rub with turmeric and salt.
+BDR-088,Stinging Catfish with Red Amaranth,2,Fry lightly in mustard oil and lift out.
+BDR-088,Stinging Catfish with Red Amaranth,3,"Fry onion, garlic and ginger, add cumin and turmeric."
+BDR-088,Stinging Catfish with Red Amaranth,4,Add the chopped amaranth and cook until wilted.
+BDR-088,Stinging Catfish with Red Amaranth,5,"Add water and the fish, simmer 10 minutes with green chillies."
+BDR-089,Walking Catfish Curry,1,Clean the fish well with salt and rub with turmeric.
+BDR-089,Walking Catfish Curry,2,Fry lightly and set aside.
+BDR-089,Walking Catfish Curry,3,"Fry onion, ginger and garlic, add cumin and turmeric."
+BDR-089,Walking Catfish Curry,4,"Add potato and water, cook 10 minutes."
+BDR-089,Walking Catfish Curry,5,"Return the fish, simmer 8 minutes, finish with chilli and coriander."
+BDR-090,Snakehead Fish Curry,1,"Rub the fish with turmeric and salt, fry lightly and set aside."
+BDR-090,Snakehead Fish Curry,2,"Fry onion, garlic and ginger until brown."
+BDR-090,Snakehead Fish Curry,3,Add powdered spices with a splash of water and cook until oil separates.
+BDR-090,Snakehead Fish Curry,4,"Add potato and water, simmer 12 minutes."
+BDR-090,Snakehead Fish Curry,5,Return the fish and cook 8 minutes more.
+BDR-091,Dry Spiced Boal Fish,1,Rub the steaks with turmeric and salt and fry until golden.
+BDR-091,Dry Spiced Boal Fish,2,"Brown the onion, garlic and ginger deeply in the same oil."
+BDR-091,Dry Spiced Boal Fish,3,"Add tomato and all powdered spices, cook until the oil separates."
+BDR-091,Dry Spiced Boal Fish,4,Return the fish with a little water.
+BDR-091,Dry Spiced Boal Fish,5,Cook uncovered 12 minutes until the masala is thick and dry.
+BDR-092,Knife Fish Dumpling Curry,1,"Scrape the flesh off the bones and mix with mashed potato, half the onion and spices."
+BDR-092,Knife Fish Dumpling Curry,2,Shape into balls and fry until browned; set aside.
+BDR-092,Knife Fish Dumpling Curry,3,"Fry the remaining onion, garlic and ginger with whole spices."
+BDR-092,Knife Fish Dumpling Curry,4,Add powdered spices and water to make a gravy.
+BDR-092,Knife Fish Dumpling Curry,5,Slip the koftas in and simmer 12 minutes; finish with coriander.
+BDR-093,Pangas Fish Curry,1,"Wash the steaks well, rub with turmeric and salt."
+BDR-093,Pangas Fish Curry,2,Fry lightly to firm them up and set aside.
+BDR-093,Pangas Fish Curry,3,"Fry onion, garlic and ginger, add tomato and powdered spices."
+BDR-093,Pangas Fish Curry,4,"Add potato and water, simmer 10 minutes."
+BDR-093,Pangas Fish Curry,5,"Return the fish, cook 8 minutes and finish with green chilli."
+BDR-094,Fried Tilapia,1,Score the fish on both sides.
+BDR-094,Fried Tilapia,2,"Marinate with turmeric, chilli, garlic, lemon juice and salt for 20 minutes."
+BDR-094,Fried Tilapia,3,Shallow-fry in hot mustard oil 6 minutes per side.
+BDR-094,Fried Tilapia,4,Drain and serve with rice and dal.
+BDR-095,Fried Pomfret,1,Slash the fish diagonally on both sides.
+BDR-095,Fried Pomfret,2,"Rub in garlic, ginger, turmeric, chilli, pepper, lemon and salt; rest 30 minutes."
+BDR-095,Fried Pomfret,3,Shallow-fry on medium heat 7 minutes per side.
+BDR-095,Fried Pomfret,4,Rest 2 minutes before serving so the flesh sets.
+BDR-096,Dried Pomfret Bhuna,1,"Soak the dried fish in hot water 20 minutes, rinse twice and squeeze dry."
+BDR-096,Dried Pomfret Bhuna,2,Roast it briefly and cut into pieces.
+BDR-096,Dried Pomfret Bhuna,3,"Brown onion, garlic and ginger in mustard oil."
+BDR-096,Dried Pomfret Bhuna,4,"Add tomato and powdered spices, cook until oil separates."
+BDR-096,Dried Pomfret Bhuna,5,"Add the fish and a little water, cook 15 minutes until dry."
+BDR-097,Small Sprat Fish Medley,1,Wash the tiny fish gently in a fine sieve and drain.
+BDR-097,Small Sprat Fish Medley,2,"Fry onion, garlic and potato in mustard oil."
+BDR-097,Small Sprat Fish Medley,3,"Add turmeric, chilli powder and salt."
+BDR-097,Small Sprat Fish Medley,4,"Add the fish, stir once and cover for 8 minutes."
+BDR-097,Small Sprat Fish Medley,5,Uncover and cook off the liquid; finish with chilli and coriander.
+BDR-098,Mola Carplet Medley,1,"Clean the fish carefully, keeping them whole."
+BDR-098,Mola Carplet Medley,2,"Temper nigella, fry onion, garlic and aubergine."
+BDR-098,Mola Carplet Medley,3,"Add turmeric, chilli powder and salt."
+BDR-098,Mola Carplet Medley,4,"Add the fish, cover and cook 8 minutes without stirring much."
+BDR-098,Mola Carplet Medley,5,Uncover and dry off; finish with green chilli and coriander.
+BDR-099,Fried Barramundi,1,Pat the fillets dry.
+BDR-099,Fried Barramundi,2,"Marinate with garlic, ginger, pepper, chilli, turmeric, lemon and salt for 30 minutes."
+BDR-099,Fried Barramundi,3,Pan-fry on medium-high 4 minutes per side.
+BDR-099,Fried Barramundi,4,Rest briefly and serve with coriander and lemon.
+BDR-100,Dry Spiced Beef,1,"Marinate the beef with ginger, garlic, powdered spices and salt for 30 minutes."
+BDR-100,Dry Spiced Beef,2,Brown the onions in mustard oil with the whole spices.
+BDR-100,Dry Spiced Beef,3,Add the meat and fry on high heat until it changes colour.
+BDR-100,Dry Spiced Beef,4,"Add hot water, cover and cook 50-60 minutes until tender."
+BDR-100,Dry Spiced Beef,5,Uncover and reduce until the oil separates and the masala coats the meat.
+BDR-101,Slow-cooked Dark Beef,1,"Marinate the beef with all pastes, powdered spices, salt and half the oil for 1 hour."
+BDR-101,Slow-cooked Dark Beef,2,Cook covered on low heat in its own juices for about 1 hour.
+BDR-101,Slow-cooked Dark Beef,3,Meanwhile fry the sliced onion in the rest of the oil until dark brown.
+BDR-101,Slow-cooked Dark Beef,4,Add the fried onion to the meat and continue cooking uncovered.
+BDR-101,Slow-cooked Dark Beef,5,Keep stirring 25-30 minutes until the meat is very dark and dry.
+BDR-102,Beef Curry with Potato,1,Brown the onion in oil with the whole spices.
+BDR-102,Beef Curry with Potato,2,"Add ginger, garlic and powdered spices with a splash of water."
+BDR-102,Beef Curry with Potato,3,"Add the beef and fry until sealed, then add hot water."
+BDR-102,Beef Curry with Potato,4,Cover and cook 55 minutes until nearly tender.
+BDR-102,Beef Curry with Potato,5,Add the potatoes and cook 20 minutes more until both are soft.
+BDR-103,Beef in Yoghurt Gravy,1,"Marinate the beef with yoghurt, ginger, garlic, pepper and salt for 1 hour."
+BDR-103,Beef in Yoghurt Gravy,2,Fry whole spices and onion paste in ghee and oil without browning it dark.
+BDR-103,Beef in Yoghurt Gravy,3,Add the marinated meat and cook covered on low heat until tender.
+BDR-103,Beef in Yoghurt Gravy,4,Stir in cashew paste and milk powder for body.
+BDR-103,Beef in Yoghurt Gravy,5,Finish with whole green chillies and a little more ghee.
+BDR-104,Spiced Beef Mince,1,"Brown the onion, garlic and ginger in oil."
+BDR-104,Spiced Beef Mince,2,"Add powdered spices and tomato, cook until the oil separates."
+BDR-104,Spiced Beef Mince,3,Add the mince and break up the lumps as it browns.
+BDR-104,Spiced Beef Mince,4,"Add peas and a little water, cook 20 minutes until dry."
+BDR-104,Spiced Beef Mince,5,Finish with pepper and coriander leaf.
+BDR-105,Beef Shami Kabab,1,"Boil the mince with soaked dal, onion, ginger, garlic, whole spices and salt until dry."
+BDR-105,Beef Shami Kabab,2,Cool and grind to a smooth paste.
+BDR-105,Beef Shami Kabab,3,"Mix in egg, coriander leaf, green chilli and pepper."
+BDR-105,Beef Shami Kabab,4,Shape into flat patties.
+BDR-105,Beef Shami Kabab,5,Shallow-fry on medium heat until brown and crisp on both sides.
+BDR-106,Beef Seekh Kabab,1,"Mix mince with all pastes, spices, ground peanut, lemon juice and salt."
+BDR-106,Beef Seekh Kabab,2,Rest the mixture in the fridge for 2 hours so it binds.
+BDR-106,Beef Seekh Kabab,3,Press onto flat skewers in a long sausage shape.
+BDR-106,Beef Seekh Kabab,4,"Grill over charcoal, turning and basting with oil, 15-20 minutes."
+BDR-107,Spiced Beef Liver,1,Wash the liver well and cut into small cubes.
+BDR-107,Spiced Beef Liver,2,"Brown onion, garlic and ginger in mustard oil with the bay leaf."
+BDR-107,Spiced Beef Liver,3,"Add powdered spices and a splash of water, cook until oil separates."
+BDR-107,Spiced Beef Liver,4,"Add the liver and cook on high 5 minutes, then cover 15 minutes."
+BDR-107,Spiced Beef Liver,5,Reduce until dry; do not overcook or it turns rubbery.
+BDR-108,Goat Meat Curry,1,"Marinate the goat meat with yoghurt, ginger, garlic and spices for 1 hour."
+BDR-108,Goat Meat Curry,2,Brown the onion with whole spices in mustard oil.
+BDR-108,Goat Meat Curry,3,Add the meat and fry until it seals and the water evaporates.
+BDR-108,Goat Meat Curry,4,"Add hot water, cover and cook 60 minutes until tender."
+BDR-108,Goat Meat Curry,5,Add the potatoes and simmer 20 minutes more.
+BDR-109,Goat in Mild White Gravy,1,"Marinate the meat in yoghurt, ginger, garlic, pepper and salt for 2 hours."
+BDR-109,Goat in Mild White Gravy,2,"Fry whole spices and onion paste in ghee, keeping it pale."
+BDR-109,Goat in Mild White Gravy,3,"Add the meat and cook covered on low until tender, about 60 minutes."
+BDR-109,Goat in Mild White Gravy,4,Stir in cashew and poppy paste with milk powder.
+BDR-109,Goat in Mild White Gravy,5,Finish with whole green chillies and rest before serving.
+BDR-110,Goat Trotter Stew,1,"Scrub and blanch the trotters, discarding the first water."
+BDR-110,Goat Trotter Stew,2,"Brown the onion with whole spices, add ginger, garlic and powdered spices."
+BDR-110,Goat Trotter Stew,3,Add the trotters and plenty of water; simmer 2.5-3 hours until gelatinous.
+BDR-110,Goat Trotter Stew,4,Whisk the flour slurry in to thicken the broth.
+BDR-110,Goat Trotter Stew,5,Simmer 10 minutes and finish with coriander leaf.
+BDR-111,Country Chicken Curry,1,"Marinate the chicken with turmeric, ginger, garlic and salt for 20 minutes."
+BDR-111,Country Chicken Curry,2,Brown onion with whole spices in mustard oil.
+BDR-111,Country Chicken Curry,3,"Add powdered spices and the chicken, fry until it colours."
+BDR-111,Country Chicken Curry,4,"Add water and potatoes, cover and cook 30 minutes."
+BDR-111,Country Chicken Curry,5,Reduce to a medium gravy and finish with green chilli.
+BDR-112,Dry Spiced Chicken,1,"Marinate the chicken with ginger, garlic, turmeric and salt."
+BDR-112,Dry Spiced Chicken,2,Brown the onion deeply with whole spices.
+BDR-112,Dry Spiced Chicken,3,"Add tomato and powdered spices, cook until the oil separates."
+BDR-112,Dry Spiced Chicken,4,"Add the chicken and fry on high 8 minutes, then cover 15 minutes."
+BDR-112,Dry Spiced Chicken,5,Uncover and reduce until thick; finish with chilli and coriander.
+BDR-113,Whole Leg Chicken Roast,1,"Marinate the chicken legs with yoghurt, ginger, garlic, pepper and salt for 1 hour."
+BDR-113,Whole Leg Chicken Roast,2,"Fry them in ghee and oil until browned, then lift out."
+BDR-113,Whole Leg Chicken Roast,3,Cook the ground fried onion with cashew paste and whole spices.
+BDR-113,Whole Leg Chicken Roast,4,Return the chicken with a little water and sugar; simmer covered 25 minutes.
+BDR-113,Whole Leg Chicken Roast,5,"Stir in milk powder, add green chillies and rest before serving."
+BDR-114,Chicken Korma,1,"Marinate the chicken in yoghurt, ginger, garlic and salt for 45 minutes."
+BDR-114,Chicken Korma,2,Fry whole spices and onion paste gently in ghee without browning.
+BDR-114,Chicken Korma,3,Add the chicken and cook covered 20 minutes.
+BDR-114,Chicken Korma,4,Stir in almond paste and coconut milk.
+BDR-114,Chicken Korma,5,Simmer 10 minutes and finish with green chillies.
+BDR-115,Duck Curry with Coconut,1,Clean the duck well and rub with turmeric and salt.
+BDR-115,Duck Curry with Coconut,2,"Brown onion, garlic and ginger with whole spices in mustard oil."
+BDR-115,Duck Curry with Coconut,3,Add the duck and fry until the pieces colour and release fat.
+BDR-115,Duck Curry with Coconut,4,"Add water, cover and cook 45 minutes until tender."
+BDR-115,Duck Curry with Coconut,5,Add grated coconut and reduce until the masala is dark and thick.
+BDR-116,Spiced Boiled Eggs,1,"Boil and peel the eggs, then prick them a few times."
+BDR-116,Spiced Boiled Eggs,2,Fry them in oil with a little turmeric and salt until golden; set aside.
+BDR-116,Spiced Boiled Eggs,3,"Brown the onion, garlic and ginger."
+BDR-116,Spiced Boiled Eggs,4,"Add tomato and powdered spices, cook until oil separates."
+BDR-116,Spiced Boiled Eggs,5,Return the eggs with a little water and simmer 8 minutes.
+BDR-117,Egg and Potato Curry,1,"Boil, peel and lightly fry the eggs."
+BDR-117,Egg and Potato Curry,2,Fry the potato wedges in the same oil.
+BDR-117,Egg and Potato Curry,3,"Brown onion, garlic and ginger, add powdered spices."
+BDR-117,Egg and Potato Curry,4,"Add potato and water, cook 12 minutes."
+BDR-117,Egg and Potato Curry,5,Add the eggs and simmer 8 minutes in the gravy.
+BDR-118,Egg Bhorta,1,Hard-boil and peel the eggs.
+BDR-118,Egg Bhorta,2,Roast the dried chillies and garlic on a dry pan.
+BDR-118,Egg Bhorta,3,"Mash the eggs with salt, chilli, garlic and onion."
+BDR-118,Egg Bhorta,4,Fold in raw mustard oil and coriander leaf.
+BDR-119,Bengali Omelette,1,Beat the eggs with salt and pepper until frothy.
+BDR-119,Bengali Omelette,2,"Stir in onion, green chilli and coriander leaf."
+BDR-119,Bengali Omelette,3,Pour into a hot oiled pan and cook on medium.
+BDR-119,Bengali Omelette,4,Fold over when the top is nearly set and serve.
+BDR-120,Duck Egg Curry,1,"Boil and peel the duck eggs, prick and fry lightly."
+BDR-120,Duck Egg Curry,2,Fry the potatoes in the same mustard oil.
+BDR-120,Duck Egg Curry,3,"Brown onion, garlic and ginger with the bay leaf."
+BDR-120,Duck Egg Curry,4,"Add powdered spices and water, cook the potato 12 minutes."
+BDR-120,Duck Egg Curry,5,Add the eggs and simmer 8 minutes with green chillies.
+BDR-121,Egg Dopiaza,1,"Boil, peel and fry the eggs lightly."
+BDR-121,Egg Dopiaza,2,"Cook half the onion with garlic, ginger and tomato until pulpy."
+BDR-121,Egg Dopiaza,3,Add powdered spices and cook until the oil separates.
+BDR-121,Egg Dopiaza,4,Return the eggs with a little water and simmer 6 minutes.
+BDR-121,Egg Dopiaza,5,"Fold in the remaining raw onion and chillies, cook 3 minutes only."
+BDR-122,Lentil and Onion Fritter,1,Soak the lentil 3 hours and grind coarsely with very little water.
+BDR-122,Lentil and Onion Fritter,2,"Mix in onion, chilli, coriander, cumin, turmeric and salt."
+BDR-122,Lentil and Onion Fritter,3,Rest 15 minutes so the mixture binds.
+BDR-122,Lentil and Onion Fritter,4,Drop small flattened rounds into hot oil.
+BDR-122,Lentil and Onion Fritter,5,Fry until deep golden and drain well.
+BDR-123,Battered Aubergine Fritter,1,Grind the dal and rice to flour and mix into a smooth pouring batter with spices and salt.
+BDR-123,Battered Aubergine Fritter,2,Slice the aubergine thinly lengthwise.
+BDR-123,Battered Aubergine Fritter,3,Dip each slice fully in batter.
+BDR-123,Battered Aubergine Fritter,4,"Deep-fry until crisp and golden, then drain on paper."
+BDR-124,Potato Croquette,1,"Mash the boiled potato with onion, chilli, cumin, coriander leaf and salt."
+BDR-124,Potato Croquette,2,Shape into small flattened ovals.
+BDR-124,Potato Croquette,3,Make a thick batter from the ground dal flour and water.
+BDR-124,Potato Croquette,4,Dip each chop and deep-fry until crisp.
+BDR-124,Potato Croquette,5,Drain well before serving.
+BDR-125,Egg Croquette,1,Boil and halve the eggs.
+BDR-125,Egg Croquette,2,"Mash potato with fried onion, ginger, chilli, cumin, pepper and salt."
+BDR-125,Egg Croquette,3,Wrap each egg half in the potato mixture and shape into an oval.
+BDR-125,Egg Croquette,4,Roll in semolina and deep-fry until golden.
+BDR-125,Egg Croquette,5,Drain and serve hot.
+BDR-126,Vegetable Samosa,1,Rub some oil into the flour with salt and make a stiff dough; rest 30 minutes.
+BDR-126,Vegetable Samosa,2,"Cook the diced potato, cauliflower, peas and peanuts with the spices until dry."
+BDR-126,Vegetable Samosa,3,"Roll the dough thin, cut in half and shape each into a cone."
+BDR-126,Vegetable Samosa,4,Fill and seal the edges firmly.
+BDR-126,Vegetable Samosa,5,Fry on low-medium heat until pale golden and crisp.
+BDR-127,Beef Mince Samosa,1,"Make a stiff dough with flour, a little oil, salt and water; rest 30 minutes."
+BDR-127,Beef Mince Samosa,2,"Cook the mince with onion, ginger, garlic and spices until completely dry; cool."
+BDR-127,Beef Mince Samosa,3,Roll the dough thin and cut into strips.
+BDR-127,Beef Mince Samosa,4,Fold into triangles around the filling and seal with flour paste.
+BDR-127,Beef Mince Samosa,5,Deep-fry on medium heat until golden.
+BDR-128,Spiced Chickpea Street Snack,1,"Boil the soaked chickpeas with salt until soft, keeping the liquid."
+BDR-128,Spiced Chickpea Street Snack,2,Add diced potato and cook until it starts to break down.
+BDR-128,Spiced Chickpea Street Snack,3,"Stir in roasted cumin, chilli powder and pepper to make a thin broth."
+BDR-128,Spiced Chickpea Street Snack,4,"Mix tamarind pulp with water, sugar-free, and keep as a sour drizzle."
+BDR-128,Spiced Chickpea Street Snack,5,"Serve topped with chopped egg, raw onion, coriander and tamarind water."
+BDR-129,Spicy Puffed Rice Mix,1,Put the puffed rice in a large dry bowl.
+BDR-129,Spicy Puffed Rice Mix,2,"Add onion, cucumber, tomato, chilli, peanuts and coriander."
+BDR-129,Spicy Puffed Rice Mix,3,"Sprinkle roasted cumin, salt and lemon juice."
+BDR-129,Spicy Puffed Rice Mix,4,Add mustard oil and toss hard; eat immediately before it softens.
+BDR-130,Wheat and Meat Porridge,1,Soak the cracked wheat and all the dals separately for 3 hours.
+BDR-130,Wheat and Meat Porridge,2,"Cook the beef with ginger, garlic, whole spices and salt until falling apart."
+BDR-130,Wheat and Meat Porridge,3,"Boil the wheat and dals until completely soft, then blend coarsely."
+BDR-130,Wheat and Meat Porridge,4,"Combine with the meat and its stock and simmer, stirring, for 40 minutes."
+BDR-130,Wheat and Meat Porridge,5,"Serve topped with fried onion, ginger julienne, coriander and lemon."
+BDR-131,Mixed Vegetable Fritter,1,Grind the soaked dal to a coarse batter.
+BDR-131,Mixed Vegetable Fritter,2,"Mix in all the sliced vegetables, spices and salt."
+BDR-131,Mixed Vegetable Fritter,3,Let it stand 10 minutes so the vegetables release moisture.
+BDR-131,Mixed Vegetable Fritter,4,Drop spoonfuls into hot oil and fry until crisp.
+BDR-131,Mixed Vegetable Fritter,5,Drain on paper and serve hot.
+BDR-132,Egg Bread Toast,1,"Beat the eggs with onion, chilli, coriander, salt and pepper."
+BDR-132,Egg Bread Toast,2,Dip each bread slice so both sides are coated.
+BDR-132,Egg Bread Toast,3,Fry on a lightly oiled pan on medium heat.
+BDR-132,Egg Bread Toast,4,Turn once and cook until golden on both sides.
+BDR-133,Rice Pudding,1,Wash and soak the rice 30 minutes.
+BDR-133,Rice Pudding,2,"Bring the milk to a boil with cardamom and bay leaf, then lower the heat."
+BDR-133,Rice Pudding,3,"Add the drained rice and simmer, stirring often, 40 minutes."
+BDR-133,Rice Pudding,4,Add sugar when the rice is soft and the milk has thickened.
+BDR-133,Rice Pudding,5,Finish with almonds and dates; serve warm or chilled.
+BDR-134,Ground Rice Pudding,1,"Soak the rice 1 hour, drain and grind coarsely."
+BDR-134,Ground Rice Pudding,2,Boil the milk with cardamom and reduce slightly.
+BDR-134,Ground Rice Pudding,3,Stir the ground rice in slowly to avoid lumps.
+BDR-134,Ground Rice Pudding,4,"Cook 20 minutes until creamy, then add sugar and milk powder."
+BDR-134,Ground Rice Pudding,5,"Pour into bowls, cool, chill and garnish before serving."
+BDR-135,Sweet Milk Vermicelli,1,Roast the vermicelli in ghee until it turns light brown.
+BDR-135,Sweet Milk Vermicelli,2,Boil the milk with cardamom and bay leaf.
+BDR-135,Sweet Milk Vermicelli,3,Add the roasted vermicelli and cook 8 minutes until soft.
+BDR-135,Sweet Milk Vermicelli,4,Add sugar and simmer 5 minutes more.
+BDR-135,Sweet Milk Vermicelli,5,Garnish with almonds and dates.
+BDR-136,Semolina Halwa,1,Roast the semolina in ghee on low heat until it smells nutty and turns golden.
+BDR-136,Semolina Halwa,2,"Separately heat the milk, water and sugar with the whole spices."
+BDR-136,Semolina Halwa,3,"Pour the hot liquid into the semolina slowly, stirring hard."
+BDR-136,Semolina Halwa,4,Cook until it thickens and leaves the sides of the pan.
+BDR-136,Semolina Halwa,5,Fold in nuts and dates and press into a dish to set.
+BDR-137,Carrot Halwa,1,Grate the carrots finely.
+BDR-137,Carrot Halwa,2,"Cook them in milk with cardamom until the milk is almost absorbed, about 30 minutes."
+BDR-137,Carrot Halwa,3,"Add ghee and fry the mixture, stirring, until it darkens."
+BDR-137,Carrot Halwa,4,Add sugar and milk powder and cook until thick and glossy.
+BDR-137,Carrot Halwa,5,Fold in almonds and cashews.
+BDR-138,Cottage Cheese Balls in Syrup,1,Knead the chena with semolina for 10 minutes until completely smooth.
+BDR-138,Cottage Cheese Balls in Syrup,2,Roll into small crack-free balls.
+BDR-138,Cottage Cheese Balls in Syrup,3,Boil sugar and water into a thin syrup with cardamom.
+BDR-138,Cottage Cheese Balls in Syrup,4,"Drop the balls in, cover and boil hard 15 minutes until they double."
+BDR-138,Cottage Cheese Balls in Syrup,5,Cool in the syrup before serving.
+BDR-139,Milk Fudge Sweet,1,Knead the chena until smooth and free of grain.
+BDR-139,Milk Fudge Sweet,2,"Cook it with sugar and khoa on low heat, stirring constantly."
+BDR-139,Milk Fudge Sweet,3,Stop as soon as the mixture leaves the pan; overcooking makes it hard.
+BDR-139,Milk Fudge Sweet,4,"Cool slightly, add cardamom and press into moulds."
+BDR-139,Milk Fudge Sweet,5,Top each with an almond sliver.
+BDR-140,Sweet Yoghurt,1,Reduce the milk by about a third over medium heat.
+BDR-140,Sweet Yoghurt,2,Caramelise part of the sugar separately and stir it into the milk.
+BDR-140,Sweet Yoghurt,3,"Add the rest of the sugar and milk powder, then cool to lukewarm."
+BDR-140,Sweet Yoghurt,4,Whisk in the yoghurt starter.
+BDR-140,Sweet Yoghurt,5,Pour into clay pots and set in a warm place 6-8 hours.
+BDR-141,Coconut Jaggery Ball,1,Melt the jaggery in a heavy pan.
+BDR-141,Coconut Jaggery Ball,2,"Add the grated coconut and cook on low, stirring constantly."
+BDR-141,Coconut Jaggery Ball,3,Continue 20 minutes until the mixture leaves the pan and holds together.
+BDR-141,Coconut Jaggery Ball,4,"Add cardamom, cool slightly and roll into balls while still warm."
+BDR-142,Steamed Sweet Yoghurt Pudding,1,"Whisk yoghurt, condensed milk and milk until completely smooth."
+BDR-142,Steamed Sweet Yoghurt Pudding,2,Strain the mixture and add ground cardamom.
+BDR-142,Steamed Sweet Yoghurt Pudding,3,Pour into a greased tin and cover tightly with foil.
+BDR-142,Steamed Sweet Yoghurt Pudding,4,Steam over simmering water 25-30 minutes until just set.
+BDR-142,Steamed Sweet Yoghurt Pudding,5,"Chill, then garnish with almonds and dates."
+BDR-143,Milk Tea,1,Boil the water with cardamom if using.
+BDR-143,Milk Tea,2,Add the tea leaves and boil 2 minutes.
+BDR-143,Milk Tea,3,Pour in the milk and bring back to a boil.
+BDR-143,Milk Tea,4,"Add sugar, strain and serve hot."
+BDR-144,Black Tea,1,Boil the water with ginger if using.
+BDR-144,Black Tea,2,Add tea leaves and steep 3 minutes off the heat.
+BDR-144,Black Tea,3,Strain into cups.
+BDR-144,Black Tea,4,Add lemon and sugar to taste.
+BDR-145,Spiced Yoghurt Drink,1,"Blend mint, coriander and green chilli with a little water."
+BDR-145,Spiced Yoghurt Drink,2,Whisk the yoghurt smooth with water.
+BDR-145,Spiced Yoghurt Drink,3,"Add the herb paste, roasted cumin, pepper, mustard powder, sugar and salt."
+BDR-145,Spiced Yoghurt Drink,4,"Add lemon juice, strain and chill thoroughly before serving."
+BDR-146,Lemon Sherbet,1,Squeeze the lemons and strain the juice.
+BDR-146,Lemon Sherbet,2,Dissolve sugar and salt in cold water.
+BDR-146,Lemon Sherbet,3,Add the lemon juice and bruised mint.
+BDR-146,Lemon Sherbet,4,Chill and serve over ice.
+BDR-147,Mango Yoghurt Drink,1,Peel and stone the mangoes and blend to a smooth pulp.
+BDR-147,Mango Yoghurt Drink,2,"Add yoghurt, milk and cardamom."
+BDR-147,Mango Yoghurt Drink,3,"Blend until frothy, adding sugar only if the fruit is not sweet enough."
+BDR-147,Mango Yoghurt Drink,4,Serve chilled.
+BDR-148,Cucumber Tomato Salad,1,"Slice the cucumber, tomato and onion thinly."
+BDR-148,Cucumber Tomato Salad,2,Add slit green chilli and chopped coriander.
+BDR-148,Cucumber Tomato Salad,3,Dress with lemon juice and a small amount of salt.
+BDR-148,Cucumber Tomato Salad,4,Toss just before serving so it does not go watery.
+BDR-149,Sweet Tomato Chutney,1,Temper panch phoron and dried chilli in mustard oil.
+BDR-149,Sweet Tomato Chutney,2,"Add chopped tomato, ginger and salt; cook until pulpy."
+BDR-149,Sweet Tomato Chutney,3,Add sugar and dates and simmer 20 minutes.
+BDR-149,Sweet Tomato Chutney,4,"Reduce until thick and glossy, then cool before serving."
+BDR-150,Tamarind Chutney,1,Soak the tamarind in warm water and extract the pulp through a sieve.
+BDR-150,Tamarind Chutney,2,Simmer the pulp with jaggery and chopped dates.
+BDR-150,Tamarind Chutney,3,"Add roasted cumin, chilli powder, pepper, ginger and salt."
+BDR-150,Tamarind Chutney,4,"Cook 15 minutes until it coats a spoon, then cool."
+BDR-151,Sweet Yellow Pilaf,1,"Wash and drain the rice, then rub it with a little ghee and turmeric."
+BDR-151,Sweet Yellow Pilaf,2,Fry the whole spices and cashews in the rest of the ghee.
+BDR-151,Sweet Yellow Pilaf,3,Add the rice and toss 3 minutes.
+BDR-151,Sweet Yellow Pilaf,4,"Add hot water, sugar, dates and salt; cover and cook on low 18 minutes."
+BDR-151,Sweet Yellow Pilaf,5,Rest 10 minutes and fluff gently.
+BDR-152,Ghee Rice,1,Wash and drain the rice.
+BDR-152,Ghee Rice,2,Fry whole spices and onion in ghee until the onion is golden.
+BDR-152,Ghee Rice,3,Add the rice and toss for 2 minutes.
+BDR-152,Ghee Rice,4,"Add hot water and salt, cover and cook on low 18 minutes."
+BDR-152,Ghee Rice,5,Rest 10 minutes before serving.
+BDR-153,Fish Head with Rice and Lentil,1,Rub the fish piece with turmeric and salt and fry it in mustard oil; set aside.
+BDR-153,Fish Head with Rice and Lentil,2,"Dry-roast the mung dal, then wash it with the rice."
+BDR-153,Fish Head with Rice and Lentil,3,"Fry onion, ginger and whole spices in the same oil."
+BDR-153,Fish Head with Rice and Lentil,4,"Add rice, dal, turmeric, cumin, water and salt; cook until soft."
+BDR-153,Fish Head with Rice and Lentil,5,"Break the fish in, add green chillies and ghee, and finish on low heat."
+BDR-154,Egg Fried Rice,1,Cook and cool the rice ahead so the grains separate.
+BDR-154,Egg Fried Rice,2,Scramble the eggs in a little oil and set aside.
+BDR-154,Egg Fried Rice,3,"Stir-fry garlic, carrot and peas on high heat."
+BDR-154,Egg Fried Rice,4,"Add the rice, salt and pepper; toss 3 minutes."
+BDR-154,Egg Fried Rice,5,Fold the egg and spring onion back in.
+BDR-155,Flattened Rice with Yoghurt and Banana,1,Rinse the flattened rice and drain.
+BDR-155,Flattened Rice with Yoghurt and Banana,2,Whisk the yoghurt smooth with the jaggery.
+BDR-155,Flattened Rice with Yoghurt and Banana,3,Fold the flattened rice in and let it soften 10 minutes.
+BDR-155,Flattened Rice with Yoghurt and Banana,4,Top with sliced banana and grated coconut.
+BDR-156,Fried Sweet Rice Cake,1,Melt the jaggery in a little warm water.
+BDR-156,Fried Sweet Rice Cake,2,"Mix rice flour, wheat flour, coconut, nigella and salt into a thick batter with the jaggery water."
+BDR-156,Fried Sweet Rice Cake,3,Rest the batter 20 minutes.
+BDR-156,Fried Sweet Rice Cake,4,Drop spoonfuls into hot oil and fry until deep brown.
+BDR-156,Fried Sweet Rice Cake,5,Drain well on paper.
+BDR-157,Milk-simmered Rice Dumplings,1,Cook coconut with jaggery to a thick filling and cool.
+BDR-157,Milk-simmered Rice Dumplings,2,"Boil salted water, stir in the rice flour and knead to a hot dough."
+BDR-157,Milk-simmered Rice Dumplings,3,"Shape small cups, fill with coconut and seal into crescents."
+BDR-157,Milk-simmered Rice Dumplings,4,Reduce the milk with cardamom and sugar until slightly thick.
+BDR-157,Milk-simmered Rice Dumplings,5,Slip the dumplings in and simmer gently 12 minutes.
+BDR-158,Fried Rice-Flour Sweet Puff,1,"Melt the jaggery and mix with rice flour, semolina, cardamom and salt into a soft dough."
+BDR-158,Fried Rice-Flour Sweet Puff,2,Rest 20 minutes.
+BDR-158,Fried Rice-Flour Sweet Puff,3,Shape into small flat rounds.
+BDR-158,Fried Rice-Flour Sweet Puff,4,Deep-fry on low-medium heat until golden and cooked through.
+BDR-158,Fried Rice-Flour Sweet Puff,5,Drain and cool; they firm up as they rest.
+BDR-159,Egg-stuffed Paratha,1,"Make a soft dough with flour, a little oil, salt and water; rest 30 minutes."
+BDR-159,Egg-stuffed Paratha,2,"Beat the eggs with onion, chilli, coriander and a pinch of salt."
+BDR-159,Egg-stuffed Paratha,3,"Roll a paratha, cook one side, then pour egg on top and fold to seal."
+BDR-159,Egg-stuffed Paratha,4,Shallow-fry both sides on a tawa until golden and the egg is set.
+BDR-160,Roasted Garlic Bhorta,1,Roast the peeled garlic on a dry pan or in a little oil until soft and golden.
+BDR-160,Roasted Garlic Bhorta,2,Roast the dried chillies.
+BDR-160,Roasted Garlic Bhorta,3,Pound the garlic and chilli with salt to a coarse paste.
+BDR-160,Roasted Garlic Bhorta,4,"Mix in onion, raw mustard oil and coriander leaf."
+BDR-161,Green Chilli Bhorta,1,Lightly roast the green chillies and garlic on a dry pan.
+BDR-161,Green Chilli Bhorta,2,Pound them with salt.
+BDR-161,Green Chilli Bhorta,3,Add onion and crush together.
+BDR-161,Green Chilli Bhorta,4,Finish with raw mustard oil and coriander leaf.
+BDR-162,Country Bean Bhorta,1,Boil the beans with a little salt until very soft; drain well.
+BDR-162,Country Bean Bhorta,2,Roast the garlic and dried chilli.
+BDR-162,Country Bean Bhorta,3,"Mash the beans with the roasted aromatics, onion and salt."
+BDR-162,Country Bean Bhorta,4,Work in raw mustard oil and coriander leaf.
+BDR-163,Coriander Leaf Bhorta,1,Wash and drain the coriander leaves well.
+BDR-163,Coriander Leaf Bhorta,2,Roast the garlic and dried chilli on a dry pan.
+BDR-163,Coriander Leaf Bhorta,3,"Grind the coriander with garlic, chilli and salt to a coarse paste."
+BDR-163,Coriander Leaf Bhorta,4,Mix in onion and raw mustard oil.
+BDR-164,Potato and Egg Bhorta,1,Boil the potatoes and eggs; peel both.
+BDR-164,Potato and Egg Bhorta,2,Roast the dried chillies.
+BDR-164,Potato and Egg Bhorta,3,"Mash the potato and egg together with salt, chilli and onion."
+BDR-164,Potato and Egg Bhorta,4,Fold in raw mustard oil and coriander leaf.
+BDR-165,Radish Bhorta,1,"Boil the diced radish until soft, then drain and squeeze out the water."
+BDR-165,Radish Bhorta,2,Roast the garlic and dried chilli.
+BDR-165,Radish Bhorta,3,"Mash the radish with the roasted aromatics, onion and salt."
+BDR-165,Radish Bhorta,4,Finish with raw mustard oil and coriander leaf.
+BDR-166,Yellow Pea Curry,1,Boil the soaked peas with salt until soft but whole.
+BDR-166,Yellow Pea Curry,2,"Fry onion, ginger and garlic in mustard oil."
+BDR-166,Yellow Pea Curry,3,"Add tomato and powdered spices, cook until the oil separates."
+BDR-166,Yellow Pea Curry,4,"Add the peas, potato and their liquid; simmer 15 minutes."
+BDR-166,Yellow Pea Curry,5,Finish with green chilli and coriander leaf.
+BDR-167,Potato and Aubergine Curry,1,"Temper nigella in mustard oil, then fry onion and garlic."
+BDR-167,Potato and Aubergine Curry,2,"Add turmeric, cumin and chilli powder with a splash of water."
+BDR-167,Potato and Aubergine Curry,3,"Add potato first and cook 6 minutes, then the aubergine."
+BDR-167,Potato and Aubergine Curry,4,"Add a little water and salt, cover and cook until both are soft."
+BDR-167,Potato and Aubergine Curry,5,Finish with green chillies.
+BDR-168,Spiced Potato in Gravy,1,"Par-boil and peel the baby potatoes, then fry until golden."
+BDR-168,Spiced Potato in Gravy,2,"Fry the onion paste, ginger and garlic with the bay leaf."
+BDR-168,Spiced Potato in Gravy,3,"Add tomato and powdered spices, then whisk in the yoghurt off the heat."
+BDR-168,Spiced Potato in Gravy,4,"Return to heat, add the potatoes and water."
+BDR-168,Spiced Potato in Gravy,5,Simmer covered 15 minutes until the gravy thickens.
+BDR-169,Green Banana Stir-fry,1,Peel and cube the green bananas and soak briefly to stop discolouring.
+BDR-169,Green Banana Stir-fry,2,"Temper nigella, fry onion and garlic."
+BDR-169,Green Banana Stir-fry,3,"Add banana, potato, turmeric, cumin and salt."
+BDR-169,Green Banana Stir-fry,4,"Cover and cook 15 minutes, sprinkling water as needed."
+BDR-169,Green Banana Stir-fry,5,Uncover and finish with green chillies.
+BDR-170,Green Banana Kofta Curry,1,"Boil and mash the green bananas, mix with gram-flour, some spice and salt."
+BDR-170,Green Banana Kofta Curry,2,Shape into balls and fry until browned; set aside.
+BDR-170,Green Banana Kofta Curry,3,"Fry onion, ginger and garlic, add tomato and powdered spices."
+BDR-170,Green Banana Kofta Curry,4,Add water to make a gravy and simmer 8 minutes.
+BDR-170,Green Banana Kofta Curry,5,Slip the koftas in just before serving so they hold shape; garnish with coriander.
+BDR-171,Bottle Gourd Mash,1,"Temper bay leaf and cumin in mustard oil, then fry onion and ginger."
+BDR-171,Bottle Gourd Mash,2,"Add the gourd, potato, peas, turmeric and salt."
+BDR-171,Bottle Gourd Mash,3,Cover and let it cook down in its own water 18 minutes.
+BDR-171,Bottle Gourd Mash,4,Mash lightly against the pan and finish with green chillies.
+BDR-172,Ash Gourd Mash,1,"Temper nigella and cumin in mustard oil, fry onion and ginger."
+BDR-172,Ash Gourd Mash,2,"Add the ash gourd, potato, turmeric and salt."
+BDR-172,Ash Gourd Mash,3,Cover and cook down 18 minutes until soft.
+BDR-172,Ash Gourd Mash,4,Mash lightly and finish with green chillies.
+BDR-173,Peas and Potato Curry,1,"Temper bay leaf and cumin, fry onion and ginger."
+BDR-173,Peas and Potato Curry,2,"Add tomato, turmeric and coriander; cook until pulpy."
+BDR-173,Peas and Potato Curry,3,"Add potato and water, cook 10 minutes."
+BDR-173,Peas and Potato Curry,4,Add the peas and simmer until both are tender.
+BDR-173,Peas and Potato Curry,5,Finish with green chillies.
+BDR-174,Jackfruit Seed and Bottle Gourd Curry,1,"Soak the jackfruit seeds, peel off the skins and halve them."
+BDR-174,Jackfruit Seed and Bottle Gourd Curry,2,Par-boil the seeds until they start to soften.
+BDR-174,Jackfruit Seed and Bottle Gourd Curry,3,"Fry onion and garlic in mustard oil, add turmeric, cumin and chilli."
+BDR-174,Jackfruit Seed and Bottle Gourd Curry,4,Add the seeds and gourd with water and salt.
+BDR-174,Jackfruit Seed and Bottle Gourd Curry,5,Simmer 18 minutes until both are tender; finish with green chilli.
+BDR-175,Amaranth Stem Medley,1,Peel the tough outer skin off the stems and cut into short lengths.
+BDR-175,Amaranth Stem Medley,2,"Temper nigella, fry onion and garlic."
+BDR-175,Amaranth Stem Medley,3,"Add the stems, potato, aubergine, turmeric, chilli and salt."
+BDR-175,Amaranth Stem Medley,4,Cover and cook 15 minutes until the stems are tender.
+BDR-175,Amaranth Stem Medley,5,Uncover and dry off any liquid.
+BDR-176,Taro Leaf with Shrimp,1,Wash and finely chop the taro leaves.
+BDR-176,Taro Leaf with Shrimp,2,Fry the turmeric-rubbed shrimp in mustard oil and lift out.
+BDR-176,Taro Leaf with Shrimp,3,"Fry garlic and onion, add the leaves, turmeric and chilli."
+BDR-176,Taro Leaf with Shrimp,4,"Cover and cook down 15 minutes, then add tamarind and shrimp."
+BDR-176,Taro Leaf with Shrimp,5,Cook uncovered until dry; finish with green chillies.
+BDR-177,Sweet Potato Leaf Stir-fry,1,Strip the leaves and tender tips and wash well.
+BDR-177,Sweet Potato Leaf Stir-fry,2,Temper nigella and dried chilli in mustard oil.
+BDR-177,Sweet Potato Leaf Stir-fry,3,Fry garlic and onion until golden.
+BDR-177,Sweet Potato Leaf Stir-fry,4,"Add the greens and salt, stir-fry 8 minutes until the water dries."
+BDR-178,Green Amaranth Stir-fry,1,"Pick, wash and chop the leaves and tender stems."
+BDR-178,Green Amaranth Stir-fry,2,Fry garlic and dried chilli in mustard oil.
+BDR-178,Green Amaranth Stir-fry,3,"Add onion, then the greens and salt."
+BDR-178,Green Amaranth Stir-fry,4,"Stir-fry uncovered until the released water evaporates, about 8 minutes."
+BDR-179,Crab Curry,1,Clean the crabs well and crack the claws.
+BDR-179,Crab Curry,2,"Brown the onion, garlic and ginger in mustard oil."
+BDR-179,Crab Curry,3,"Add tomato and powdered spices, cook until the oil separates."
+BDR-179,Crab Curry,4,"Add the crab and toss to coat, then add a little water."
+BDR-179,Crab Curry,5,Cover and cook 18 minutes; reduce to a thick masala and finish with coriander.
+BDR-180,Fried Rohu Fish,1,"Rub the steaks with turmeric, chilli powder and salt; rest 15 minutes."
+BDR-180,Fried Rohu Fish,2,"Heat mustard oil until it just smokes, then lower the heat."
+BDR-180,Fried Rohu Fish,3,Fry the pieces 4 minutes per side until golden.
+BDR-180,Fried Rohu Fish,4,Drain and serve with rice and dal.
+BDR-181,Small Barb Fish Medley,1,Clean and scale the small fish.
+BDR-181,Small Barb Fish Medley,2,"Temper nigella, fry onion, garlic and potato."
+BDR-181,Small Barb Fish Medley,3,"Add turmeric, chilli powder and salt."
+BDR-181,Small Barb Fish Medley,4,"Add the fish, cover and cook 10 minutes without much stirring."
+BDR-181,Small Barb Fish Medley,5,Uncover and dry off; finish with green chilli and coriander.
+BDR-182,Shrimp and Potato Curry,1,Toss the shrimp with turmeric and salt.
+BDR-182,Shrimp and Potato Curry,2,"Fry onion, garlic and ginger, add tomato and powdered spices."
+BDR-182,Shrimp and Potato Curry,3,"Add potato and water, cook 12 minutes."
+BDR-182,Shrimp and Potato Curry,4,Add the shrimp and simmer 6 minutes.
+BDR-182,Shrimp and Potato Curry,5,Finish with green chilli and coriander.
+BDR-183,Fish Head with Mung Dal,1,Rub the fish piece with turmeric and salt and fry it; set aside.
+BDR-183,Fish Head with Mung Dal,2,"Dry-roast the mung dal, wash and boil with turmeric until soft."
+BDR-183,Fish Head with Mung Dal,3,"Temper bay leaf and cumin, fry onion and ginger in mustard oil."
+BDR-183,Fish Head with Mung Dal,4,"Add the dal, break the fish in and simmer 8 minutes."
+BDR-183,Fish Head with Mung Dal,5,Finish with green chillies.
+BDR-184,Fresh Bombay Duck Curry,1,Clean the fish and rub with turmeric and salt.
+BDR-184,Fresh Bombay Duck Curry,2,"Fry onion and garlic in mustard oil, add powdered spices."
+BDR-184,Fresh Bombay Duck Curry,3,Add potato and water and cook 10 minutes.
+BDR-184,Fresh Bombay Duck Curry,4,Slide the fish in and simmer 8 minutes without stirring.
+BDR-184,Fresh Bombay Duck Curry,5,Finish with green chilli and coriander.
+BDR-185,Everyday Chicken and Potato Curry,1,"Marinate the chicken with turmeric, ginger, garlic and salt for 15 minutes."
+BDR-185,Everyday Chicken and Potato Curry,2,"Fry onion with the bay leaf, add the chicken and cook until it colours."
+BDR-185,Everyday Chicken and Potato Curry,3,"Add powdered spices and a splash of water, cook until oil separates."
+BDR-185,Everyday Chicken and Potato Curry,4,"Add potato and water, cover and cook 25 minutes."
+BDR-185,Everyday Chicken and Potato Curry,5,Finish with green chillies in a medium gravy.
+BDR-186,Spiced Chicken Liver,1,"Rinse and trim the liver, cut into bite-size pieces."
+BDR-186,Spiced Chicken Liver,2,"Brown the onion, garlic and ginger."
+BDR-186,Spiced Chicken Liver,3,Add powdered spices with a splash of water and cook until oil separates.
+BDR-186,Spiced Chicken Liver,4,"Add the liver and cook on high 6 minutes, then cover briefly."
+BDR-186,Spiced Chicken Liver,5,"Finish with pepper, green chilli and coriander; do not overcook."
+BDR-187,Home-style Fried Chicken,1,"Prick the chicken and marinate with garlic, ginger, pepper, chilli, cumin, lemon and salt for 1 hour."
+BDR-187,Home-style Fried Chicken,2,Coat lightly with beaten egg.
+BDR-187,Home-style Fried Chicken,3,"Shallow-fry on medium heat, turning, until deep golden and cooked through."
+BDR-187,Home-style Fried Chicken,4,Rest a few minutes before serving.
+BDR-188,Dry Spicy Goat,1,"Marinate the goat with yoghurt, ginger, garlic, powdered spices and salt for 1 hour."
+BDR-188,Dry Spicy Goat,2,Brown the onion deeply with whole spices in mustard oil.
+BDR-188,Dry Spicy Goat,3,Add the meat and fry on high until it seals and the water dries.
+BDR-188,Dry Spicy Goat,4,"Add a little hot water, cover and cook on low 60 minutes until tender."
+BDR-188,Dry Spicy Goat,5,Uncover and stir until the gravy is dark and thick.
+BDR-189,Scrambled Egg with Onion,1,Fry the onion and green chilli in oil until soft.
+BDR-189,Scrambled Egg with Onion,2,Add turmeric and salt.
+BDR-189,Scrambled Egg with Onion,3,Beat the eggs lightly and pour in.
+BDR-189,Scrambled Egg with Onion,4,Stir constantly until just set but not dry; finish with coriander.
+BDR-190,Light Egg Curry,1,"Boil, peel and lightly fry the eggs."
+BDR-190,Light Egg Curry,2,"Fry onion and ginger with the bay leaf, add turmeric, cumin and chilli."
+BDR-190,Light Egg Curry,3,Add potato and plenty of water; cook 12 minutes.
+BDR-190,Light Egg Curry,4,Add the eggs and simmer 6 minutes in the thin gravy.
+BDR-190,Light Egg Curry,5,Finish with green chillies.
+BDR-191,Flattened Rice and Jaggery Ball,1,Lightly dry-roast the flattened rice and coconut.
+BDR-191,Flattened Rice and Jaggery Ball,2,Melt the jaggery to a thick syrup and add cardamom.
+BDR-191,Flattened Rice and Jaggery Ball,3,Fold in the flattened rice and coconut quickly.
+BDR-191,Flattened Rice and Jaggery Ball,4,"While still warm, press into small balls with greased hands."
+BDR-192,Puffed Rice and Jaggery Ball,1,Warm the puffed rice slightly so it stays crisp.
+BDR-192,Puffed Rice and Jaggery Ball,2,Melt the jaggery to a thick syrup that forms a soft ball in water.
+BDR-192,Puffed Rice and Jaggery Ball,3,Add cardamom and quickly fold in the puffed rice.
+BDR-192,Puffed Rice and Jaggery Ball,4,Shape into balls while warm with greased hands.
+BDR-193,Sesame Jaggery Ball,1,Dry-roast the sesame until it pops and smells nutty.
+BDR-193,Sesame Jaggery Ball,2,Melt the jaggery to a thick syrup.
+BDR-193,Sesame Jaggery Ball,3,"Stir in the sesame, coconut and cardamom."
+BDR-193,Sesame Jaggery Ball,4,Roll into small balls while warm.
+BDR-194,Date Palm Jaggery Rice Pudding,1,Wash and soak the rice 30 minutes.
+BDR-194,Date Palm Jaggery Rice Pudding,2,"Reduce the milk with cardamom and bay leaf, then add the rice."
+BDR-194,Date Palm Jaggery Rice Pudding,3,"Simmer, stirring, until the rice is soft and the milk thickens."
+BDR-194,Date Palm Jaggery Rice Pudding,4,"Cool slightly, then stir in the jaggery off strong heat so the milk does not split."
+BDR-194,Date Palm Jaggery Rice Pudding,5,Warm through gently and garnish with almonds.
+BDR-195,Bottle Gourd Halwa,1,Grate the bottle gourd and squeeze out excess water.
+BDR-195,Bottle Gourd Halwa,2,Cook it in milk with cardamom until the milk is absorbed.
+BDR-195,Bottle Gourd Halwa,3,"Add ghee and fry the mixture, stirring, until it thickens."
+BDR-195,Bottle Gourd Halwa,4,Add sugar and milk powder and cook until glossy.
+BDR-195,Bottle Gourd Halwa,5,Garnish with almonds.
+BDR-196,Sweet Yoghurt Lassi,1,Whisk the yoghurt with milk and cold water until smooth and frothy.
+BDR-196,Sweet Yoghurt Lassi,2,Add sugar and cardamom.
+BDR-196,Sweet Yoghurt Lassi,3,Serve chilled over ice.
+BDR-197,Savoury Buttermilk,1,Whisk the buttermilk smooth with cold water.
+BDR-197,Savoury Buttermilk,2,Crush the mint and green chilli and add.
+BDR-197,Savoury Buttermilk,3,Stir in roasted cumin and salt.
+BDR-197,Savoury Buttermilk,4,Strain and serve chilled.
+BDR-198,Wood Apple Sherbet,1,Crack the wood apple and scoop out the pulp.
+BDR-198,Wood Apple Sherbet,2,"Soak the pulp in water and mash, then pass through a sieve to remove seeds and fibre."
+BDR-198,Wood Apple Sherbet,3,Sweeten with sugar and a pinch of salt.
+BDR-198,Wood Apple Sherbet,4,Chill and serve over ice.
+BDR-199,Pineapple Chutney,1,Temper mustard seed and dried chilli in a dry-ish pan with a drop of oil.
+BDR-199,Pineapple Chutney,2,Add the diced pineapple and salt; cook until soft.
+BDR-199,Pineapple Chutney,3,Add sugar and simmer until thick and glossy.
+BDR-199,Pineapple Chutney,4,Cool before serving.
+BDR-200,Green Papaya and Carrot Salad,1,Peel and grate the green papaya and carrot.
+BDR-200,Green Papaya and Carrot Salad,2,"Add thinly sliced onion, green chilli and coriander."
+BDR-200,Green Papaya and Carrot Salad,3,Dress with lemon juice and a little salt.
+BDR-200,Green Papaya and Carrot Salad,4,Scatter roasted peanuts on top and toss just before serving.
+BDR-201,Beef Akhni,1,"Marinate the beef with yoghurt, ginger, garlic, powdered spices and salt for 1 hour."
+BDR-201,Beef Akhni,2,"Temper panch phoron and whole spices in mustard oil, then brown the onions."
+BDR-201,Beef Akhni,3,"Add the beef and cook covered until nearly tender, about 45 minutes."
+BDR-201,Beef Akhni,4,"Add fried potato halves, the washed rice and hot water; season."
+BDR-201,Beef Akhni,5,Cover and cook on low 20 minutes; finish with ghee and green chillies and rest 10 minutes.
+BDR-202,Sylheti Soft Khichuri,1,Wash the rice and both dals together.
+BDR-202,Sylheti Soft Khichuri,2,"Temper fenugreek and bay leaf in oil, then soften the onion, ginger and garlic."
+BDR-202,Sylheti Soft Khichuri,3,"Add rice, dal, turmeric, salt and plenty of water."
+BDR-202,Sylheti Soft Khichuri,4,"Simmer 35 minutes, stirring often, until very soft and porridge-like."
+BDR-202,Sylheti Soft Khichuri,5,Finish with slit green chillies.
+BDR-203,Fermented Rice with Fried Hilsa,1,Cover the previous night's cooked rice with clean water and leave 8-10 hours.
+BDR-203,Fermented Rice with Fried Hilsa,2,Rub the hilsa with turmeric and salt and shallow-fry in mustard oil.
+BDR-203,Fermented Rice with Fried Hilsa,3,Fry the dried chillies in the same oil.
+BDR-203,Fermented Rice with Fried Hilsa,4,"Serve the rice in its water with fried hilsa, raw onion, chilli and a drizzle of the frying oil."
+BDR-204,Egg Khichuri,1,Hard-boil and peel the eggs; fry them lightly with a pinch of turmeric.
+BDR-204,Egg Khichuri,2,"Dry-roast the mung dal, then wash with the rice."
+BDR-204,Egg Khichuri,3,"Fry whole spices and onion, add ginger, garlic, turmeric and cumin."
+BDR-204,Egg Khichuri,4,"Add rice, dal, potato, water and salt; simmer 25 minutes until soft."
+BDR-204,Egg Khichuri,5,"Fold in the eggs, green chillies and ghee."
+BDR-205,Puffed Rice with Milk and Banana,1,Warm the milk if preferred and dissolve the jaggery in it.
+BDR-205,Puffed Rice with Milk and Banana,2,Pour over the puffed rice in a bowl.
+BDR-205,Puffed Rice with Milk and Banana,3,Add sliced banana and eat immediately.
+BDR-206,Black Gram Flatbread,1,"Mix black-gram flour, rice flour and salt."
+BDR-206,Black Gram Flatbread,2,"Add warm water gradually and knead to a soft, slightly sticky dough."
+BDR-206,Black Gram Flatbread,3,Pat each ball out by hand into a thick round.
+BDR-206,Black Gram Flatbread,4,Cook on a hot clay or iron tawa until both sides are spotted and cooked through.
+BDR-207,Decorated Fried Rice Pitha,1,Knead rice flour with hot salted water into a smooth dough.
+BDR-207,Decorated Fried Rice Pitha,2,Roll thick and carve patterns with a knife or skewer.
+BDR-207,Decorated Fried Rice Pitha,3,Deep-fry on low heat until crisp.
+BDR-207,Decorated Fried Rice Pitha,4,Dip briefly in warm jaggery syrup and drain.
+BDR-208,Banana Fritter Pitha,1,Mash the bananas with the jaggery until smooth.
+BDR-208,Banana Fritter Pitha,2,"Mix in rice flour, wheat flour, coconut, cardamom and salt to a thick batter."
+BDR-208,Banana Fritter Pitha,3,Rest 15 minutes.
+BDR-208,Banana Fritter Pitha,4,Drop spoonfuls into hot oil and fry until deep brown; drain.
+BDR-209,Palmyra Fruit Fritter,1,Extract the pulp from ripe palmyra fruit through a sieve.
+BDR-209,Palmyra Fruit Fritter,2,"Mix with rice flour, sugar, coconut and salt into a thick batter; rest 30 minutes."
+BDR-209,Palmyra Fruit Fritter,3,Drop spoonfuls into hot oil.
+BDR-209,Palmyra Fruit Fritter,4,Fry on medium heat until dark golden; drain.
+BDR-210,Rice Noodles in Sweet Milk,1,Knead rice flour with hot water and a pinch of salt into a smooth dough.
+BDR-210,Rice Noodles in Sweet Milk,2,Roll small pieces between the palms into thin tapering noodles; dry them briefly.
+BDR-210,Rice Noodles in Sweet Milk,3,Reduce the milk with cardamom and bay leaf.
+BDR-210,Rice Noodles in Sweet Milk,4,"Add the noodles and simmer 10 minutes, then stir in the jaggery off strong heat."
+BDR-211,Indian Pennywort Bhorta,1,Wash the pennywort leaves well and drain.
+BDR-211,Indian Pennywort Bhorta,2,Roast the garlic lightly on a dry pan.
+BDR-211,Indian Pennywort Bhorta,3,"Grind the leaves with garlic, chilli and salt to a coarse paste."
+BDR-211,Indian Pennywort Bhorta,4,Mix in onion and raw mustard oil.
+BDR-212,Hog Plum Bhorta,1,Peel the hog plums and grate the flesh off the stone.
+BDR-212,Hog Plum Bhorta,2,"Mix with salt, sugar and crushed chilli."
+BDR-212,Hog Plum Bhorta,3,Add mustard oil and coriander leaf and toss.
+BDR-213,Star Fruit Bhorta,1,Slice the star fruit thinly and remove seeds.
+BDR-213,Star Fruit Bhorta,2,"Crush lightly with salt, sugar and chilli."
+BDR-213,Star Fruit Bhorta,3,Add mustard oil and coriander leaf and toss.
+BDR-214,Green Guava Bhorta,1,Chop the green guava into small pieces.
+BDR-214,Green Guava Bhorta,2,"Crush with salt, sugar and both chillies."
+BDR-214,Green Guava Bhorta,3,Add mustard oil and coriander leaf and toss.
+BDR-215,Sour Lentil with Tamarind,1,"Boil the lentil with turmeric, tomato and salt until soft."
+BDR-215,Sour Lentil with Tamarind,2,Whisk smooth and thin with hot water.
+BDR-215,Sour Lentil with Tamarind,3,Stir in tamarind pulp and sugar and simmer 5 minutes.
+BDR-215,Sour Lentil with Tamarind,4,"Temper mustard seed, nigella, dried chilli and onion in mustard oil and pour over."
+BDR-216,Lentil with Mixed Vegetables,1,Boil the lentil with turmeric until half done.
+BDR-216,Lentil with Mixed Vegetables,2,Add the diced vegetables and salt; cook until tender.
+BDR-216,Lentil with Mixed Vegetables,3,"Temper cumin, garlic and onion in mustard oil."
+BDR-216,Lentil with Mixed Vegetables,4,Stir the tempering through and finish with green chillies.
+BDR-217,Five-Lentil Dal,1,Soak the bengal gram and black gram for 1 hour.
+BDR-217,Five-Lentil Dal,2,Boil all five pulses with turmeric and tomato until soft.
+BDR-217,Five-Lentil Dal,3,"Temper cumin, dried chilli, garlic, ginger and onion in oil."
+BDR-217,Five-Lentil Dal,4,"Combine, simmer 10 minutes and finish with ghee."
+BDR-218,Okra and Tomato Bhuna,1,Fry the onion and garlic in mustard oil.
+BDR-218,Okra and Tomato Bhuna,2,"Add okra, turmeric and chilli powder; fry uncovered 8 minutes."
+BDR-218,Okra and Tomato Bhuna,3,Add tomato and salt and cook until the tomato breaks down.
+BDR-218,Okra and Tomato Bhuna,4,Reduce until the masala clings and the oil separates.
+BDR-219,Fried Teasle Gourd,1,Slice the teasle gourd into rounds.
+BDR-219,Fried Teasle Gourd,2,"Toss with turmeric, chilli, salt and gram flour."
+BDR-219,Fried Teasle Gourd,3,Shallow-fry in mustard oil until crisp on both sides.
+BDR-219,Fried Teasle Gourd,4,Drain on paper.
+BDR-220,Teasle Gourd and Potato Curry,1,Fry onion and garlic in mustard oil.
+BDR-220,Teasle Gourd and Potato Curry,2,"Add turmeric, cumin and chilli powder with a splash of water."
+BDR-220,Teasle Gourd and Potato Curry,3,"Add potato and cook 6 minutes, then the teasle gourd."
+BDR-220,Teasle Gourd and Potato Curry,4,"Add water and salt, cover and simmer until tender; finish with green chillies."
+BDR-221,Snake Gourd with Shrimp,1,Fry the turmeric-rubbed shrimp briefly and lift out.
+BDR-221,Snake Gourd with Shrimp,2,"Fry onion and garlic, add cumin and turmeric."
+BDR-221,Snake Gourd with Shrimp,3,Add the snake gourd and let it cook in its own water 10 minutes.
+BDR-221,Snake Gourd with Shrimp,4,Return the shrimp with green chillies and simmer 5 minutes.
+BDR-222,Sponge Gourd Stir-fry,1,Peel and dice the sponge gourd.
+BDR-222,Sponge Gourd Stir-fry,2,"Temper nigella in mustard oil, then fry onion, garlic and potato."
+BDR-222,Sponge Gourd Stir-fry,3,"Add the gourd, turmeric and salt; cover 8 minutes."
+BDR-222,Sponge Gourd Stir-fry,4,Uncover and cook until nearly dry; add green chillies.
+BDR-223,Knol-khol Curry,1,"Fry onion and ginger, add tomato and powdered spices."
+BDR-223,Knol-khol Curry,2,Add knol-khol and potato and toss 3 minutes.
+BDR-223,Knol-khol Curry,3,"Add water and salt, cover and cook 12 minutes."
+BDR-223,Knol-khol Curry,4,Add peas and cook until all are tender; finish with green chillies.
+BDR-224,Fried Sweet Potato,1,Peel and slice the sweet potato into rounds.
+BDR-224,Fried Sweet Potato,2,"Toss with turmeric, chilli and salt."
+BDR-224,Fried Sweet Potato,3,Shallow-fry until golden and tender.
+BDR-224,Fried Sweet Potato,4,Drain before serving.
+BDR-225,Rangpur Greens Soup with Small Fish,1,Chop all the greens finely and wash.
+BDR-225,Rangpur Greens Soup with Small Fish,2,"Boil with water, garlic, chilli and the alkali until very soft."
+BDR-225,Rangpur Greens Soup with Small Fish,3,Add the cleaned small fish and simmer 8 minutes.
+BDR-225,Rangpur Greens Soup with Small Fish,4,Temper onion in mustard oil and stir through; season.
+BDR-226,Sylheti Dried Fish and Vegetable Curry,1,"Soak the dried fish in hot water, rinse twice and drain."
+BDR-226,Sylheti Dried Fish and Vegetable Curry,2,"Put vegetables, onion, garlic, spices and the fish in a pot with water."
+BDR-226,Sylheti Dried Fish and Vegetable Curry,3,Simmer covered until the vegetables are soft and the gravy thickens.
+BDR-226,Sylheti Dried Fish and Vegetable Curry,4,"Finish with green chillies, coriander leaf and a few drops of mustard oil."
+BDR-227,Chakma Mixed Vegetable Curry,1,Soak and rinse the dried fish.
+BDR-227,Chakma Mixed Vegetable Curry,2,Cut all vegetables into similar pieces.
+BDR-227,Chakma Mixed Vegetable Curry,3,"Boil them with water, turmeric, garlic, lemongrass and the dried fish."
+BDR-227,Chakma Mixed Vegetable Curry,4,"Simmer until tender, add green chillies and a little oil at the end."
+BDR-228,Bamboo Shoot with Shrimp,1,Boil the sliced bamboo shoot and discard the water to remove bitterness.
+BDR-228,Bamboo Shoot with Shrimp,2,Fry shrimp in mustard oil and lift out.
+BDR-228,Bamboo Shoot with Shrimp,3,"Fry onion and garlic, add the bamboo shoot and spices."
+BDR-228,Bamboo Shoot with Shrimp,4,Return the shrimp and cook until dry.
+BDR-229,Fern Shoot Stir-fry,1,Use only the tender curled tips; wash well.
+BDR-229,Fern Shoot Stir-fry,2,Temper nigella and dried chilli in mustard oil.
+BDR-229,Fern Shoot Stir-fry,3,"Fry garlic and onion, then add the fern and salt."
+BDR-229,Fern Shoot Stir-fry,4,Stir-fry until tender and dry.
+BDR-230,Helencha Greens Stir-fry,1,Wash the greens thoroughly and chop.
+BDR-230,Helencha Greens Stir-fry,2,Fry garlic and onion in mustard oil.
+BDR-230,Helencha Greens Stir-fry,3,"Add the greens, turmeric and salt."
+BDR-230,Helencha Greens Stir-fry,4,Stir-fry until the water evaporates; add green chillies.
+BDR-231,Slender Amaranth Stir-fry,1,"Pick, wash and chop the leaves and tender stems."
+BDR-231,Slender Amaranth Stir-fry,2,Fry garlic and dried chilli in mustard oil.
+BDR-231,Slender Amaranth Stir-fry,3,"Add onion, then the greens and salt."
+BDR-231,Slender Amaranth Stir-fry,4,Stir-fry uncovered until dry.
+BDR-232,Pumpkin Leaf Stir-fry,1,Peel the fibrous skin from the stems and chop with the leaves.
+BDR-232,Pumpkin Leaf Stir-fry,2,"Temper nigella in mustard oil and fry garlic, onion and potato."
+BDR-232,Pumpkin Leaf Stir-fry,3,Add the greens and salt; cover 5 minutes.
+BDR-232,Pumpkin Leaf Stir-fry,4,Uncover and dry off; add green chillies.
+BDR-233,Bathua Greens Stir-fry,1,Wash and chop the bathua leaves.
+BDR-233,Bathua Greens Stir-fry,2,Fry garlic and dried chilli in mustard oil.
+BDR-233,Bathua Greens Stir-fry,3,"Add onion, then the greens and salt."
+BDR-233,Bathua Greens Stir-fry,4,Stir-fry until the water evaporates.
+BDR-234,Fried Small Sprat Fish,1,Wash the fish gently in a sieve and drain well.
+BDR-234,Fried Small Sprat Fish,2,"Toss with turmeric, chilli powder and salt."
+BDR-234,Fried Small Sprat Fish,3,"Fry the onion in mustard oil, add the fish and spread out."
+BDR-234,Fried Small Sprat Fish,4,Fry without much stirring until crisp; add green chillies.
+BDR-235,Fried River Shad,1,"Clean the fish and rub with turmeric, chilli and salt."
+BDR-235,Fried River Shad,2,Rest 10 minutes.
+BDR-235,Fried River Shad,3,Shallow-fry in hot mustard oil until crisp on both sides.
+BDR-235,Fried River Shad,4,Drain and serve with rice.
+BDR-236,Spiced Long-whiskered Catfish,1,Rub the steaks with turmeric and salt and fry lightly; set aside.
+BDR-236,Spiced Long-whiskered Catfish,2,"Brown the onion, garlic and ginger in the same oil."
+BDR-236,Spiced Long-whiskered Catfish,3,Add tomato and powdered spices; cook until the oil separates.
+BDR-236,Spiced Long-whiskered Catfish,4,Return the fish with a little water and reduce until thick.
+BDR-237,Spiced Freshwater Eel,1,Clean the eel with salt and ash or flour to remove slime; cut into pieces.
+BDR-237,Spiced Freshwater Eel,2,Fry lightly with turmeric and set aside.
+BDR-237,Spiced Freshwater Eel,3,"Brown onion, garlic and ginger, add the powdered spices."
+BDR-237,Spiced Freshwater Eel,4,Return the eel with a little water and cook until dry.
+BDR-238,Barramundi in Mustard Parcel,1,"Grind mustard, coconut and green chilli to a paste with salt and turmeric."
+BDR-238,Barramundi in Mustard Parcel,2,Coat each fillet and drizzle with mustard oil.
+BDR-238,Barramundi in Mustard Parcel,3,Wrap in softened banana leaf and tie.
+BDR-238,Barramundi in Mustard Parcel,4,Steam 15-20 minutes or cook on a covered tawa.
+BDR-239,Prawns Cooked in Green Coconut,1,Cut the top off a green coconut and scrape some flesh; keep the shell.
+BDR-239,Prawns Cooked in Green Coconut,2,"Marinate prawns with turmeric, salt, mustard paste and onion paste."
+BDR-239,Prawns Cooked in Green Coconut,3,"Mix with coconut milk, coconut flesh, green chilli and mustard oil."
+BDR-239,Prawns Cooked in Green Coconut,4,"Fill the shell, seal with dough and steam or bake 25-30 minutes."
+BDR-240,Steamed Prawns in Mustard and Poppy,1,"Grind mustard, poppy seed, coconut and green chilli to a paste."
+BDR-240,Steamed Prawns in Mustard and Poppy,2,"Mix with yoghurt, turmeric, salt and mustard oil."
+BDR-240,Steamed Prawns in Mustard and Poppy,3,Coat the prawns and put them in a sealed tiffin box.
+BDR-240,Steamed Prawns in Mustard and Poppy,4,Steam over simmering water 15-20 minutes.
+BDR-241,Bacha Catfish Curry,1,Rub the fish with turmeric and salt and fry lightly.
+BDR-241,Bacha Catfish Curry,2,"Fry onion, ginger and garlic, add the powdered spices."
+BDR-241,Bacha Catfish Curry,3,Add potato and water and cook 10 minutes.
+BDR-241,Bacha Catfish Curry,4,"Return the fish, simmer 8 minutes and finish with chilli and coriander."
+BDR-242,Chattogram Mezbani Beef,1,Dry-roast the whole spices and grind to the mezbani masala.
+BDR-242,Chattogram Mezbani Beef,2,"Marinate the beef with the pastes, masala, chilli, turmeric and salt."
+BDR-242,Chattogram Mezbani Beef,3,"Brown the onions in mustard oil, add the beef and sear."
+BDR-242,Chattogram Mezbani Beef,4,"Add water and simmer 1.5-2 hours until tender, keeping a loose red gravy."
+BDR-243,Sylheti Beef with Citrus Rind,1,Brown the onions with whole spices in mustard oil.
+BDR-243,Sylheti Beef with Citrus Rind,2,Add the pastes and powdered spices and cook until the oil separates.
+BDR-243,Sylheti Beef with Citrus Rind,3,"Add the beef and sear, then add water and cook until nearly tender."
+BDR-243,Sylheti Beef with Citrus Rind,4,Add the citrus-rind pieces for the last 20 minutes and finish with green chillies.
+BDR-244,Beef Handi Kabab,1,"Marinate the beef with yoghurt, pastes, spices and salt for 2 hours."
+BDR-244,Beef Handi Kabab,2,Brown the onions in oil in a heavy pot (handi).
+BDR-244,Beef Handi Kabab,3,Add the beef and cook covered on low heat in its own juices.
+BDR-244,Beef Handi Kabab,4,Uncover and reduce until the meat is coated and nearly dry.
+BDR-245,Duck with Bamboo Shoot,1,Boil the sliced bamboo shoot and discard the water.
+BDR-245,Duck with Bamboo Shoot,2,"Brown the onion, garlic and ginger in mustard oil; add the spices."
+BDR-245,Duck with Bamboo Shoot,3,Add the duck and fry until it releases its fat.
+BDR-245,Duck with Bamboo Shoot,4,Add water and bamboo shoot and cook until the duck is tender.
+BDR-246,Spiced Pigeon,1,"Marinate the pigeon with pastes, powdered spices and salt."
+BDR-246,Spiced Pigeon,2,Brown the onion with whole spices in mustard oil.
+BDR-246,Spiced Pigeon,3,"Add the pigeon and sear, then add a little water."
+BDR-246,Spiced Pigeon,4,"Cover and cook until tender, then reduce until thick."
+BDR-247,Chakma Chicken and Chilli Salad,1,Poach the chicken with garlic and salt until cooked; drain.
+BDR-247,Chakma Chicken and Chilli Salad,2,Shred the chicken finely.
+BDR-247,Chakma Chicken and Chilli Salad,3,Crush green chilli with a little salt.
+BDR-247,Chakma Chicken and Chilli Salad,4,"Mix everything with onion, coriander and lemon juice."
+BDR-248,Chicken Soup,1,"Put the chicken, onion, ginger, garlic and turmeric in a pot with water."
+BDR-248,Chicken Soup,2,"Simmer 30 minutes, skimming the surface."
+BDR-248,Chicken Soup,3,Add carrot and cook until tender.
+BDR-248,Chicken Soup,4,Season with pepper and salt and finish with coriander leaf.
+BDR-249,Quick Mustard Relish,1,Soak the mustard seed for 2 hours.
+BDR-249,Quick Mustard Relish,2,"Grind with green chilli, turmeric, salt and a little water."
+BDR-249,Quick Mustard Relish,3,Stir in vinegar and mustard oil.
+BDR-249,Quick Mustard Relish,4,Rest a day before using; keep in a clean glass jar.
+BDR-250,Fried Egg,1,Heat the oil in a small pan.
+BDR-250,Fried Egg,2,Crack in the eggs and cook on medium-low until the white sets.
+BDR-250,Fried Egg,3,Season with salt and pepper.

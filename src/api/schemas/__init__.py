@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class BiomarkersIn(BaseModel):
@@ -59,11 +59,21 @@ class QueueItem(BaseModel):
 
 
 class MealItemEdit(BaseModel):
-    food_id: str = Field(min_length=1, max_length=50)
+    """One plan item: a single food (food_id) or a household dish
+    (recipe_id), with its quantity in grams either way."""
+
+    food_id: str | None = Field(None, min_length=1, max_length=50)
+    recipe_id: str | None = Field(None, min_length=1, max_length=50)
     qty_g: float = Field(ge=5, le=2000)
     # display name the physician saw — lets the server detect when the dataset
     # was replaced and the id now denotes a different food entirely
     name_en: str = Field("", max_length=200)
+
+    @model_validator(mode="after")
+    def _one_kind(self):
+        if (self.food_id is None) == (self.recipe_id is None):
+            raise ValueError("give exactly one of food_id or recipe_id")
+        return self
 
 
 class ExercisePlanEdit(BaseModel):
@@ -77,9 +87,13 @@ class ExercisePlanEdit(BaseModel):
 
 
 class PlanEditIn(BaseModel):
-    """Physician edits to the diet/exercise plan, recomputed deterministically."""
+    """Physician edits to the diet/exercise plan, recomputed deterministically.
 
-    meals: dict[str, list[MealItemEdit]]
+    A week plan (engine 0.4.0 onwards) is sent as `days`, one meals mapping per
+    day in plan order; a one-day plan from an older assessment as `meals`."""
+
+    days: list[dict[str, list[MealItemEdit]]] | None = Field(None, max_length=7)
+    meals: dict[str, list[MealItemEdit]] | None = None
     exercise: ExercisePlanEdit | None = None
 
 

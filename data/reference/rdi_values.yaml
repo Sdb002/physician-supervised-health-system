@@ -8,7 +8,8 @@
 # patient at runtime (Mifflin-St Jeor in src/clinical/bmi.py).
 #
 # Sodium limit: WHO Guideline: Sodium intake for adults and children (2012):
-# <2000 mg/day sodium.
+# <2000 mg/day sodium. The meal planner sets each day's cooking salt so the
+# day stays under it (src/diet/meal_plan.py, ration_salt).
 
 groups:
   male_adult:

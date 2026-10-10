@@ -3,7 +3,7 @@
 from src.clinical.contraindication import excluded_tags, filter_items
 from src.clinical.deficiency import findings_from_flags, nutrient_targets, rdi_group
 from src.clinical.risk_scoring import score_biomarkers
-from src.diet.food_db import load_foods
+from src.diet.food_db import eaten_in_portions, load_foods, recommendable_foods
 from src.diet.matcher import rank_foods
 
 
@@ -59,10 +59,23 @@ def test_matcher_ranks_iron_dense_foods_for_anemia():
         n = by_id[r["food_id"]].nutrients
         assert n["iron_mg"] >= 3 or n["vit_c_mg"] >= 50
     # and each must outscore a low-iron staple (parboiled milled rice)
-    rice = next(f for f in foods if f.name_en == "Rice, milled, parboiled")
+    rice = next(f for f in foods if f.name_en == "Rice, BR-28, parboiled, milled, raw")
     rice_ranked = rank_foods([rice], nutrition["emphasize"], nutrition["targets"])
     rice_score = rice_ranked[0]["score"] if rice_ranked else 0.0
     assert all(r["score"] > rice_score for r in ranked[:3])
+
+
+def test_recommendation_pool_is_bangladeshi_foods_eaten_in_portions():
+    foods = load_foods()
+    pool = recommendable_foods(foods)
+    assert 300 < len(pool) < len(foods)  # IFCT/USDA gap-fill rows are left out
+    by_name = {f.name_en: f for f in foods}
+    assert by_name["Goat, spleen"] not in pool  # IFCT offal, rarely eaten in Bangladesh
+    assert by_name["Spinach, raw"] in pool  # FCTB
+    assert by_name["Mint leaves"] in pool  # IFCT, but used in household recipes
+    portions = eaten_in_portions(pool)
+    assert all(f.food_group != "spice" for f in portions)
+    assert by_name["Tea, powder"] not in portions  # brewed concentrate
 
 
 def test_gate_runs_before_matching():

@@ -49,8 +49,8 @@ py -3.13 -m venv .venv
 .venv\Scripts\python.exe -m uvicorn src.api.main:app --reload
 ```
 
-> **64-bit Python required.** `scikit-learn`/`scipy` (the food-recommender
-> model's training dependencies, see below) have no prebuilt wheels for
+> **64-bit Python required.** `scikit-learn`/`scipy` (the recommender
+> models' training dependencies, see below) have no prebuilt wheels for
 > 32-bit Windows Python and this machine has no C compiler to build them
 > from source — use a 64-bit interpreter.
 
@@ -112,63 +112,100 @@ Copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY`. This enables:
 `docker compose up -d`, then set `DATABASE_URL` in `.env` (see
 `docker-compose.yml`) and `pip install "psycopg[binary]"`.
 
-## Adding your datasets
+## Datasets
 
-The CSVs currently hold clearly-flagged **DEMO rows** (`source = DEMO`) so the
-app is demonstrable. To load real data:
+Foods and recipes are separate datasets, each with its own folder, raw
+source, `schema.md`, snapshots and validation report:
 
-1. Replace the rows in `data/food/bd_food.csv`, `data/recipe/recipes.csv` +
-   `recipe_ingredients.csv`, and `data/lifestyle/exercises.csv`, keeping the
-   exact columns. Each dataset's `schema.md` defines every column, unit, and
-   the tag vocabulary. Cite the source of each row in its `source` column.
+| Dataset | Contents | Source (in `raw/`) |
+|---|---|---|
+| `data/food/bd_food.csv` | 672 foods, nutrients per 100 g | 700-food compilation of FCTB 2013 (Bangladesh), IFCT 2017 (India), USDA SR Legacy |
+| `data/recipe/` (`recipes.csv`, `recipe_ingredients.csv`, `recipe_steps.csv`) | 250 Bangladeshi home recipes, 2,349 ingredient rows, 1,105 method steps | Bangladeshi Recipe Dataset 250 v2 (workbook + CSV exports) |
+
+Every recipe carries a **household frequency score** (`weekly_frequency_score`,
+1–10, **10 = the most commonly cooked dish**), which the recipe ranking uses
+(see below). Recipe nutrition is never stored: it is computed from the
+ingredients against `bd_food.csv` with the dataset's own method (FAO/INFOODS,
+USDA retention factors), and reproduces the source workbook exactly for every
+recipe that uses no corrected food. The food converter fixes a set of
+demonstrable source errors (unconverted IFCT vitamin A, gap fills taken from
+the wrong food, blank or placeholder minerals) and logs every changed cell to
+`data/food/corrections_log.csv` — see `data/food/schema.md`.
+
+`data/lifestyle/exercises.csv` still holds clearly-flagged **DEMO rows**
+(`source = DEMO`).
+
+To update a dataset:
+
+1. Put the new raw export in the dataset's `raw/` folder and regenerate:
+   `.venv\Scripts\python.exe scripts\convert_datasets.py` (never hand-edit the
+   generated CSVs — fix the converter, which documents every decision).
 2. Validate: `.venv\Scripts\python.exe scripts\validate_datasets.py` — checks
-   types, ranges, ID formats, and referential integrity (every
-   `recipe_ingredients.food_id` must exist in `bd_food.csv`), and writes a
-   `validation_report.md` into each dataset folder.
-3. Snapshot the version: copy the CSV into its `snapshots/` folder with a
-   dated name (e.g. `v0.2_2026-08-01.csv`).
-4. Re-seed if desired: delete `health.db` and run `scripts\seed_db.py`.
+   types, ranges, ID formats, the frequency score, and referential integrity
+   (every `recipe_ingredients.food_id` must exist in `bd_food.csv`), and
+   writes a `validation_report.md` into each dataset folder.
+3. Snapshot the version: copy the CSVs into the `snapshots/` folders with a
+   dated name (e.g. `v1.0_2026-10-08.csv`).
+4. Retrain the recommenders (below), then bring the review queue up to date:
+   `.venv\Scripts\python.exe scripts\refresh_assessments.py` (add `--dry-run`
+   to preview) regenerates every **pending** assessment with the current
+   engine and data, audit-logs it, and backs up `health.db` first. Approved
+   and rejected assessments are never changed. To start over instead, delete
+   `health.db` and run `scripts\seed_db.py`.
 
 `data/reference/*.yaml` (biomarker ranges, RDIs, contraindication rules) are
 **real cited clinical constants**, not demo data — edit only with a citation.
 
-## Food recommendation model
+## Food and recipe recommendation models
 
-Food/recipe ranking (`src/diet/matcher.py`) uses a trained model when one is
-available, and otherwise falls back to a deterministic linear formula — same
-optional-and-gracefully-degrading shape as the LLM features. The
-contraindication gate (`src/clinical/contraindication.py`) is unaffected
-either way: it always runs first, and the model only ever re-ranks items the
-gate already allowed.
+Foods and recipes are ranked as **separate sections** (`src/diet/matcher.py`),
+each by its own trained model when one is available, otherwise by a
+deterministic formula — same optional-and-gracefully-degrading shape as the
+LLM features. The contraindication gate (`src/clinical/contraindication.py`)
+is unaffected either way: it always runs first, and the models only ever
+re-rank items the gate already allowed.
 
-To train it: `.venv\Scripts\python.exe scripts\train_food_recommender.py`
-(a few minutes). This builds a synthetic patient-archetype training set from
-the app's own cited reference data (no real preference data exists yet),
-hyperparameter-tunes a `RandomForestRegressor` and a
-`HistGradientBoostingRegressor` (via `RandomizedSearchCV`, grouped by
-archetype, optimizing held-out Spearman correlation) alongside an untuned
-`GradientBoostingRegressor` and a `LinearRegression` baseline, and reports a
-five-way comparison against the hand-tuned formula on patient archetypes
-held out of training — currently `HistGradientBoostingRegressor` wins
-(Spearman ≈0.97 vs. ≈0.67 for the hand-tuned formula) and ships as a ~500 KB
-artifact. Writes `data/models/food_recommender.joblib` (gitignored — a
-regenerable build artifact, not a reference file) and
-`data/models/food_recommender_metrics.json` (includes the tuned
-hyperparameters found, for the thesis record). Every assessment records
-which backend actually produced it: `result.nutrition.scoring_backend` is
-`"ml"` or `"linear"`. See `notebooks/04_recommender_training.ipynb` for the
-thesis figures/tables.
+- **Foods** (per 100 g): only foods tagged `bangladeshi` (listed in FCTB 2013
+  or used in a household recipe — 400 of 672) are recommended on their own,
+  and seasonings / tea and coffee powder never appear in "top foods".
+- **Recipes** (per serving): nutritional fit × household familiarity. The
+  recipe dataset scores each dish 1–10 for how commonly it is cooked at home
+  (10 = most common); the fit is multiplied by 0.25 + 0.75 × (score − 1)/9,
+  so among dishes that suit the patient the common ones come first, and a
+  dish that does nothing for the patient's targets is never lifted.
 
-**Known limitation:** a handful of dry, concentrated items (tea/coffee
-powder) still rank higher than they should for the same reason spices used
-to — `bd_food.csv`'s nutrient columns are per-100g, and nobody brews 100g of
-tea powder. The spice/oil food groups already carry a correcting penalty in
-`scripts/train_food_recommender.py`'s label (see `_BASELINE_GROUP_PRIOR`);
-tea/coffee sit in the `other` group alongside genuinely good picks (nuts,
-seeds), so the same blanket penalty can't apply there without also
-suppressing those. Fixing it properly needs a data-level tag (e.g.
-`brewed_beverage` on the ~5 affected `bd_food.csv` rows) that the label
-function can penalize specifically — not yet done.
+To train both: `.venv\Scripts\python.exe scripts\train_recommenders.py`
+(about 20 minutes; `--only food` or `--only recipe` for one). Each model is
+trained on a synthetic patient-archetype set built from the app's own cited
+reference data (no real preference data exists yet): a `RandomForestRegressor`
+and a `HistGradientBoostingRegressor` are tuned (`RandomizedSearchCV`, grouped
+by archetype, optimizing held-out Spearman correlation) alongside an untuned
+`GradientBoostingRegressor` and a `LinearRegression` baseline, and compared
+against the deterministic formula on patient archetypes held out of training:
+
+| Model (held-out Spearman) | Food | Recipe |
+|---|---|---|
+| `HistGradientBoostingRegressor` (shipped) | **0.957** | **0.914** |
+| `RandomForestRegressor` | 0.955 | 0.909 |
+| `GradientBoostingRegressor` (untuned) | 0.571 | 0.882 |
+| deterministic formula | 0.629 | 0.785 |
+| `LinearRegression` | 0.210 | 0.187 |
+
+Writes `data/models/{food,recipe}_recommender.joblib` (gitignored —
+regenerable build artifacts), `..._metrics.json` (tuned hyperparameters and
+permutation feature importance, for the thesis record) and
+`thesis/results/{food,recipe}_recommender_comparison.csv`. Every assessment
+records which backend produced each section: `result.nutrition.scoring_backend`
+(foods) and `recipe_scoring_backend` are `"ml"` or `"linear"`. The trained
+recipe model learns the familiarity effect monotonically but more softly than
+the formula (a score-1 dish keeps ~44% of a score-10 dish's score, vs. 25%).
+See `notebooks/04_recommender_training.ipynb` for the thesis figures.
+
+**Known limitation:** the one-day meal plan still picks the most
+nutrient-dense item per food-group slot, which can produce unusual staples
+(rice bran, salted popcorn) or uncommon proteins (frog legs) — all FCTB foods
+that were also in the previous dataset. The physician reviews and can edit
+every item before approval.
 
 ## Workflow (what the app does)
 
@@ -177,9 +214,9 @@ function can penalize specifically — not yet done.
    report image to prefill the form via OCR.
 2. **Engine** — the deterministic engine immediately computes BMI (WHO Asian
    cutoffs), risk flags, derived conditions, nutrient targets (RDI +
-   deficiency emphasis), a contraindication-filtered food/recipe ranking, a
-   one-day meal plan, and an ACSM FITT-VP exercise prescription. Stored as a
-   **pending** assessment.
+   deficiency emphasis), two contraindication-filtered rankings — **foods**
+   and **home recipes**, separately — a one-day meal plan, and an ACSM
+   FITT-VP exercise prescription. Stored as a **pending** assessment.
 3. **Review** — the physician sees the queue, inspects the full assessment,
    and approves / edits / rejects. Every decision is written to the
    append-only audit log.
@@ -199,7 +236,7 @@ thesis validation table — exported to CSV by `notebooks/03_results_figures.ipy
 
 ```
 data/          datasets (schema.md + snapshots + validation reports) and cited reference YAMLs
-data/models/   trained food-recommender artifact (gitignored, regenerable — see scripts/train_food_recommender.py)
+data/models/   trained food + recipe recommender artifacts (gitignored, regenerable — see scripts/train_recommenders.py)
 src/clinical   deterministic rules: BMI, risk scoring, deficiency → targets, contraindication gate
 src/diet       food DB, recipe nutrition (computed from ingredients), matcher, meal plan, recommender (ML backend)
 src/lifestyle  exercise DB, ACSM FITT-VP prescription, intensity scaling
@@ -209,7 +246,7 @@ src/db         SQLAlchemy models: Patient, Visit, Assessment, Approval, AuditLog
 src/core       config, logging, append-only audit helpers
 dashboard/     Next.js physician UI
 tests/         validation tables + gate/isolation tests + synthetic fixtures
-scripts/       validate_datasets.py, seed_db.py, train_food_recommender.py
+scripts/       convert_datasets.py, validate_datasets.py, seed_db.py, train_recommenders.py
 notebooks/     dataset audit, cross-validation, thesis figure export, recommender training
 thesis/        diagrams / figures / results
 ```

@@ -91,6 +91,48 @@ def test_featurize_distinguishes_food_group():
     assert not np.array_equal(vegetable, none_group)
 
 
+def test_featurize_exposes_brewed_beverage_tag():
+    nutrients = {"kcal": 296, "potassium_mg": 6040}
+    targets = {"potassium_mg": 3400}
+    tea_powder = recommender.featurize(nutrients, "other", ("brewed_beverage",), [], targets, 0.0, 0.0)
+    nuts = recommender.featurize(nutrients, "other", (), [], targets, 0.0, 0.0)
+    index = recommender.FEATURE_NAMES.index("tag_brewed_beverage")
+    assert tea_powder[index] == 1.0 and nuts[index] == 0.0
+
+
+def test_featurize_recipe_shape_and_frequency():
+    nutrients = {"kcal": 250, "iron_mg": 3}
+    shares = {"vegetable": 0.8, "oil": 0.05, "spice": 0.15}
+    common = recommender.featurize_recipe(nutrients, shares, (), 9, ["iron_mg"], {"iron_mg": 18}, 0.2, 1.0)
+    rare = recommender.featurize_recipe(nutrients, shares, (), 2, ["iron_mg"], {"iron_mg": 18}, 0.2, 1.0)
+    assert common.shape == (recommender.RECIPE_FEATURE_DIM,)
+    index = recommender.RECIPE_FEATURE_NAMES.index("household_frequency")
+    assert common[index] == pytest.approx(0.9) and rare[index] == pytest.approx(0.2)
+    share_index = recommender.RECIPE_FEATURE_NAMES.index("share_vegetable")
+    assert common[share_index] == pytest.approx(0.8)
+
+
+def test_food_and_recipe_artifacts_are_not_interchangeable(tmp_path, monkeypatch):
+    from sklearn.dummy import DummyRegressor
+
+    food_path, recipe_path = tmp_path / "food.joblib", tmp_path / "recipe.joblib"
+    joblib.dump({"model": DummyRegressor().fit([[0.0]], [0.0]), "kind": "food",
+                 "feature_version": recommender.FEATURE_VERSION,
+                 "sklearn_version": sklearn.__version__}, food_path)
+    joblib.dump({"model": DummyRegressor().fit([[0.0]], [0.0]), "kind": "recipe",
+                 "feature_version": recommender.RECIPE_FEATURE_VERSION,
+                 "sklearn_version": sklearn.__version__}, recipe_path)
+    # each file loads only as its own kind
+    monkeypatch.setattr(recommender, "MODEL_PATH", recipe_path)
+    monkeypatch.setattr(recommender, "RECIPE_MODEL_PATH", food_path)
+    assert recommender._load_model_uncached() is None
+    assert recommender._load_recipe_model_uncached() is None
+    monkeypatch.setattr(recommender, "MODEL_PATH", food_path)
+    monkeypatch.setattr(recommender, "RECIPE_MODEL_PATH", recipe_path)
+    assert recommender._load_model_uncached() is not None
+    assert recommender._load_recipe_model_uncached() is not None
+
+
 def test_load_model_missing_file_returns_none(tmp_path, monkeypatch):
     _use_real_loader(monkeypatch, tmp_path / "does_not_exist.joblib")
     assert recommender.load_model() is None

@@ -79,6 +79,42 @@ def test_full_flow_gate_then_approve(client):
     assert second.status_code == 409
 
 
+def test_foods_and_recipes_are_separate_gated_sections(client):
+    assessment = _create_pending_assessment(client)
+    nutrition = assessment["result"]["nutrition"]
+    assert nutrition["scoring_backend"] in ("ml", "linear")
+    assert nutrition["recipe_scoring_backend"] in ("ml", "linear")
+
+    # top foods: Bangladeshi foods eaten in portions (no seasonings)
+    assert nutrition["top_foods"]
+    for food in nutrition["top_foods"]:
+        assert "bangladeshi" in food["tags"] and food["food_group"] != "spice"
+
+    recipes = nutrition["top_recipes"]
+    assert recipes
+    excluded = set(assessment["result"]["exclusions"]["food_tags"])
+    assert {"high_sodium", "high_sugar"} <= excluded  # hypertensive + diabetic
+    for recipe in recipes:
+        assert not excluded & set(recipe["tags"])
+        assert recipe["recipe_id"].startswith("BDR-")
+        assert 1 <= recipe["weekly_frequency_score"] <= 10
+        assert recipe["ingredients"] and recipe["steps"]
+
+    client.post(f"/review/{assessment['id']}/decision",
+                json={"decision": "approved", "physician_name": "Dr. Rahman"})
+    text = client.get(f"/report/{assessment['visit_id']}?lang=en&use_llm=false").json()["text"]
+    assert "## Foods that suit your plan" in text
+    assert "## Recommended home recipes" in text
+    assert recipes[0]["name_en"] in text
+    # each day's cooking salt is part of the plan the patient reads
+    saturday = nutrition["meal_plan"]["days"][0]
+    assert f"Cooking salt for the day: {saturday['salt_g']} g in your portions" in text
+    assert "add no salt at the table" in text
+    text_bn = client.get(f"/report/{assessment['visit_id']}?lang=bn&use_llm=false").json()["text"]
+    assert "## সুপারিশকৃত ঘরোয়া রান্না" in text_bn
+    assert "সারা দিনের রান্নার লবণ" in text_bn
+
+
 def test_rejected_assessment_never_reports(client):
     assessment = _create_pending_assessment(client)
     visit_id = assessment["visit_id"]

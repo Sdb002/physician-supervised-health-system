@@ -18,11 +18,14 @@ findings:
     boost_nutrients: [potassium_mg, fiber_g]
     rationale: >
       DASH-pattern emphasis: increased potassium and fiber intake lowers blood
-      pressure; the sodium ceiling is enforced separately as a hard limit.
+      pressure; dishes high in sodium are excluded separately by the
+      contraindication gate, and each day's cooking salt is set so the day
+      stays under 2000 mg of sodium.
     citation: >
       Appel LJ et al. A clinical trial of the effects of dietary patterns on
       blood pressure (DASH). N Engl J Med 1997;336:1117-24; WHO potassium
-      guideline (2012).
+      guideline (2012); WHO Guideline: Sodium intake for adults and children
+      (2012).
 
   diabetes:
     # prediabetes or diabetes_range bands trigger this finding

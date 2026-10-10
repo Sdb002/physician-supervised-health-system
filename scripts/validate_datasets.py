@@ -20,11 +20,19 @@ from src.diet.food_db import FOOD_GROUPS  # noqa: E402
 FOOD_TAGS = {"staple", "high_protein", "lean", "high_fiber", "iron_rich",
              "calcium_rich", "potassium_rich", "leafy_green", "fruit", "dairy",
              "probiotic", "omega3", "oil", "high_fat", "high_sugar",
-             "high_sodium", "dessert"}
+             "high_sodium", "dessert", "added_sugar", "brewed_beverage",
+             "bangladeshi"}
 NUTRIENT_COLUMNS = ["kcal", "protein_g", "carb_g", "fat_g", "fiber_g", "iron_mg",
                     "calcium_mg", "zinc_mg", "folate_ug", "vit_a_ug", "vit_c_mg",
                     "sodium_mg", "potassium_mg"]
 MEAL_TYPES = {"breakfast", "lunch", "dinner", "snack"}
+# weekly_frequency_score -> frequency_tier, as defined by the recipe
+# dataset's Frequency_Scale sheet (10 = the most commonly cooked dish)
+FREQUENCY_TIERS = {
+    10: "Daily staple", 9: "Near-daily", 8: "Very frequent", 7: "Very frequent",
+    6: "Frequent", 5: "Weekly", 4: "Regular", 3: "Occasional",
+    2: "Festive/seasonal", 1: "Rare/special",
+}
 EXERCISE_CATEGORIES = {"aerobic", "strength", "flexibility"}
 CONTRA_TAGS = {"high_impact", "high_exertion", "knee_stress", "wrist_stress",
                "abdominal_pressure", "supine_position", "balance_required"}
@@ -74,10 +82,12 @@ def validate_recipes(food_ids: set[str]) -> tuple[list[str], list[str], int]:
     errors, warnings = [], []
     recipes = read_csv(DATA_DIR / "recipe" / "recipes.csv")
     ingredients = read_csv(DATA_DIR / "recipe" / "recipe_ingredients.csv")
+    steps_path = DATA_DIR / "recipe" / "recipe_steps.csv"
+    steps = read_csv(steps_path) if steps_path.exists() else []
     recipe_ids = set()
     for i, row in enumerate(recipes, start=2):
         rid = row.get("recipe_id", "")
-        if not re.fullmatch(r"R\d+", rid):
+        if not re.fullmatch(r"BDR-\d{3}", rid):
             errors.append(f"recipes row {i}: bad recipe_id {rid!r}")
         if rid in recipe_ids:
             errors.append(f"recipes row {i}: duplicate recipe_id {rid}")
@@ -87,9 +97,30 @@ def validate_recipes(food_ids: set[str]) -> tuple[list[str], list[str], int]:
                 errors.append(f"recipes row {i} ({rid}): servings must be > 0")
         except (ValueError, KeyError):
             errors.append(f"recipes row {i} ({rid}): servings not an integer")
-        for mt in filter(None, (row.get("meal_type") or "").split("|")):
+        try:
+            if float(row["serving_size_g"]) <= 0:
+                errors.append(f"recipes row {i} ({rid}): serving_size_g must be > 0")
+        except (ValueError, KeyError):
+            errors.append(f"recipes row {i} ({rid}): serving_size_g not numeric")
+        try:
+            score = int(row["weekly_frequency_score"])
+            if not 1 <= score <= 10:
+                errors.append(f"recipes row {i} ({rid}): weekly_frequency_score {score} outside 1-10")
+            elif row.get("frequency_tier") != FREQUENCY_TIERS[score]:
+                warnings.append(
+                    f"recipes row {i} ({rid}): frequency_tier {row.get('frequency_tier')!r} "
+                    f"does not match score {score} ({FREQUENCY_TIERS[score]!r})"
+                )
+        except (ValueError, KeyError):
+            errors.append(f"recipes row {i} ({rid}): weekly_frequency_score not an integer")
+        meal_types = list(filter(None, (row.get("meal_type") or "").split("|")))
+        if not meal_types:
+            errors.append(f"recipes row {i} ({rid}): no meal_type")
+        for mt in meal_types:
             if mt not in MEAL_TYPES:
                 errors.append(f"recipes row {i} ({rid}): unknown meal_type {mt!r}")
+        if not (row.get("source") or "").strip():
+            errors.append(f"recipes row {i} ({rid}): missing source citation")
 
     with_ingredients = set()
     for i, row in enumerate(ingredients, start=2):
@@ -103,9 +134,32 @@ def validate_recipes(food_ids: set[str]) -> tuple[list[str], list[str], int]:
                 errors.append(f"ingredients row {i}: qty_g must be > 0")
         except (ValueError, KeyError):
             errors.append(f"ingredients row {i}: qty_g not numeric")
+        for rf in ("rf_vit_a", "rf_vit_c"):
+            try:
+                if not 0 < float(row[rf]) <= 1:
+                    errors.append(f"ingredients row {i}: {rf} must be in (0, 1]")
+            except (ValueError, KeyError):
+                errors.append(f"ingredients row {i}: {rf} not numeric")
         with_ingredients.add(rid)
     for rid in recipe_ids - with_ingredients:
         errors.append(f"recipe {rid} has no ingredients")
+
+    step_numbers: dict[str, list[int]] = {}
+    for i, row in enumerate(steps, start=2):
+        rid = row.get("recipe_id", "")
+        if rid not in recipe_ids:
+            errors.append(f"steps row {i}: unknown recipe_id {rid!r}")
+        if not (row.get("instruction") or "").strip():
+            errors.append(f"steps row {i}: empty instruction")
+        try:
+            step_numbers.setdefault(rid, []).append(int(row["step_no"]))
+        except (ValueError, KeyError):
+            errors.append(f"steps row {i}: step_no not an integer")
+    for rid, numbers in step_numbers.items():
+        if sorted(numbers) != list(range(1, len(numbers) + 1)):
+            errors.append(f"recipe {rid}: step numbers are not 1..{len(numbers)}")
+    for rid in sorted(recipe_ids - set(step_numbers)):
+        warnings.append(f"recipe {rid} has no cooking steps")
     return errors, warnings, len(recipes)
 
 

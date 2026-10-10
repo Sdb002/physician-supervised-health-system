@@ -53,18 +53,18 @@ export function ThemeToggle() {
       role="switch"
       aria-checked={dark}
       onClick={toggle}
-      className="group relative inline-flex h-8 w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-white/10 bg-white/5 px-2 text-xs font-medium text-slate-300 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clinical"
+      className="group relative inline-flex h-9 w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-3 text-sm font-medium text-ink-soft transition-colors duration-150 hover:bg-surface-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clinical"
     >
-      <span className="flex items-center gap-2">
-        {dark ? <IconMoon className="h-4 w-4" /> : <IconSun className="h-4 w-4" />}
-        {dark ? "Dark" : "Light"}
+      <span className="flex items-center gap-2.5">
+        {dark ? <IconMoon className="h-4.5 w-4.5" /> : <IconSun className="h-4.5 w-4.5" />}
+        {dark ? "Dark screen" : "Light screen"}
       </span>
 
       {/* Track */}
       <span
         aria-hidden="true"
         className={`relative h-4 w-8 shrink-0 rounded-full transition-colors duration-200 ${
-          dark ? "bg-clinical" : "bg-white/20"
+          dark ? "bg-clinical" : "bg-line-strong"
         }`}
       >
         <span

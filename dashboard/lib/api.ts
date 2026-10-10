@@ -117,6 +117,83 @@ export interface RiskFlag {
   risk: "none" | "low" | "moderate" | "high" | "critical";
 }
 
+export interface RecommendedFood {
+  food_id: string;
+  name_en: string;
+  name_bn: string;
+  score: number;
+  tags: string[];
+  // present on assessments generated after kcal was added to the ranking
+  food_group?: string;
+  kcal_per_100g?: number;
+}
+
+export interface RecipeIngredient {
+  name_en: string;
+  name_bn: string;
+  household_measure: string;
+  qty_g: number;
+  optional: boolean;
+}
+
+/** A ranked household recipe. Fields beyond per_serving_kcal are present on
+ * assessments from engine 0.2.0 onwards (the 250-recipe dataset). */
+export interface RecommendedRecipe {
+  recipe_id: string;
+  name_en: string;
+  name_bn: string;
+  score: number;
+  per_serving_kcal: number;
+  tags?: string[];
+  category?: string;
+  diet_type?: string;
+  meal_type?: string[];
+  /** 1-10: how commonly the dish is cooked at home (10 = most common) */
+  weekly_frequency_score?: number | null;
+  frequency_tier?: string;
+  servings?: number;
+  serving_size_g?: number | null;
+  cooking_method?: string;
+  total_time_min?: number | null;
+  per_serving?: Record<string, number>;
+  ingredients?: RecipeIngredient[];
+  steps?: string[];
+  notes?: string;
+}
+
+/** One line of the day's meal plan: a household dish (recipe_id; engine
+ * 0.3.0 onwards) or a single food (food_id - every line before 0.3.0, and
+ * the snack's fruit after). */
+export interface MealItem {
+  food_id?: string;
+  recipe_id?: string;
+  name_en: string;
+  name_bn: string;
+  qty_g: number;
+  kcal: number;
+  /** the portion's carbohydrate, fat and sodium (engine 0.5.0 onwards) */
+  carb_g?: number;
+  fat_g?: number;
+  sodium_mg?: number;
+  /** dishes only: the oil, ghee or butter the portion is cooked in */
+  cooking_fat_g?: number;
+  /** dishes only: the salt the portion is cooked with (engine 0.6.0 onwards);
+   * sodium_mg counts this much salt, which can be less than the recipe lists */
+  salt_g?: number;
+  /** staple | dal | main | vegetable | side | fruit (engine-planned lines) */
+  course?: string;
+  category?: string;
+  servings?: number;
+  serving_size_g?: number;
+}
+
+/** A day's cooking salt (engine 0.6.0 onwards): the grams that keep the day
+ * under the sodium limit, beside what the recipes as written would use. */
+export interface PlanSalt {
+  salt_g?: number;
+  recipe_salt_g?: number;
+}
+
 export interface AssessmentResult {
   age: number;
   anthropometrics: {
@@ -125,6 +202,21 @@ export interface AssessmentResult {
     target_kcal: number;
     ree_kcal: number;
     tdee_kcal: number;
+    /** what the target was worked out from (engine 0.5.0 onwards) */
+    basis?: {
+      weight_kg: number;
+      height_cm: number;
+      age: number;
+      sex: string;
+      equation: string;
+      activity: string;
+      activity_factor: number;
+      /** no activity level was given, so the engine's default was used */
+      activity_assumed: boolean;
+      adjustment_kcal: number;
+      floor_kcal: number;
+      floor_applied: boolean;
+    };
   };
   risk_flags: RiskFlag[];
   bp_category: string | null;
@@ -137,22 +229,29 @@ export interface AssessmentResult {
     limits: Record<string, number>;
     emphasize: string[];
     rationales: Record<string, string>;
-    top_foods: {
-      food_id: string;
-      name_en: string;
-      name_bn: string;
-      score: number;
-      tags: string[];
-      // present on assessments generated after kcal was added to the ranking
-      food_group?: string;
-      kcal_per_100g?: number;
-    }[];
-    top_recipes: { recipe_id: string; name_en: string; name_bn: string; score: number; per_serving_kcal: number }[];
+    scoring_backend?: "ml" | "linear";
+    recipe_scoring_backend?: "ml" | "linear";
+    top_foods: RecommendedFood[];
+    top_recipes: RecommendedRecipe[];
     meal_plan: {
-      meals: Record<string, { food_id: string; name_en: string; name_bn: string; qty_g: number; kcal: number }[]>;
+      /** a week, Saturday to Friday (engine 0.4.0 onwards) */
+      days?: ({
+        day: number;
+        weekday: string;
+        meals: Record<string, MealItem[]>;
+        totals: Record<string, number>;
+      } & PlanSalt)[];
+      /** a single day's plan, for every day (assessments before engine 0.4.0) */
+      meals?: Record<string, MealItem[]>;
+      /** a week plan's average day */
       totals: Record<string, number>;
+      /** a week plan's average day; a one-day plan's own salt */
+      salt_g?: number;
+      recipe_salt_g?: number;
       target_kcal: number;
       coverage: Record<string, number>;
+      /** nutrients the food table records for no food (no coverage figure) */
+      untracked?: string[];
       note?: string;
     };
   };
@@ -261,16 +360,26 @@ export interface PatientDashboard {
   items: VisitStatusItem[];
 }
 
+/** Something the plan editor can add: a household dish or a single food. */
 export interface AllowedFood {
-  food_id: string;
+  kind?: "food" | "recipe";
+  food_id?: string;
+  recipe_id?: string;
   name_en: string;
   name_bn: string;
+  /** food group, or the dish's recipe category */
   food_group: string;
   kcal_per_100g: number;
+  serving_size_g?: number;
 }
 
+type PlanEditItem = { food_id?: string; recipe_id?: string; qty_g: number; name_en?: string };
+
 export interface PlanEdit {
-  meals: Record<string, { food_id: string; qty_g: number; name_en?: string }[]>;
+  /** a week plan, one meals mapping per day in plan order */
+  days?: Record<string, PlanEditItem[]>[];
+  /** a one-day plan from an assessment made before weekly plans */
+  meals?: Record<string, PlanEditItem[]>;
   exercise?: {
     aerobic_days: number;
     strength_days: number;

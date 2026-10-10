@@ -1,46 +1,95 @@
 "use client";
 
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { api, ApiError, OcrResult, Patient } from "@/lib/api";
+import { pid } from "@/lib/format";
+import { IconCheck, IconFileText, IconSparkles } from "@/components/icons";
 import {
-  Card,
   ErrorNote,
-  Field,
+  PageHeader,
+  PatientBanner,
+  Skeleton,
   buttonPrimary,
   buttonSecondary,
   inputClass,
 } from "@/components/ui";
 
+/* Reference wording shown next to each field so the cutoffs the engine
+ * applies are visible at the moment of entry. Display text only - the
+ * engine reads its thresholds from data/reference/*.yaml. */
 const BIOMARKERS = [
   {
     key: "fasting_glucose",
     label: "Fasting glucose",
     unit: "mg/dL",
-    normal: "70–99 normal · 100–125 prediabetes · ≥126 diabetes range (ADA)",
+    normal: "70–99 normal, 100–125 prediabetes, 126+ diabetes range (ADA)",
   },
   {
     key: "systolic_bp",
     label: "Systolic blood pressure",
     unit: "mmHg",
-    normal: "<120 normal · 130–139 stage 1 · ≥140 stage 2 (ACC/AHA)",
+    normal: "Under 120 normal, 130–139 stage 1, 140+ stage 2 (ACC/AHA)",
   },
   {
     key: "diastolic_bp",
     label: "Diastolic blood pressure",
     unit: "mmHg",
-    normal: "<80 normal · 80–89 stage 1 · ≥90 stage 2 (ACC/AHA)",
+    normal: "Under 80 normal, 80–89 stage 1, 90+ stage 2 (ACC/AHA)",
   },
   {
     key: "hemoglobin",
-    label: "Hemoglobin",
+    label: "Haemoglobin",
     unit: "g/dL",
-    normal: "normal ≥13 (men) / ≥12 (women) / ≥11 (pregnancy) (WHO)",
+    normal: "Normal from 13 (men), 12 (women), 11 (pregnancy) (WHO)",
   },
 ] as const;
 
 type BiomarkerKey = (typeof BIOMARKERS)[number]["key"];
+
+/** A number field with its unit set inside the box, as on a lab slip. */
+function MeasureInput({
+  id,
+  unit,
+  value,
+  onChange,
+  required,
+  min,
+  max,
+  placeholder,
+  prefilled,
+}: {
+  id: string;
+  unit: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  min?: number;
+  max?: number;
+  placeholder?: string;
+  prefilled?: boolean;
+}) {
+  return (
+    <div className="relative mt-1.5">
+      <input
+        id={id}
+        className={`${inputClass} mt-0! pr-16 ${prefilled ? "border-clinical bg-clinical-tint" : ""}`}
+        type="number"
+        inputMode="decimal"
+        step="0.1"
+        min={min}
+        max={max}
+        required={required}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+      <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-ink-muted">
+        {unit}
+      </span>
+    </div>
+  );
+}
 
 export default function IntakePage() {
   const { id } = useParams<{ id: string }>();
@@ -57,6 +106,7 @@ export default function IntakePage() {
     diastolic_bp: "",
     hemoglobin: "",
   });
+  const [prefilled, setPrefilled] = useState<Set<string>>(new Set());
   const [ocrState, setOcrState] = useState<"idle" | "running" | "done" | "unavailable">("idle");
   const [ocrNotes, setOcrNotes] = useState("");
   const [ocrRaw, setOcrRaw] = useState<OcrResult | null>(null);
@@ -71,14 +121,13 @@ export default function IntakePage() {
     try {
       const result = await api.ocr(file);
       setOcrRaw(result);
+      const extracted = BIOMARKERS.filter((b) => result.biomarkers[b.key] != null).map((b) => b.key);
       setValues((v) => {
         const next = { ...v };
-        for (const b of BIOMARKERS) {
-          const extracted = result.biomarkers[b.key];
-          if (extracted != null) next[b.key] = String(extracted);
-        }
+        for (const key of extracted) next[key] = String(result.biomarkers[key]);
         return next;
       });
+      setPrefilled(new Set(extracted));
       setOcrNotes(result.notes);
       setOcrState("done");
     } catch (err) {
@@ -114,101 +163,119 @@ export default function IntakePage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <div>
-        <p className="text-sm text-ink-muted">
-          <Link href={`/doctor/patients/${id}`} className="hover:underline">
-            {patient ? patient.name : `Patient #${id}`}
-          </Link>{" "}
-          / new visit
-        </p>
-        <h1 className="text-2xl font-bold">Intake</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Enter today&apos;s measurements. Leave a field empty if it wasn&apos;t
-          measured — the assessment scores only what you enter.
-        </p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="New visit"
+        subtitle="Enter today's measurements. Leave a field empty if it wasn't measured; the assessment scores only what you enter."
+        back={{ href: `/doctor/patients/${id}`, label: patient ? patient.name : "Patient record" }}
+      />
+
+      {patient ? (
+        <PatientBanner
+          name={patient.name}
+          id={pid(patient.id)}
+          sex={patient.sex}
+          age={new Date().getFullYear() - patient.birth_year}
+          heightCm={patient.height_cm}
+          pregnant={patient.pregnant}
+          conditions={patient.conditions}
+        />
+      ) : (
+        <Skeleton className="h-20" />
+      )}
 
       {error && <ErrorNote message={error} />}
 
-      <Card title="Prefill from lab report (optional)">
-        <p className="mb-3 text-sm text-ink-muted">
-          Upload a photo of the lab report and AI will read the values into the
-          form. <strong>You confirm every value before submitting</strong> —
-          nothing is scored until you do.
-        </p>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          className="hidden"
-          onChange={(e) => e.target.files?.[0] && runOcr(e.target.files[0])}
-        />
-        <button
-          type="button"
-          className={buttonSecondary}
-          disabled={ocrState === "running"}
-          onClick={() => fileInput.current?.click()}
-        >
-          {ocrState === "running" ? "Reading report…" : "Upload lab report image"}
-        </button>
-        {ocrState === "done" && (
-          <p className="mt-2 text-sm text-emerald-700">
-            Values prefilled below — please verify each one against the report.
-            {ocrNotes && (
-              <span className="mt-1 block text-amber-700">OCR notes: {ocrNotes}</span>
-            )}
-          </p>
-        )}
-        {ocrState === "unavailable" && (
-          <p className="mt-2 text-sm text-ink-muted">
-            OCR is not configured on the server (no API key). Manual entry below
-            works exactly the same.
-          </p>
-        )}
-      </Card>
-
-      <form onSubmit={submit}>
-        <Card title="Measurements">
-          <div className="space-y-4">
-            <Field label="Weight (kg)">
-              <input
-                className={inputClass}
-                type="number"
-                step="0.1"
-                min={3}
-                max={350}
-                required
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-              />
-            </Field>
-
-            {BIOMARKERS.map((b) => (
-              <Field key={b.key} label={`${b.label} (${b.unit})`} hint={b.normal}>
-                <input
-                  className={inputClass}
-                  type="number"
-                  step="0.1"
-                  value={values[b.key]}
-                  onChange={(e) =>
-                    setValues((v) => ({ ...v, [b.key]: e.target.value }))
-                  }
-                  placeholder="not measured"
-                />
-              </Field>
-            ))}
-
-            <button type="submit" disabled={saving || !weight} className={buttonPrimary + " w-full"}>
-              {saving ? "Generating assessment…" : "Submit & generate assessment"}
-            </button>
-            <p className="text-center text-xs text-ink-muted">
-              A deterministic assessment is generated instantly and waits for
-              your review — the patient sees nothing until you approve it.
-            </p>
+      <div className="grid items-start gap-6 lg:grid-cols-[1fr_20rem]">
+        <form onSubmit={submit} className="rounded-xl border border-line bg-surface">
+          <div className="border-b border-line px-5 py-4">
+            <h2 className="font-display text-lg font-bold leading-7 text-ink">Measurements</h2>
           </div>
-        </Card>
-      </form>
+          <div className="divide-y divide-line">
+            <div className="grid gap-x-6 gap-y-1 px-5 py-4 sm:grid-cols-[1fr_12rem] sm:items-center">
+              <label htmlFor="weight" className="font-semibold text-ink">
+                Weight <span className="font-normal text-ink-muted">(required)</span>
+              </label>
+              <MeasureInput id="weight" unit="kg" value={weight} onChange={setWeight} required min={3} max={350} />
+            </div>
+            {BIOMARKERS.map((b) => (
+              <div key={b.key} className="grid gap-x-6 gap-y-1 px-5 py-4 sm:grid-cols-[1fr_12rem] sm:items-center">
+                <div>
+                  <label htmlFor={b.key} className="font-semibold text-ink">
+                    {b.label}
+                  </label>
+                  <p className="text-sm text-ink-muted">{b.normal}</p>
+                </div>
+                <MeasureInput
+                  id={b.key}
+                  unit={b.unit}
+                  value={values[b.key]}
+                  onChange={(v) => {
+                    setValues((prev) => ({ ...prev, [b.key]: v }));
+                    setPrefilled((p) => {
+                      const next = new Set(p);
+                      next.delete(b.key);
+                      return next;
+                    });
+                  }}
+                  placeholder="Not measured"
+                  prefilled={prefilled.has(b.key)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3 border-t border-line bg-surface-soft px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-ink-muted">
+              The assessment is created instantly and waits for your review. The patient sees nothing until you
+              approve it.
+            </p>
+            <button type="submit" disabled={saving || !weight} className={`${buttonPrimary} shrink-0`}>
+              {saving ? "Creating assessment…" : "Create assessment"}
+            </button>
+          </div>
+        </form>
+
+        <aside className="rounded-xl border border-line bg-surface p-5">
+          <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
+            <IconSparkles className="h-4.5 w-4.5 text-clinical" />
+            Fill from a lab slip
+          </h2>
+          <p className="mt-1.5 text-sm text-ink-soft">
+            Upload a photo of the lab report and the values are read into the form. Check each one against the
+            slip before you submit.
+          </p>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            className="hidden"
+            onChange={(e) => e.target.files?.[0] && runOcr(e.target.files[0])}
+          />
+          <button
+            type="button"
+            className={`${buttonSecondary} mt-4 w-full`}
+            disabled={ocrState === "running"}
+            onClick={() => fileInput.current?.click()}
+          >
+            <IconFileText className="h-4 w-4" />
+            {ocrState === "running" ? "Reading the slip…" : "Upload lab slip photo"}
+          </button>
+          {ocrState === "done" && (
+            <div className="mt-3 space-y-2 text-sm">
+              <p className="flex items-start gap-1.5 text-ok-ink">
+                <IconCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                Values filled in and highlighted. Check each one against the slip.
+              </p>
+              {ocrNotes && <p className="text-watch-ink">Reader notes: {ocrNotes}</p>}
+            </div>
+          )}
+          {ocrState === "unavailable" && (
+            <p className="mt-3 text-sm text-ink-muted">
+              Lab-slip reading isn&apos;t set up on this server (no API key). Typing the values works the same.
+            </p>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }

@@ -6,66 +6,170 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------
- * Clinical design tokens - light mode is the source of truth.
+ * Design tokens - light mode is the source of truth.
  *
- * Semantic names, not raw hex at the call site, so dark mode is a value swap
- * below rather than a `dark:` variant on every element. Every text pair is
- * measured against WCAG AA (4.5:1).
+ * Two colour families with strictly separate jobs:
+ *
+ *   - "clinical" is prescription ink: brand, actions, links, focus, and the
+ *     physician's approval. It is a deep blue precisely because blue is the
+ *     one hue the status scale never uses, so a button can never be misread
+ *     as a finding.
+ *   - ok / low / watch / high / crit are reserved for clinical status and are
+ *     always paired with words. Nothing decorative is allowed to borrow them.
+ *
+ * Every text pair is measured against WCAG AA (4.5:1); input borders against
+ * the 3:1 non-text minimum.
  * ------------------------------------------------------------------------ */
 @theme {
-  --font-sans: var(--font-figtree), var(--font-noto-bengali), ui-sans-serif,
-    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
-  --font-bangla: var(--font-noto-bengali), var(--font-figtree), sans-serif;
+  /* Atkinson Hyperlegible Next was drawn for low-vision readers: 0/O, 1/l/I
+   * and 5/S are unambiguous, which matters for lab values and for older
+   * patients with diabetic eye disease. Bangla falls through to Noto. */
+  --font-sans: var(--font-atkinson), var(--font-noto-bengali), ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-bangla: var(--font-noto-bengali), var(--font-atkinson), sans-serif;
+  /* Headings: round and warm, Bangla-first. Never for lab values. */
+  --font-display: var(--font-baloo), var(--font-atkinson), var(--font-noto-bengali), sans-serif;
 
-  /* Primary. teal-700, not teal-600: white on teal-600 measures 3.74:1 and
-   * fails AA; teal-700 reaches 5.47:1. */
-  --color-clinical: #0f766e;
-  --color-clinical-hover: #115e59;
-  --color-clinical-tint: #f0fdfa;
+  /* Type scale from the classical sequence (12 14 16 18 21 24 36) rather
+   * than Tailwind's 20/30: steps a reader can actually tell apart. */
+  --text-xl: 1.3125rem;
+  --text-xl--line-height: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 2.5rem;
+
+  /* Prescription ink */
+  --color-clinical: #23439b;
+  --color-clinical-hover: #1a3378;
+  --color-clinical-tint: #edf1fa;
   --color-on-clinical: #ffffff;
 
-  /* Text. ink-muted is slate-500, not slate-400: slate-400 on white is
-   * 2.56:1 and fails AA for anything carrying meaning. */
-  --color-ink: #0f172a;
-  --color-ink-strong: #334155;
-  --color-ink-soft: #475569;
-  --color-ink-muted: #64748b;
+  /* Text */
+  --color-ink: #1b2433;
+  --color-ink-strong: #2f3a4c;
+  --color-ink-soft: #445064;
+  --color-ink-muted: #5c687c;
 
-  /* Surfaces */
-  --color-canvas: #f1f5f9;
+  /* Surfaces: white paper on a cool ward grey */
+  --color-canvas: #f2f4f8;
   --color-surface: #ffffff;
-  --color-surface-soft: #f8fafc;
-  --color-line: #e2e8f0;
-  --color-line-strong: #cbd5e1;
+  --color-surface-soft: #f7f8fb;
+  --color-line: #dce1e9;
+  --color-line-strong: #b7c0ce;
+  --color-field: #848fa0;
+
+  /* Clinical status - text / tint / border / solid mark */
+  --color-ok-ink: #17663f;
+  --color-ok-tint: #e7f4ec;
+  --color-ok-line: #b9dec8;
+  --color-ok-mark: #2f9461;
+
+  --color-low-ink: #1f5f8b;
+  --color-low-tint: #e6f1f8;
+  --color-low-line: #b4d3e8;
+  --color-low-mark: #3b86bd;
+
+  --color-watch-ink: #8a4b00;
+  --color-watch-tint: #fdf3e1;
+  --color-watch-line: #f1d29a;
+  --color-watch-mark: #d08a1b;
+
+  --color-high-ink: #a63a12;
+  --color-high-tint: #fcebe3;
+  --color-high-line: #f2c1ac;
+  --color-high-mark: #d9622b;
+
+  --color-crit-ink: #a3201a;
+  --color-crit-tint: #fce8e6;
+  --color-crit-line: #f1b9b4;
+  --color-crit-mark: #c7322a;
+
+  /* Illustration ("doodle") colours: the cartoon stethoscope and its spot
+   * drawings. A closed family of their own - steel, tubing blue, heart pink -
+   * so drawings never borrow a status colour and never read as a finding. */
+  --color-doodle-line: #16234d;
+  --color-doodle-sky: #dfe7ff;
+  --color-doodle-tube: #4565e8;
+  --color-doodle-tube-hi: #a9bbff;
+  --color-doodle-steel: #dbe2ef;
+  --color-doodle-steel-shade: #a7b3ca;
+  --color-doodle-heart: #ffd5e2;
+  --color-doodle-tip: #f58bb0;
+  --color-doodle-paper: #ffffff;
+  --color-doodle-rule: #c9d2e3;
+  --color-doodle-glint: #ffffff;
+  --color-doodle-ink: #23439b;
+  --color-doodle-spark: #16234d;
 }
 
 /* ---------------------------------------------------------------------------
- * Dark mode. Slate-900 surfaces on a slate-950 canvas rather than pure black:
- * pure black raises halation against light text, which matters when the job
- * is reading numbers off a screen for long stretches.
+ * Dark mode. Blue-grey surfaces rather than pure black: pure black raises
+ * halation against light text, which matters when the job is reading
+ * numbers off a screen for long stretches. Screen only: paper is always the
+ * light sheet, whatever theme the reader had on when they printed.
  * ------------------------------------------------------------------------ */
-.dark {
-  /* teal-400 with near-black text measures 10.84:1. Keeping the light-mode
-   * teal-700 + white here would technically pass, but reads muddy against a
-   * dark canvas. */
-  --color-clinical: #2dd4bf;
-  --color-clinical-hover: #5eead4;
-  --color-clinical-tint: #042f2e;
-  --color-on-clinical: #020617;
+@media screen {
+  .dark {
+    --color-clinical: #9db2f5;
+    --color-clinical-hover: #bacaf8;
+    --color-clinical-tint: #1a2340;
+    --color-on-clinical: #0e1526;
 
-  --color-ink: #f1f5f9;
-  --color-ink-strong: #e2e8f0;
-  --color-ink-soft: #cbd5e1;
-  --color-ink-muted: #94a3b8;
+    --color-ink: #edf0f5;
+    --color-ink-strong: #d5dbe5;
+    --color-ink-soft: #b5bfce;
+    --color-ink-muted: #8f9aad;
 
-  --color-canvas: #020617;
-  --color-surface: #0f172a;
-  --color-surface-soft: #1e293b;
-  --color-line: #334155;
-  --color-line-strong: #64748b;
+    --color-canvas: #0d1320;
+    --color-surface: #141c2b;
+    --color-surface-soft: #1b2536;
+    --color-line: #2a364a;
+    --color-line-strong: #4a5870;
+    --color-field: #5a6880;
 
-  color-scheme: dark;
+    --color-ok-ink: #7fd3a4;
+    --color-ok-tint: #10301f;
+    --color-ok-line: #1f5537;
+    --color-ok-mark: #4fbf84;
+
+    --color-low-ink: #8cc4ea;
+    --color-low-tint: #0f2a3d;
+    --color-low-line: #1d4a69;
+    --color-low-mark: #5aa7dc;
+
+    --color-watch-ink: #f3c46f;
+    --color-watch-tint: #33240b;
+    --color-watch-line: #5e4314;
+    --color-watch-mark: #e3a23a;
+
+    --color-high-ink: #f5a383;
+    --color-high-tint: #3a1c10;
+    --color-high-line: #66311b;
+    --color-high-mark: #ea7d4c;
+
+    --color-crit-ink: #f59a93;
+    --color-crit-tint: #3b1513;
+    --color-crit-line: #6a2522;
+    --color-crit-mark: #e5574e;
+
+    /* Drawings keep their dark outline at night - that outline is what makes
+     * them cartoons - so they sit on a lifted navy ground instead. */
+    --color-doodle-line: #0b1226;
+    --color-doodle-sky: #1d2847;
+    --color-doodle-tube: #5b78f0;
+    --color-doodle-tube-hi: #a9bbff;
+    --color-doodle-steel: #c9d2e3;
+    --color-doodle-steel-shade: #8f9cb6;
+    --color-doodle-heart: #f2a7c2;
+    --color-doodle-tip: #ff8fb8;
+    --color-doodle-paper: #e9eef8;
+    --color-doodle-rule: #b4bfd4;
+    --color-doodle-glint: #ffffff;
+    /* ℞ ink stays ink on the light paper; loose sparkles lift off the canvas */
+    --color-doodle-ink: #23439b;
+    --color-doodle-spark: #7d8db3;
+
+    color-scheme: dark;
+  }
 }
 
 body {
@@ -91,34 +195,156 @@ body {
   }
 }
 
-/* The report letterhead carries a clinical accent rule at the top edge. */
-.report-head {
-  border-top: 3px solid var(--color-clinical);
-  border-bottom: 1px solid var(--color-line);
+/* ---------------------------------------------------------------------------
+ * The prescription sheet. Only physician-approved documents get paper
+ * treatment - a lifted sheet with a ruled ink edge - so "this is a signed
+ * record" reads before a word of it does. Working screens stay flat.
+ * ------------------------------------------------------------------------ */
+.sheet {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  box-shadow: 0 1px 0 var(--color-line), 0 18px 40px -28px rgb(27 36 51 / 0.45);
 }
 
-/* Patient reports are printed and filed, so print gets real treatment rather
- * than just a white background: sane page margins, and no section split
- * across a page break mid-table. */
+@media screen {
+  .dark .sheet {
+    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.7);
+  }
+}
+
+.sheet-head {
+  border-top: 4px solid var(--color-clinical);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+/* The physician's approval, set like a chamber stamp. The slight tilt is the
+ * one ornamental gesture in the app, and it sits on the one element that
+ * carries the product's core guarantee. */
+.approval-stamp {
+  border: 2px solid var(--color-clinical);
+  outline: 1px solid var(--color-clinical);
+  outline-offset: 2px;
+  border-radius: 6px;
+  color: var(--color-clinical);
+  transform: rotate(-2.5deg);
+}
+
+/* One deliberate entrance: the stamp lands once, when an approved document
+ * first renders. Everything else on the page appears without motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .approval-stamp {
+    animation: stamp-in 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 250ms both;
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(-2.5deg) scale(1.25);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2.5deg) scale(1);
+  }
+}
+
+/* Headings in Baloo sit high in their em box; a touch of negative tracking
+ * and a tighter leading keep large titles compact. */
+.font-display {
+  letter-spacing: -0.01em;
+}
+
+/* The sign-in screens' one moment: the stethoscope's heart beats twice when
+ * the page opens, then stays still. */
+@media (prefers-reduced-motion: no-preference) {
+  .heart-beat {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: heart-beat 1.1s cubic-bezier(0.3, 0, 0.3, 1) 400ms 2;
+  }
+}
+
+@keyframes heart-beat {
+  0%,
+  45%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.08);
+  }
+  30% {
+    transform: scale(1.02);
+  }
+  38% {
+    transform: scale(1.06);
+  }
+}
+
+/* Patient reports are printed and filed, so print gets its own layout rather
+ * than the screen's on white paper: the sheet runs the full width of the
+ * page, the week and the recipes are set as tables, and a block is kept
+ * whole only where it is small enough to fit on a page. */
 @page {
-  margin: 16mm;
+  margin: 14mm;
 }
 
 @media print {
+  /* 16px on screen comes out as 12pt on paper. Everything is sized in rem,
+   * so the root alone sets the sheet to a 10.5pt body. */
+  html {
+    font-size: 14px;
+  }
+
   body {
     background-color: #ffffff;
     color: #000000;
   }
 
-  section,
-  table,
-  .report-head {
+  .sheet {
+    border: 0;
+    box-shadow: none;
+    /* The risk scale and the frequency meter are drawn with backgrounds,
+     * which browsers leave off paper unless told otherwise. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* The printed stamp is a copy that only exists on paper, so its entrance
+   * would start at the moment of printing and be caught at zero opacity. */
+  .approval-stamp {
+    animation: none;
+  }
+
+  /* Rows and list items stay whole; sections do not, because one taller
+   * than the page would jump to a fresh page and leave the last one empty. */
+  tr,
+  li,
+  .sheet-head {
     break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
   }
 
   /* Repeat column headers when a long table does span pages. */
   thead {
     display: table-header-group;
+  }
+
+  /* A short table may run on to the next page, but not by stranding a row
+   * or two on either side of the break. */
+  .keep-rows tr:nth-child(-n + 2) {
+    break-after: avoid;
+  }
+
+  .keep-rows tr:nth-last-child(-n + 2) {
+    break-before: avoid;
   }
 
   /* The dashboard's link URLs are noise on a filed report. */

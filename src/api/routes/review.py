@@ -8,7 +8,7 @@ from src.api.deps import get_db, require_staff
 from src.api.schemas import ApprovalOut, PlanEditIn, QueueItem, ReviewDecision
 from src.api.services import allowed_foods_for, recompute_edited_result
 from src.core import audit
-from src.db.models import Approval, Assessment, User, Visit
+from src.db.models import Approval, Assessment, User
 
 router = APIRouter(prefix="/review", tags=["review"])
 

@@ -5,15 +5,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
-import { IconHeartPulse } from "@/components/icons";
-import { ErrorNote, Field, inputClass } from "@/components/ui";
+import { AuthLayout } from "@/components/auth-layout";
+import { ErrorNote, Field, buttonPrimary, checkboxClass, inputClass } from "@/components/ui";
 
 const CONDITION_OPTIONS = [
-  { key: "hypertension", label: "Hypertension" },
+  { key: "hypertension", label: "High blood pressure" },
   { key: "diabetes", label: "Diabetes" },
-  { key: "anemia", label: "Anemia" },
+  { key: "anemia", label: "Anaemia" },
   { key: "knee_osteoarthritis", label: "Knee osteoarthritis" },
 ];
+
+const legendClass = "text-base font-semibold text-ink";
+
+/** A row-sized checkbox target: the whole row toggles, not just the 16px box. */
+const choiceRow =
+  "flex cursor-pointer items-center gap-3 rounded-lg border border-line px-3 py-2.5 text-sm text-ink-strong " +
+  "has-[:checked]:border-clinical has-[:checked]:bg-clinical-tint hover:bg-surface-soft";
 
 export default function PatientRegisterPage() {
   const router = useRouter();
@@ -63,160 +70,156 @@ export default function PatientRegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-emerald-50 via-slate-50 to-slate-100 dark:from-emerald-950 dark:via-slate-900 dark:to-slate-950 p-6">
-      <div className="w-full max-w-md py-8">
-        <div className="rounded-2xl border border-line bg-surface p-7 shadow-lg shadow-slate-200/60">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-            <IconHeartPulse className="h-6 w-6" />
-          </span>
-          <h1 className="mt-4 text-xl font-bold tracking-tight text-ink">
-            Create your patient account
-          </h1>
-          <p className="mt-1 text-sm text-ink-muted">
-            Your doctor uses this profile during visits — reports are released to you only after
-            physician approval.
-          </p>
+    <AuthLayout
+      wide
+      title="Create your patient account"
+      subtitle="Your doctor uses these details at your visits. You see a plan only after your doctor approves it."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link href="/login/patient" className="font-semibold text-clinical hover:underline">
+            Sign in
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={submit} className="space-y-7">
+        {error && <ErrorNote message={error} />}
 
-          <form onSubmit={submit} className="mt-6 space-y-4">
-            {error && <ErrorNote message={error} />}
-            <Field label="Full name">
-              <input
-                className={inputClass}
-                required
-                value={form.name}
-                onChange={(e) => set("name", e.target.value)}
-                placeholder="e.g. Ayesha Rahman"
-              />
-            </Field>
-            <Field label="Email">
-              <input
-                className={inputClass}
-                type="email"
-                required
-                autoComplete="email"
-                value={form.email}
-                onChange={(e) => set("email", e.target.value)}
-              />
-            </Field>
-            <Field label="Password" hint="At least 8 characters.">
-              <input
-                className={inputClass}
-                type="password"
-                required
-                minLength={8}
-                autoComplete="new-password"
-                value={form.password}
-                onChange={(e) => set("password", e.target.value)}
-              />
-            </Field>
+        <fieldset className="space-y-4">
+          <legend className={legendClass}>Your account</legend>
+          <Field label="Full name">
+            <input
+              className={inputClass}
+              required
+              autoComplete="name"
+              value={form.name}
+              onChange={(e) => set("name", e.target.value)}
+              placeholder="e.g. Ayesha Rahman"
+            />
+          </Field>
+          <Field label="Email">
+            <input
+              className={inputClass}
+              type="email"
+              required
+              autoComplete="email"
+              value={form.email}
+              onChange={(e) => set("email", e.target.value)}
+            />
+          </Field>
+          <Field label="Password" hint="At least 8 characters.">
+            <input
+              className={inputClass}
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={form.password}
+              onChange={(e) => set("password", e.target.value)}
+            />
+          </Field>
+        </fieldset>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Sex">
-                <select
-                  className={inputClass}
-                  value={form.sex}
-                  onChange={(e) => set("sex", e.target.value)}
-                >
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                </select>
-              </Field>
-              <Field label="Year of birth">
-                <input
-                  className={inputClass}
-                  type="number"
-                  min={1900}
-                  max={new Date().getFullYear()}
-                  required
-                  value={form.birth_year}
-                  onChange={(e) => set("birth_year", Number(e.target.value))}
-                />
-              </Field>
+        <fieldset className="space-y-4 border-t border-line pt-6">
+          <legend className={`${legendClass} float-left mb-4 w-full`}>About you</legend>
+          <div className="clear-both" role="radiogroup" aria-label="Sex">
+            <span className="text-sm font-semibold text-ink-strong">Sex</span>
+            <div className="mt-1.5 grid grid-cols-2 gap-2">
+              {(["female", "male"] as const).map((s) => (
+                <label key={s} className={choiceRow}>
+                  <input
+                    type="radio"
+                    name="sex"
+                    className="h-4 w-4 accent-clinical"
+                    checked={form.sex === s}
+                    onChange={() => set("sex", s)}
+                  />
+                  {s === "female" ? "Female" : "Male"}
+                </label>
+              ))}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Height (cm)">
-                <input
-                  className={inputClass}
-                  type="number"
-                  min={80}
-                  max={230}
-                  step="0.5"
-                  required
-                  value={form.height_cm}
-                  onChange={(e) => set("height_cm", Number(e.target.value))}
-                />
-              </Field>
-              <Field label="Fitness level">
-                <select
-                  className={inputClass}
-                  value={form.fitness_level}
-                  onChange={(e) => set("fitness_level", e.target.value)}
-                >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-              </Field>
-            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Year of birth">
+              <input
+                className={inputClass}
+                type="number"
+                inputMode="numeric"
+                min={1900}
+                max={new Date().getFullYear()}
+                required
+                value={form.birth_year}
+                onChange={(e) => set("birth_year", Number(e.target.value))}
+              />
+            </Field>
+            <Field label="Height (cm)">
+              <input
+                className={inputClass}
+                type="number"
+                inputMode="decimal"
+                min={80}
+                max={230}
+                step="0.5"
+                required
+                value={form.height_cm}
+                onChange={(e) => set("height_cm", Number(e.target.value))}
+              />
+            </Field>
+          </div>
+          <Field label="How active are you?" hint="Used to set a safe starting point for exercise.">
+            <select
+              className={inputClass}
+              value={form.fitness_level}
+              onChange={(e) => set("fitness_level", e.target.value)}
+            >
+              <option value="beginner">Not very active</option>
+              <option value="intermediate">Somewhat active</option>
+              <option value="advanced">Very active</option>
+            </select>
+          </Field>
+          {form.sex === "female" && (
+            <label className={choiceRow}>
+              <input
+                type="checkbox"
+                className={checkboxClass}
+                checked={form.pregnant}
+                onChange={(e) => set("pregnant", e.target.checked)}
+              />
+              I am currently pregnant
+            </label>
+          )}
+        </fieldset>
 
-            {form.sex === "female" && (
-              <label className="flex items-center gap-2 text-sm text-ink-strong">
+        <fieldset className="border-t border-line pt-6">
+          <legend className={`${legendClass} float-left w-full`}>Conditions a doctor has diagnosed</legend>
+          <p className="clear-both pt-1 text-sm text-ink-muted">Tick any that apply. Leave all unticked if none.</p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {CONDITION_OPTIONS.map((c) => (
+              <label key={c.key} className={choiceRow}>
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-line-strong text-emerald-600"
-                  checked={form.pregnant}
-                  onChange={(e) => set("pregnant", e.target.checked)}
+                  className={checkboxClass}
+                  checked={form.conditions.includes(c.key)}
+                  onChange={(e) =>
+                    set(
+                      "conditions",
+                      e.target.checked
+                        ? [...form.conditions, c.key]
+                        : form.conditions.filter((x) => x !== c.key)
+                    )
+                  }
                 />
-                Currently pregnant
+                {c.label}
               </label>
-            )}
+            ))}
+          </div>
+        </fieldset>
 
-            <fieldset>
-              <legend className="text-sm font-medium text-ink-strong">
-                Diagnosed conditions (if any)
-              </legend>
-              <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                {CONDITION_OPTIONS.map((c) => (
-                  <label key={c.key} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-line-strong text-emerald-600"
-                      checked={form.conditions.includes(c.key)}
-                      onChange={(e) =>
-                        set(
-                          "conditions",
-                          e.target.checked
-                            ? [...form.conditions, c.key]
-                            : form.conditions.filter((x) => x !== c.key)
-                        )
-                      }
-                    />
-                    {c.label}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="w-full rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 disabled:opacity-50"
-            >
-              {busy ? "Creating account…" : "Create account"}
-            </button>
-          </form>
-
-          <p className="mt-4 text-center text-xs text-ink-muted">
-            Already have an account?{" "}
-            <Link href="/login/patient" className="font-medium hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </div>
-        <p className="mt-4 text-center text-xs text-ink-muted">
-          <Link href="/login" className="hover:underline">← Choose a different portal</Link>
-        </p>
-      </div>
-    </div>
+        <button type="submit" disabled={busy} className={`${buttonPrimary} w-full`}>
+          {busy ? "Creating account…" : "Create account"}
+        </button>
+      </form>
+    </AuthLayout>
   );
 }

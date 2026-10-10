@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api, Patient } from "@/lib/api";
+import { conditionName, formatDate } from "@/lib/clinical-terms";
 import { pid } from "@/lib/format";
 import { IconHeartPulse } from "@/components/icons";
 import {
@@ -47,12 +48,12 @@ export default function AdminPatientsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Patients"
-        subtitle={rows ? `${rows.length} registered patients` : "Loading…"}
+        subtitle={rows ? `${rows.length} registered patients` : undefined}
         action={
           <SearchInput
             value={query}
             onChange={setQuery}
-            placeholder="Search by name, PID, email…"
+            placeholder="Search name, PID, email"
           />
         }
       />
@@ -66,56 +67,51 @@ export default function AdminPatientsPage() {
           icon={<IconHeartPulse className="h-5 w-5" />}
         />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-line bg-surface">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-line text-xs uppercase tracking-wide text-ink-muted">
+            <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th className="px-4 py-3">PID</th>
-                <th className="px-4 py-3">Patient</th>
-                <th className="px-4 py-3">Sex / age</th>
-                <th className="px-4 py-3">Conditions</th>
-                <th className="px-4 py-3">Login account</th>
-                <th className="px-4 py-3">Registered</th>
+                <th scope="col" className="px-5 py-3 font-semibold">Patient</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Sex, age</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Conditions</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Login</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Registered</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
               {visible.map(({ patient, account_email }) => (
                 <tr key={patient.id} className="hover:bg-surface-soft">
-                  <td className="px-4 py-3 font-mono text-xs font-semibold text-emerald-700">
-                    {pid(patient.id)}
-                  </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
                       <Avatar name={patient.name} />
-                      <span className="font-medium text-ink">
-                        {patient.name}
-                        {patient.pregnant && (
-                          <span className="ml-2">
-                            <Badge kind="moderate">pregnant</Badge>
-                          </span>
-                        )}
+                      <span>
+                        <span className="block font-semibold text-ink">{patient.name}</span>
+                        <span className="block text-ink-muted">{pid(patient.id)}</span>
                       </span>
                     </div>
                   </td>
                   <td className="px-4 py-3 capitalize text-ink-soft">
-                    {patient.sex} · {new Date().getFullYear() - patient.birth_year}
+                    {patient.sex}, {new Date().getFullYear() - patient.birth_year}
                   </td>
                   <td className="px-4 py-3">
-                    {patient.conditions.length === 0 ? (
-                      <span className="text-ink-muted">—</span>
-                    ) : (
-                      patient.conditions.map((c) => (
-                        <span key={c} className="mr-1">
-                          <Badge kind="high">{c.replace(/_/g, " ")}</Badge>
-                        </span>
-                      ))
-                    )}
+                    <div className="flex flex-wrap gap-1.5">
+                      {patient.pregnant && <Badge kind="flag">Pregnant</Badge>}
+                      {patient.conditions.length === 0 && !patient.pregnant ? (
+                        <span className="text-ink-muted">None</span>
+                      ) : (
+                        patient.conditions.map((c) => (
+                          <Badge key={c} kind="condition">
+                            {conditionName(c)}
+                          </Badge>
+                        ))
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-ink-soft">
-                    {account_email ?? <Badge kind="none">no login</Badge>}
+                    {account_email ?? <span className="text-ink-muted">No login</span>}
                   </td>
-                  <td className="px-4 py-3 text-ink-muted">
-                    {new Date(patient.created_at).toLocaleDateString()}
+                  <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
+                    {formatDate(patient.created_at)}
                   </td>
                 </tr>
               ))}

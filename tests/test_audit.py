@@ -3,7 +3,6 @@
 import pytest
 
 from src.core import audit
-from src.db.models import AuditLog
 
 
 def test_record_and_trail(db_session):

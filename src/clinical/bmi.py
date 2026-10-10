@@ -51,6 +51,9 @@ ACTIVITY_FACTORS = {
     "moderate": 1.55,
     "active": 1.725,
 }
+# Used when no activity level is given for the patient. The result records
+# that it was assumed, so the report can say so.
+DEFAULT_ACTIVITY = "light"
 
 # Energy adjustment by BMI category: modest deficit for weight loss, surplus for
 # underweight. Floors per conventional dietetic practice minimums.
@@ -63,18 +66,35 @@ def daily_energy_target(
     height_cm: float,
     age: int,
     sex: str,
-    activity: str = "light",
+    activity: str | None = None,
     asian_cutoffs: bool = True,
 ) -> dict:
+    """The energy target, with the inputs and steps it was worked out from
+    (`basis`) so a reader of the report can check the arithmetic."""
     bmi = compute_bmi(weight_kg, height_cm)
     category = bmi_category(bmi, asian_cutoffs)
     ree = mifflin_st_jeor(weight_kg, height_cm, age, sex)
-    tdee = ree * ACTIVITY_FACTORS.get(activity, 1.375)
-    target = max(tdee + _ADJUST[category], _FLOOR.get(sex, 1200))
+    level = activity if activity in ACTIVITY_FACTORS else DEFAULT_ACTIVITY
+    tdee = ree * ACTIVITY_FACTORS[level]
+    floor = _FLOOR.get(sex, 1200)
+    target = max(tdee + _ADJUST[category], floor)
     return {
         "bmi": bmi,
         "bmi_category": category,
         "ree_kcal": round(ree),
         "tdee_kcal": round(tdee),
         "target_kcal": round(target),
+        "basis": {
+            "weight_kg": weight_kg,
+            "height_cm": height_cm,
+            "age": age,
+            "sex": sex,
+            "equation": "mifflin_st_jeor",
+            "activity": level,
+            "activity_factor": ACTIVITY_FACTORS[level],
+            "activity_assumed": activity not in ACTIVITY_FACTORS,
+            "adjustment_kcal": _ADJUST[category],
+            "floor_kcal": floor,
+            "floor_applied": tdee + _ADJUST[category] < floor,
+        },
     }

@@ -2,7 +2,22 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AllowedFood } from "@/lib/api";
+import { mealItemKey } from "@/lib/clinical-terms";
 import { IconSearch, IconStar } from "@/components/icons";
+
+/** Dishes group under their recipe category ("Dal", "Fish"); single foods
+ * under their food group, named so the two kinds never share a heading. */
+const groupLabel = (f: AllowedFood) =>
+  f.kind === "recipe"
+    ? f.food_group
+    : `${f.food_group.charAt(0).toUpperCase()}${f.food_group.slice(1)}, single foods`;
+
+/** Energy as the physician will portion it: per serving for a dish, per
+ * 100 g for a single food. */
+const energyText = (f: AllowedFood) =>
+  f.kind === "recipe" && f.serving_size_g
+    ? `${Math.round((f.kcal_per_100g * f.serving_size_g) / 100)} kcal per ${f.serving_size_g} g serving`
+    : `${f.kcal_per_100g} kcal/100g`;
 
 interface FoodCombobox {
   /** Live, contraindication-filtered candidates (never null once loaded). */
@@ -16,10 +31,10 @@ interface FoodCombobox {
   label?: string;
 }
 
-/** Searchable food picker: type to filter by English or Bangla name across
- * the whole (gate-filtered) catalog; browsing with an empty query shows the
- * patient's recommended picks first, then everything else grouped by food
- * group — same information the old native <select> showed, just findable.
+/** Searchable dish-and-food picker: type to filter by English or Bangla name
+ * across the whole (gate-filtered) catalog; browsing with an empty query shows
+ * the patient's recommended picks first, then dishes by recipe category, then
+ * single foods by food group.
  *
  * Follows the ARIA combobox pattern: focus stays on the input and the active
  * row is published via aria-activedescendant, so the rows are deliberately
@@ -34,15 +49,16 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
   const listboxId = useId();
   const optionId = (index: number) => `${listboxId}-opt-${index}`;
 
-  const recommendedIds = useMemo(() => new Set(recommended.map((f) => f.food_id)), [recommended]);
+  const recommendedIds = useMemo(() => new Set(recommended.map(mealItemKey)), [recommended]);
 
   const groups = useMemo(() => {
     const byGroup = new Map<string, AllowedFood[]>();
     for (const f of foods) {
-      if (recommendedIds.has(f.food_id)) continue; // already shown in "recommended"
-      const list = byGroup.get(f.food_group) ?? [];
+      if (recommendedIds.has(mealItemKey(f))) continue; // already shown in "recommended"
+      const label = groupLabel(f);
+      const list = byGroup.get(label) ?? [];
       list.push(f);
-      byGroup.set(f.food_group, list);
+      byGroup.set(label, list);
     }
     return [...byGroup.entries()];
   }, [foods, recommendedIds]);
@@ -55,8 +71,8 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
     );
     // recommended matches first (in rank order), then the rest alphabetically
     return matches.sort((a, b) => {
-      const ar = recommendedIds.has(a.food_id) ? 0 : 1;
-      const br = recommendedIds.has(b.food_id) ? 0 : 1;
+      const ar = recommendedIds.has(mealItemKey(a)) ? 0 : 1;
+      const br = recommendedIds.has(mealItemKey(b)) ? 0 : 1;
       return ar !== br ? ar - br : a.name_en.localeCompare(b.name_en);
     });
   }, [foods, trimmed, recommendedIds]);
@@ -109,7 +125,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
 
   const row = (food: AllowedFood, index: number) => (
     <button
-      key={food.food_id}
+      key={mealItemKey(food)}
       type="button"
       role="option"
       id={optionId(index)}
@@ -123,21 +139,21 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
       onClick={() => select(food)}
       onMouseEnter={() => setHighlight(index)}
       className={`flex w-full items-center justify-between gap-3 px-3 py-1.5 text-left text-sm ${
-        index === highlight ? "bg-teal-50" : ""
+        index === highlight ? "bg-clinical-tint" : ""
       }`}
     >
       <span className="min-w-0 truncate text-ink-strong">
         {food.name_en}
         {food.name_bn && <span className="text-ink-muted"> · {food.name_bn}</span>}
-        {recommendedIds.has(food.food_id) && (
+        {recommendedIds.has(mealItemKey(food)) && (
           <>
-            <IconStar className="ml-1.5 inline h-3.5 w-3.5 text-amber-500 dark:text-amber-400" />
+            <IconStar className="ml-1.5 inline h-3.5 w-3.5 text-clinical" />
             <span className="sr-only"> (recommended for this patient)</span>
           </>
         )}
       </span>
-      <span className="shrink-0 text-xs tabular-nums text-ink-muted">
-        {food.kcal_per_100g} kcal/100g
+      <span className="shrink-0 text-xs text-ink-muted">
+        {energyText(food)}
       </span>
     </button>
   );
@@ -151,7 +167,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
       }}
     >
       <label className="relative block">
-        <span className="sr-only">{label ?? "Search foods"}</span>
+        <span className="sr-only">{label ?? "Search dishes and foods"}</span>
         <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
         <input
           type="text"
@@ -167,16 +183,16 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
             setOpen(true);
           }}
           onKeyDown={onKeyDown}
-          placeholder={placeholder ?? "Search foods (safety-filtered)…"}
-          className="w-full rounded-lg border border-line-strong bg-surface py-1.5 pl-9 pr-3 text-sm shadow-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+          placeholder={placeholder ?? "Search dishes and foods (safety-filtered)…"}
+          className="w-full rounded-lg border border-field bg-surface py-1.5 pl-9 pr-3 text-base placeholder:text-ink-muted focus:border-clinical focus:outline-none focus:ring-2 focus:ring-clinical/20 sm:text-sm"
         />
       </label>
       {/* Filtering is otherwise a purely visual change - announce the count. */}
       <p className="sr-only" role="status">
         {open && trimmed
           ? noMatches
-            ? `No foods match ${query}`
-            : `${searchResults.length} food${searchResults.length === 1 ? "" : "s"} available`
+            ? `Nothing matches ${query}`
+            : `${searchResults.length} item${searchResults.length === 1 ? "" : "s"} available`
           : ""}
       </p>
 
@@ -189,12 +205,12 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
             * and groups, and this row is neither. */}
           {noMatches && (
             <p className="px-3 py-4 text-center text-sm text-ink-muted">
-              No foods match &ldquo;{query}&rdquo;
+              Nothing matches &ldquo;{query}&rdquo;
             </p>
           )}
           {/* Rendered even while empty so the input's aria-controls always
             * resolves to a real element. */}
-          <div role="listbox" id={listboxId} aria-label={label ?? "Foods"}>
+          <div role="listbox" id={listboxId} aria-label={label ?? "Dishes and foods"}>
             {trimmed ? (
               searchResults.map((f, i) => row(f, i))
             ) : (
@@ -203,7 +219,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
                   <div role="group" aria-label="Recommended for this patient">
                     <p
                       aria-hidden="true"
-                      className="sticky top-0 bg-surface px-3 py-1.5 text-xs font-semibold text-teal-700"
+                      className="sticky top-0 bg-surface px-3 py-1.5 text-xs font-semibold text-clinical"
                     >
                       Recommended for this patient
                     </p>
@@ -214,7 +230,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
                   <div key={group} role="group" aria-label={group}>
                     <p
                       aria-hidden="true"
-                      className="sticky top-0 bg-surface px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted"
+                      className="sticky top-0 bg-surface px-3 py-1.5 text-xs font-semibold text-ink-muted"
                     >
                       {group}
                     </p>

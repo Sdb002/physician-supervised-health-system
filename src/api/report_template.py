@@ -14,7 +14,15 @@ _LABELS = {
         "conditions": "Conditions considered in this plan: {items}",
         "why": "Why this plan",
         "diet": "Your daily food plan (target: {kcal} kcal)",
+        "diet_week": "Your food plan for the week (target: {kcal} kcal a day)",
         "diet_total": "Planned total: about {kcal} kcal/day",
+        "diet_week_total": "Planned: about {kcal} kcal a day on average",
+        "salt": "Cooking salt for the day: {g} g in your portions",
+        "salt_less": "Cooking salt for the day: {g} g in your portions, less than the {recipe} g the recipes list",
+        "salt_note": "Cook each day's dishes with no more salt than the amount shown for that day, and add no salt at the table.",
+        "foods": "Foods that suit your plan",
+        "recipes": "Recommended home recipes",
+        "recipe_line": "{name} ({category}) — 1 serving ≈ {grams} g, {kcal} kcal; {tier}",
         "exercise": "Your exercise plan",
         "aerobic": "Aerobic activity: {min} minutes per session, {days} days a week (target heart rate {lo}-{hi} beats/min)",
         "strength": "Strength training: {days} days a week",
@@ -33,7 +41,15 @@ _LABELS = {
         "conditions": "এই পরিকল্পনায় বিবেচিত অবস্থা: {items}",
         "why": "কেন এই পরিকল্পনা",
         "diet": "আপনার দৈনিক খাবারের পরিকল্পনা (লক্ষ্য: {kcal} কিলোক্যালরি)",
+        "diet_week": "আপনার সপ্তাহের খাবারের পরিকল্পনা (লক্ষ্য: দিনে {kcal} কিলোক্যালরি)",
         "diet_total": "পরিকল্পিত মোট: প্রায় {kcal} কিলোক্যালরি/দিন",
+        "diet_week_total": "পরিকল্পিত: গড়ে দিনে প্রায় {kcal} কিলোক্যালরি",
+        "salt": "সারা দিনের রান্নার লবণ: আপনার অংশে {g} গ্রাম",
+        "salt_less": "সারা দিনের রান্নার লবণ: আপনার অংশে {g} গ্রাম, রেসিপিতে লেখা {recipe} গ্রামের চেয়ে কম",
+        "salt_note": "প্রতিদিনের রান্নায় ওই দিনের জন্য দেখানো পরিমাণের বেশি লবণ দেবেন না, আর পাতে আলাদা লবণ নেবেন না।",
+        "foods": "আপনার পরিকল্পনার উপযোগী খাবার",
+        "recipes": "সুপারিশকৃত ঘরোয়া রান্না",
+        "recipe_line": "{name} ({category}) — ১ পরিবেশন ≈ {grams} গ্রাম, {kcal} কিলোক্যালরি; {tier}",
         "exercise": "আপনার ব্যায়ামের পরিকল্পনা",
         "aerobic": "অ্যারোবিক ব্যায়াম: প্রতিবার {min} মিনিট, সপ্তাহে {days} দিন (লক্ষ্য হৃদস্পন্দন {lo}-{hi} বার/মিনিট)",
         "strength": "শক্তি ব্যায়াম: সপ্তাহে {days} দিন",
@@ -114,6 +130,41 @@ _MEAL_NAMES = {
     "bn": {"breakfast": "সকালের নাস্তা", "lunch": "দুপুরের খাবার", "dinner": "রাতের খাবার", "snack": "হালকা নাস্তা"},
 }
 
+_WEEKDAY_NAMES = {
+    "en": {"saturday": "Saturday", "sunday": "Sunday", "monday": "Monday", "tuesday": "Tuesday",
+           "wednesday": "Wednesday", "thursday": "Thursday", "friday": "Friday"},
+    "bn": {"saturday": "শনিবার", "sunday": "রবিবার", "monday": "সোমবার", "tuesday": "মঙ্গলবার",
+           "wednesday": "বুধবার", "thursday": "বৃহস্পতিবার", "friday": "শুক্রবার"},
+}
+
+# recipe dataset vocabularies (data/recipe/schema.md); English is the source
+_RECIPE_CATEGORIES = {
+    "bn": {
+        "Vegetable": "সবজি", "Fish": "মাছ", "Meat": "মাংস", "Bhorta": "ভর্তা",
+        "Rice & Grain": "ভাত ও শস্য", "Bread & Pitha": "রুটি ও পিঠা",
+        "Leafy Green": "শাক", "Sweet": "মিষ্টি", "Dal": "ডাল", "Snack": "নাস্তা",
+        "Egg": "ডিম", "Beverage": "পানীয়", "Salad & Chutney": "সালাদ ও চাটনি",
+    },
+}
+_FREQUENCY_TIERS = {
+    "en": {
+        "Daily staple": "an everyday staple", "Near-daily": "cooked almost daily",
+        "Very frequent": "cooked most days", "Frequent": "cooked a few times a week",
+        "Weekly": "cooked about weekly", "Regular": "cooked a few times a month",
+        "Occasional": "cooked occasionally", "Festive/seasonal": "a festive or seasonal dish",
+        "Rare/special": "a special-occasion dish",
+    },
+    "bn": {
+        "Daily staple": "প্রতিদিনের প্রধান খাবার", "Near-daily": "প্রায় প্রতিদিন রান্না হয়",
+        "Very frequent": "সপ্তাহের বেশিরভাগ দিন রান্না হয়",
+        "Frequent": "সপ্তাহে কয়েকবার রান্না হয়", "Weekly": "সপ্তাহে প্রায় একবার রান্না হয়",
+        "Regular": "মাসে কয়েকবার রান্না হয়", "Occasional": "মাঝে মাঝে রান্না হয়",
+        "Festive/seasonal": "উৎসব বা মৌসুমি রান্না", "Rare/special": "বিশেষ উপলক্ষের রান্না",
+    },
+}
+_TOP_FOODS_IN_REPORT = 8
+_TOP_RECIPES_IN_REPORT = 6
+
 
 def template_report(patient_name: str, result: dict, lang: str = "en",
                     comment: str = "") -> str:
@@ -150,16 +201,65 @@ def template_report(patient_name: str, result: dict, lang: str = "en",
         lines.append("")
 
     meal_plan = result.get("nutrition", {}).get("meal_plan", {})
-    lines.append(f"## {t['diet'].format(kcal=meal_plan.get('target_kcal', anthro.get('target_kcal', '')))}")
-    for meal, items in (meal_plan.get("meals") or {}).items():
-        item_text = ", ".join(
-            f"{item.get(name_key) or item['name_en']} ({item['qty_g']} g)" for item in items
-        )
-        lines.append(f"- {meal_names.get(meal, meal)}: {item_text}")
+    target = meal_plan.get("target_kcal", anthro.get("target_kcal", ""))
+
+    def meal_lines(meals: dict, indent: str) -> None:
+        for meal, items in meals.items():
+            item_text = ", ".join(
+                f"{item.get(name_key) or item['name_en']} ({item['qty_g']} g)" for item in items
+            )
+            lines.append(f"{indent}- {meal_names.get(meal, meal)}: {item_text}")
+
+    def salt_line(day: dict, indent: str) -> None:
+        # engine 0.6.0 onwards: the cooking salt that keeps the day under the
+        # sodium limit, which can be less than the recipes as written use
+        if day.get("salt_g") is None:
+            return
+        key = "salt_less" if day["salt_g"] < day.get("recipe_salt_g", 0) else "salt"
+        lines.append(f"{indent}- " + t[key].format(g=day["salt_g"], recipe=day.get("recipe_salt_g")))
+
     totals = meal_plan.get("totals") or {}
-    if totals.get("kcal"):
-        lines.append("- " + t["diet_total"].format(kcal=round(totals["kcal"])))
+    if meal_plan.get("days"):
+        # engine 0.4.0 onwards: a week, Saturday to Friday
+        weekdays = _WEEKDAY_NAMES.get(lang, _WEEKDAY_NAMES["en"])
+        lines.append(f"## {t['diet_week'].format(kcal=target)}")
+        for day in meal_plan["days"]:
+            lines.append(f"- {weekdays.get(day.get('weekday'), day.get('day'))}")
+            meal_lines(day.get("meals") or {}, "  ")
+            salt_line(day, "  ")
+        if totals.get("kcal"):
+            lines.append("- " + t["diet_week_total"].format(kcal=round(totals["kcal"])))
+    else:
+        lines.append(f"## {t['diet'].format(kcal=target)}")
+        meal_lines(meal_plan.get("meals") or {}, "")
+        salt_line(meal_plan, "")
+        if totals.get("kcal"):
+            lines.append("- " + t["diet_total"].format(kcal=round(totals["kcal"])))
+    if meal_plan.get("salt_g") is not None:
+        lines.append("- " + t["salt_note"])
     lines.append("")
+
+    nutrition = result.get("nutrition", {})
+    top_foods = (nutrition.get("top_foods") or [])[:_TOP_FOODS_IN_REPORT]
+    if top_foods:
+        lines.append(f"## {t['foods']}")
+        lines.append("- " + ", ".join(f.get(name_key) or f["name_en"] for f in top_foods))
+        lines.append("")
+
+    top_recipes = (nutrition.get("top_recipes") or [])[:_TOP_RECIPES_IN_REPORT]
+    if top_recipes:
+        lines.append(f"## {t['recipes']}")
+        for recipe in top_recipes:
+            category = recipe.get("category") or ""
+            tier = recipe.get("frequency_tier") or ""
+            lines.append("- " + t["recipe_line"].format(
+                name=recipe.get(name_key) or recipe["name_en"],
+                category=_term(_RECIPE_CATEGORIES, lang, category) if category else "",
+                grams=round(recipe.get("serving_size_g") or 0),
+                kcal=round(recipe.get("per_serving_kcal") or 0),
+                tier=_term(_FREQUENCY_TIERS, lang, tier) if tier else "",
+            ))
+        lines.append("")
 
     plan = result.get("exercise_plan", {})
     lines.append(f"## {t['exercise']}")

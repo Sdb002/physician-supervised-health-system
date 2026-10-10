@@ -1,0 +1,146 @@
+﻿food_id,name_en,column,source_value,new_value,rule,evidence
+F076,"Amaranth, stem, raw",Calcium (mg),181,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Iron (mg),9.33,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Potassium (mg),433,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Sodium (mg),2.7,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Zinc (mg),2.66,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Vit A (ug RAE),0,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F076,"Amaranth, stem, raw",Vit C (mg),0,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A001), a different food"
+F128,"Cowpea, boiled* (without salt)",Vit A (ug RAE),7.08,,wrong-food gap fill reverted,"value was filled from dried cowpea seed (IFCT 2017 B005), a different food"
+F131,"Drumstick, pods, raw",Vit A (ug RAE),17542,,wrong-food gap fill reverted,"value was filled from drumstick leaves (IFCT 2017 C019), a different food"
+F178,"Amaranth, leaves, green, raw",Vit A (ug RAE),0,,wrong-food gap fill reverted,"value was filled from amaranth seed (IFCT 2017 A002), a different food"
+F266,"Lotus seeds, dried",Vit A (ug RAE),0,,wrong-food gap fill reverted,"value was filled from lotus root (IFCT 2017 F005), a different food"
+F001,Bajra,Vit A (ug RAE),28.23,2.35,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F006,Jowar,Vit A (ug RAE),8.29,0.692,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F015,Quinoa,Vit A (ug RAE),5.12,0.425,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F016,Ragi,Vit A (ug RAE),1.53,0.125,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F039,Samai,Vit A (ug RAE),1.91,0.158,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F043,Varagu,Vit A (ug RAE),1.41,0.117,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F065,Moth bean,Vit A (ug RAE),3.57,0.3,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F068,"Rajmah, black",Vit A (ug RAE),1.95,0.167,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F069,"Rajmah, brown",Vit A (ug RAE),2.16,0.183,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F070,"Rajmah, red",Vit A (ug RAE),1.6,0.133,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F073,"Soya bean, brown",Vit A (ug RAE),3.5,0.292,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F074,"Soya bean, white",Vit A (ug RAE),2.82,0.233,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F078,"Bean scarlet, tender",Vit A (ug RAE),35.52,2.958,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F082,"Bitter gourd, jagged, smooth ridges, elongate",Vit A (ug RAE),130,10.833,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F083,"Bitter gourd, jagged, teeth ridges, elongate",Vit A (ug RAE),122,10.167,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F084,"Bitter gourd, jagged, teeth ridges, short",Vit A (ug RAE),126,10.5,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F085,"Bottle gourd, elongate, dark green",Vit A (ug RAE),44.82,3.733,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F086,"Bottle gourd, elongate, pale green",Vit A (ug RAE),44.05,3.667,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F087,"Bottle gourd, round, pale green",Vit A (ug RAE),47.13,3.925,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F115,"Capsicum, green",Vit A (ug RAE),328,27.333,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F116,"Capsicum, red",Vit A (ug RAE),246,20.5,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F117,"Capsicum, yellow",Vit A (ug RAE),166,13.833,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F122,Celery stalk,Vit A (ug RAE),465,38.75,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F125,Cho-cho-marrow,Vit A (ug RAE),1.57,0.133,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F126,Cluster beans,Vit A (ug RAE),241,20.083,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F127,"Corn, Baby",Vit A (ug RAE),1.52,0.125,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F132,"French beans, country",Vit A (ug RAE),416.57,34.717,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F133,"French beans, hybrid",Vit A (ug RAE),391.18,32.6,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F148,"Kovai, big",Vit A (ug RAE),134,11.167,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F149,"Kovai, small",Vit A (ug RAE),147,12.25,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F157,Parwar,Vit A (ug RAE),13.1,1.092,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F166,"Tinda, tender",Vit A (ug RAE),7.96,0.667,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F171,"Zucchini, green",Vit A (ug RAE),85.79,7.15,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F172,"Zucchini, yellow",Vit A (ug RAE),69.9,5.825,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F175,"Amaranth spinosus, leaves, green mix",Vit A (ug RAE),1594,132.833,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F176,"Amaranth spinosus, leaves, red and green mix",Vit A (ug RAE),1487,123.917,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F182,Basella leaves,Vit A (ug RAE),2473,206.083,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F183,Bathua leaves,Vit A (ug RAE),1075,89.583,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F188,Brussels sprouts,Vit A (ug RAE),360,30,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F199,Garden cress,Vit A (ug RAE),88.72,7.392,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F200,"Gogu leaves, green",Vit A (ug RAE),5285,440.417,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F201,"Gogu leaves, red",Vit A (ug RAE),5143,428.583,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F205,"Knol-Khol, leaves",Vit A (ug RAE),12.04,1,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F206,Lettuce,Vit A (ug RAE),1285,107.083,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F207,Pak Choi leaves,Vit A (ug RAE),2450,204.167,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F208,Parsley,Vit A (ug RAE),2710,225.833,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F209,Ponnaganni,Vit A (ug RAE),5288,440.667,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F212,Rumex leaves,Vit A (ug RAE),2754,229.5,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F221,"Tamarind leaves, tender",Vit A (ug RAE),168,14,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F258,"Gingelly seeds, black",Vit A (ug RAE),13.09,1.092,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F259,"Gingelly seeds, brown",Vit A (ug RAE),5.41,0.45,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F260,"Gingelly seeds, white",Vit A (ug RAE),12.94,1.075,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F261,Ground nut,Vit A (ug RAE),22.75,1.9,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F265,Linseeds,Vit A (ug RAE),1.05,0.083,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F269,"Niger seeds, black",Vit A (ug RAE),2.15,0.183,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F270,"Niger seeds, gray",Vit A (ug RAE),11.22,0.933,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F273,Safflower seeds,Vit A (ug RAE),2.07,0.175,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F276,Walnut,Vit A (ug RAE),14.47,1.208,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F280,Asafoetida,Vit A (ug RAE),6.42,0.533,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F288,"Chillies, green - all varieties",Vit A (ug RAE),125,10.417,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F296,"Chillies, red",Vit A (ug RAE),3141,261.75,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F302,Curry leaves,Vit A (ug RAE),7807,650.583,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F314,Mango ginger,Vit A (ug RAE),76.62,6.383,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F316,Mint leaves,Vit A (ug RAE),4602,383.5,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F320,Omum,Vit A (ug RAE),797.37,66.45,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F326,Pippali,Vit A (ug RAE),933,77.75,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F339,"Apple, small, Kashmir",Vit A (ug RAE),2.11,0.175,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F342,"Apricot, dried",Vit A (ug RAE),1806,150.5,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F343,"Apricot, processed",Vit A (ug RAE),1372,114.333,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F345,Avocado fruit,Vit A (ug RAE),12,1,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F346,Bael fruit,Vit A (ug RAE),2.5,0.208,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F348,"Banana, ripe, montham",Vit A (ug RAE),56.63,4.717,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F349,"Banana, ripe, poovam",Vit A (ug RAE),59.04,4.917,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F350,"Banana, ripe, red",Vit A (ug RAE),53.64,4.467,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F351,"Banana, ripe, robusta",Vit A (ug RAE),60.35,5.033,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F352,Black berry,Vit A (ug RAE),52.32,4.358,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F356,"Cherries, red",Vit A (ug RAE),40.78,3.4,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F357,"Currants, black",Vit A (ug RAE),62.48,5.208,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F364,Goosberry,Vit A (ug RAE),1.58,0.133,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F371,"Jambu fruit, ripe",Vit A (ug RAE),1.55,0.133,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F374,Karonda fruit,Vit A (ug RAE),15.64,1.3,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F377,Litchi,Vit A (ug RAE),1.47,0.125,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F381,Mangosteen,Vit A (ug RAE),1.8,0.15,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F382,Manila tamarind,Vit A (ug RAE),2.2,0.183,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F395,Phalsa,Vit A (ug RAE),7.39,0.617,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F400,Pummelo,Vit A (ug RAE),11.98,1,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F401,Rambutan,Vit A (ug RAE),2.9,0.242,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F402,Sapota,Vit A (ug RAE),80.7,6.725,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F403,Soursop,Vit A (ug RAE),2.2,0.183,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F404,Star fruit,Vit A (ug RAE),1.4,0.117,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F405,Strawberry,Vit A (ug RAE),2.19,0.183,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F409,Zizyphus,Vit A (ug RAE),1.5,0.125,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F699,"Sugarcane, juice",Vit A (ug RAE),7.87,0.658,IFCT vitamin A: beta-carotene eq / 12,stored 'RAE' equals beta-carotene eq (no /12 applied)
+F143,"Gourd, snake, raw",Vit A (ug RAE),62.84,5.237,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT D072 beta-carotene
+F155,"Papaya, unripe, boiled* (without salt)",Vit A (ug RAE),240.8,20.067,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT D059 beta-carotene
+F167,"Tomato, green, raw",Vit A (ug RAE),38.13,3.178,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT D074 beta-carotene
+F173,"Agathi, raw",Vit A (ug RAE),12582,1048.5,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT C001 beta-carotene
+F197,"Fenugreek, leaves, raw",Vit A (ug RAE),9245,770.417,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT C020 beta-carotene
+F210,"Pumpkin leaves, raw",Vit A (ug RAE),1455,121.25,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT C030 beta-carotene
+F211,"Radish leaves, raw",Vit A (ug RAE),2591,215.917,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT C031 beta-carotene
+F235,"Sweet potato, Komola Sundori, orange flesh, boiled* (without salt)",Vit A (ug RAE),5376,691.667,gap-filled vitamin A: own beta-carotene eq / 12,vitamin A was filled from IFCT F013 beta-carotene
+F285,Cardamom,Vit A (ug RAE),21.91,1.826,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT G020 beta-carotene
+F306,Fenugreek seeds,Vit A (ug RAE),142,11.833,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT G026 beta-carotene
+F313,"Mace, ground",Vit A (ug RAE),2322,193.5,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT G027 beta-carotene
+F367,"Hog plum, raw",Vit A (ug RAE),1.32,0.11,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT E054 beta-carotene
+F396,"Pineapple, Joldugee, ripe, raw",Vit A (ug RAE),31.21,2.601,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT E053 beta-carotene
+F408,"Wood apple, ripe, raw",Vit A (ug RAE),3.81,0.318,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT E067 beta-carotene
+F692,"Betel leaves, raw",Vit A (ug RAE),4377,364.75,gap-filled vitamin A: filled value / 12,vitamin A was filled from IFCT C010 beta-carotene
+F216,"Spinach, raw",Calcium (mg),,99,cited replacement,"USDA FDC 168462 Spinach, raw"
+F216,"Spinach, raw",Iron (mg),,2.71,cited replacement,"USDA FDC 168462 Spinach, raw"
+F216,"Spinach, raw",Zinc (mg),,0.53,cited replacement,"USDA FDC 168462 Spinach, raw"
+F216,"Spinach, raw",Sodium (mg),,79,cited replacement,"USDA FDC 168462 Spinach, raw"
+F216,"Spinach, raw",Potassium (mg),,558,cited replacement,"USDA FDC 168462 Spinach, raw"
+F595,"Chicken breast, without skin, raw",Calcium (mg),,5,cited replacement,"USDA FDC 171077 Chicken breast, skinless, raw"
+F595,"Chicken breast, without skin, raw",Iron (mg),,0.37,cited replacement,"USDA FDC 171077 Chicken breast, skinless, raw"
+F595,"Chicken breast, without skin, raw",Zinc (mg),,0.68,cited replacement,"USDA FDC 171077 Chicken breast, skinless, raw"
+F595,"Chicken breast, without skin, raw",Sodium (mg),,45,cited replacement,"USDA FDC 171077 Chicken breast, skinless, raw"
+F595,"Chicken breast, without skin, raw",Potassium (mg),,334,cited replacement,"USDA FDC 171077 Chicken breast, skinless, raw"
+F283,"Bay leaf, dried",Calcium (mg),1,834,cited replacement,"previous FCT-BD export, FCTB 07_0001 (= USDA SR 02004)"
+F283,"Bay leaf, dried",Iron (mg),1,43,cited replacement,"previous FCT-BD export, FCTB 07_0001 (= USDA SR 02004)"
+F283,"Bay leaf, dried",Zinc (mg),1,3.7,cited replacement,"previous FCT-BD export, FCTB 07_0001 (= USDA SR 02004)"
+F283,"Bay leaf, dried",Sodium (mg),1,23,cited replacement,"previous FCT-BD export, FCTB 07_0001 (= USDA SR 02004)"
+F283,"Bay leaf, dried",Potassium (mg),1,529,cited replacement,"previous FCT-BD export, FCTB 07_0001 (= USDA SR 02004)"
+F266,"Lotus seeds, dried",Sodium (mg),13705,5,cited replacement,"USDA FDC 170149 Lotus seeds, dried"
+F178,"Amaranth, leaves, green, raw",Vit A (ug RAE),,146,cited replacement,"USDA FDC 168385 Amaranth leaves, raw"
+F318,Nigella seed / black cumin,Energy (kcal),,569,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F662,Coconut oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F663,Corn oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F668,Gingelly oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F669,Groundnut oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F675,Safflower oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F676,Safflower oil (blended),Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F678,Soyabean oil,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)
+F680,Vanaspati,Energy (kcal),,900,energy from macros,4P + 9F + 4C + 2 fibre (FCTB 2013 formula)

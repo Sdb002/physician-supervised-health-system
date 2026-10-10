@@ -4,22 +4,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api, Patient, QueueItem } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
+import { byTriage } from "@/lib/triage";
+import { IconAlert, IconCheck, IconClipboard, IconPlus, IconSparkles, IconUsers } from "@/components/icons";
+import { QueueList } from "@/components/queue-list";
 import {
-  IconChevronRight,
-  IconClipboard,
-  IconPlus,
-  IconSparkles,
-  IconUsers,
-} from "@/components/icons";
-import {
-  Badge,
-  Card,
   EmptyState,
   ErrorNote,
+  MetricRow,
   PageHeader,
+  SectionHeading,
   Skeleton,
-  StatCard,
   buttonPrimary,
+  linkButton,
 } from "@/components/ui";
 
 export default function DoctorOverview() {
@@ -33,7 +29,7 @@ export default function DoctorOverview() {
     Promise.all([api.listPatients(), api.reviewQueue(), api.health()])
       .then(([p, q, h]) => {
         setPatients(p);
-        setQueue(q);
+        setQueue([...q].sort(byTriage));
         setLlmConfigured(h.llm_configured);
       })
       .catch((e) => setError(e.message));
@@ -41,11 +37,14 @@ export default function DoctorOverview() {
 
   if (error) return <ErrorNote message={error} />;
 
+  const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+  const urgent = queue?.filter((q) => ["high", "critical"].includes(q.assessment.result.overall_risk)).length ?? 0;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         title={`Welcome back${session ? `, ${session.user.name}` : ""}`}
-        subtitle="Today's workload at a glance."
+        subtitle={today}
         action={
           <Link href="/doctor/patients/new" className={buttonPrimary}>
             <IconPlus className="h-4 w-4" /> New patient
@@ -53,87 +52,67 @@ export default function DoctorOverview() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard
-          label="Awaiting your review"
-          value={queue === null ? <Skeleton className="h-8 w-10" /> : queue.length}
-          icon={<IconClipboard className="h-5 w-5" />}
-          tone="amber"
-          hint={
-            <Link href="/doctor/review" className="font-medium text-teal-700 hover:underline">
-              Open review queue &rarr;
-            </Link>
-          }
-        />
-        <StatCard
-          label="Registered patients"
-          value={patients === null ? <Skeleton className="h-8 w-10" /> : patients.length}
-          icon={<IconUsers className="h-5 w-5" />}
-          tone="teal"
-          hint={
-            <Link href="/doctor/patients" className="font-medium text-teal-700 hover:underline">
-              View patients &rarr;
-            </Link>
-          }
-        />
-        <StatCard
-          label="Lab-report OCR (AI)"
-          value={
-            llmConfigured === null ? (
-              <Skeleton className="h-8 w-24" />
-            ) : llmConfigured ? (
-              <span className="text-xl font-semibold text-emerald-600">Available</span>
-            ) : (
-              <span className="text-xl font-semibold text-ink-muted">Not configured</span>
-            )
-          }
-          icon={<IconSparkles className="h-5 w-5" />}
-          tone="sky"
-          hint={
-            llmConfigured
-              ? "Images can prefill the intake form — you confirm every value."
-              : "Set ANTHROPIC_API_KEY in .env to enable. Manual entry always works."
-          }
-        />
-      </div>
+      <MetricRow
+        items={[
+          {
+            label: "Awaiting your review",
+            value: queue === null ? <Skeleton className="h-8 w-10" /> : queue.length,
+            hint: queue !== null && queue.length === 0 ? "Queue is clear" : undefined,
+            icon: <IconClipboard className="h-5 w-5" />,
+          },
+          {
+            label: "High or critical risk",
+            value: queue === null ? <Skeleton className="h-8 w-10" /> : urgent,
+            hint: queue === null ? undefined : urgent > 0 ? "Open these first" : "None waiting",
+            icon: <IconAlert className="h-5 w-5" />,
+          },
+          {
+            label: "Registered patients",
+            value: patients === null ? <Skeleton className="h-8 w-10" /> : patients.length,
+            hint: (
+              <Link href="/doctor/patients" className="font-semibold text-clinical hover:underline">
+                View patients
+              </Link>
+            ),
+            icon: <IconUsers className="h-5 w-5" />,
+          },
+        ]}
+      />
 
-      <Card title="Pending assessments">
+      <section>
+        <SectionHeading
+          description="Highest risk first. Nothing reaches a patient until you approve it."
+          action={
+            queue && queue.length > 0 ? (
+              <Link href="/doctor/review" className={linkButton}>
+                Open review queue
+              </Link>
+            ) : undefined
+          }
+        >
+          Waiting for your approval
+        </SectionHeading>
         {queue === null ? (
-          <Skeleton className="h-24" />
+          <Skeleton className="h-40" />
         ) : queue.length === 0 ? (
           <EmptyState
-            title="Nothing waiting for review"
-            hint="New visits appear here as soon as intake is submitted."
-            icon={<IconClipboard className="h-5 w-5" />}
+            title="You're all caught up"
+            hint="New assessments appear here as soon as an intake is submitted."
+            icon={<IconCheck className="h-5 w-5" />}
           />
         ) : (
-          <ul className="divide-y divide-line">
-            {queue.map((item) => (
-              <li key={item.assessment.id}>
-                <Link
-                  href={`/doctor/review/${item.assessment.id}`}
-                  className="group flex items-center justify-between gap-3 py-3"
-                >
-                  <div className="min-w-0">
-                    <p className="font-medium text-ink group-hover:text-teal-700">
-                      {item.patient.name}
-                    </p>
-                    <p className="text-xs text-ink-muted">
-                      Visit #{item.visit.id} · {new Date(item.visit.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-3">
-                    <Badge kind={item.assessment.result.overall_risk}>
-                      {item.assessment.result.overall_risk} risk
-                    </Badge>
-                    <IconChevronRight className="h-4 w-4 text-ink-muted group-hover:text-teal-600" />
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <QueueList items={queue.slice(0, 6)} />
         )}
-      </Card>
+      </section>
+
+      {llmConfigured !== null && (
+        <p className="flex items-start gap-2 border-t border-line pt-4 text-sm text-ink-muted">
+          <IconSparkles className="mt-0.5 h-4 w-4 shrink-0" />
+          {llmConfigured
+            ? "Lab-report reading is on: a photo of a lab slip can prefill the intake form. You confirm every value."
+            : "Lab-report reading is off (no ANTHROPIC_API_KEY). Typing values into the intake form works the same."}
+        </p>
+      )}
     </div>
   );
 }
