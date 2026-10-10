@@ -51,6 +51,14 @@ MEAL_COURSES: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
     ),
 }
 
+# A patient who eats no fish or meat (a vegetarian, or anyone the gate leaves
+# no fish or meat dish for) gets a second pulse dish in the main-dish course:
+# dal is the protein of a vegetarian Bengali meal. Without this an egg dish
+# would be the only main at lunch and dinner every day, and a vegan would
+# have no main dish at all.
+_MAIN_CATEGORIES = ("Fish", "Meat", "Egg")
+_MEATLESS_MAIN_CATEGORIES = ("Egg", "Dal")
+
 # The plan covers a week, Saturday to Friday: the Bangladeshi week starts on
 # Saturday, so that is the day patients count from.
 WEEKDAYS = ("saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday")
@@ -158,6 +166,15 @@ def key_ingredients(recipe: Recipe, foods_by_id: dict[str, Food]) -> frozenset[s
     if not total:
         return frozenset()
     return frozenset(f for f, w in weights.items() if w / total >= KEY_INGREDIENT_SHARE)
+
+
+def _course_categories(course: str, categories: tuple[str, ...],
+                       recipes: list[Recipe]) -> tuple[str, ...]:
+    """The dish categories a course draws on for this patient's gated dishes."""
+    if course != "main":
+        return categories
+    has_fish_or_meat = any(r.category in ("Fish", "Meat") and plannable(r) for r in recipes)
+    return _MAIN_CATEGORIES if has_fish_or_meat else _MEATLESS_MAIN_CATEGORIES
 
 
 def _active_emphasis(emphasize: list[str], totals: dict, targets: dict) -> list[str]:
@@ -370,6 +387,7 @@ def _build_day(recipes: list[Recipe], fruits: list[Food], target_kcal: float, ta
 
         chosen: list[tuple[str, Recipe]] = []
         for course, categories in MEAL_COURSES[meal]:
+            categories = _course_categories(course, categories, recipes)
             dish = _pick_dish(recipes, meal, course, categories,
                               _active_emphasis(emphasize, totals, targets), targets,
                               used_ids, used_kinds, used_keys, foods_by_id, week)

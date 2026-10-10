@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.core.config import DATA_DIR
+from src.diet.restriction_tags import food_restriction_tags
 
 FOOD_CSV = DATA_DIR / "food" / "bd_food.csv"
 
@@ -34,6 +35,7 @@ class Food:
     name_bn: str
     food_group: str
     nutrients: dict  # per 100 g edible portion
+    # the table's tags, then the restriction tags read off group and name
     tags: tuple = field(default_factory=tuple)
     source: str = ""
 
@@ -52,13 +54,16 @@ def load_foods(path: Path | None = None) -> list[Food]:
             if not (row.get("food_id") or "").strip():
                 continue
             nutrients = {col: float(row[col] or 0) for col in NUTRIENT_COLUMNS}
+            name_en = row["name_en"].strip()
+            food_group = (row.get("food_group") or "other").strip()
             foods.append(Food(
                 food_id=row["food_id"].strip(),
-                name_en=row["name_en"].strip(),
+                name_en=name_en,
                 name_bn=(row.get("name_bn") or "").strip(),
-                food_group=(row.get("food_group") or "other").strip(),
+                food_group=food_group,
                 nutrients=nutrients,
-                tags=_split_tags(row.get("tags") or ""),
+                tags=(_split_tags(row.get("tags") or "")
+                      + food_restriction_tags(name_en, food_group)),
                 source=(row.get("source") or "").strip(),
             ))
     return foods

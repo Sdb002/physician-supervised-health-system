@@ -5,9 +5,9 @@ reproducible from the inputs and the reference files.
 
 import copy
 
-from src.clinical.bmi import age_from_birth_year, daily_energy_target
+from src.clinical.bmi import PREGNANCY_KCAL, age_from_birth_year, daily_energy_target
 from src.clinical.contraindication import excluded_tags, filter_items
-from src.clinical.deficiency import nutrient_targets
+from src.clinical.deficiency import ADULT_AGE, nutrient_targets
 from src.clinical.risk_scoring import (
     bp_category,
     derive_conditions,
@@ -55,13 +55,38 @@ from src.lifestyle.fitt_vp import build_fitt_plan
 #        records the inputs and steps it was worked out from
 # 0.6.0: each day's cooking salt is set so the day stays under the sodium
 #        limit; days and dish lines report that salt
-ENGINE_VERSION = "0.6.0"
+# 0.7.0: no weight-loss deficit in pregnancy, trimester energy and pregnancy
+#        food exclusions; reference intakes by age band; recorded conditions
+#        drive the nutrient emphasis; dietary restrictions; the recorded
+#        activity level; cautions for the reviewing physician
+ENGINE_VERSION = "0.7.0"
 
 # "Foods that suit your plan" spans the food groups rather than listing ten
 # leafy greens: at most this many from any one group.
 TOP_FOODS_PER_GROUP = 3
 # ...and suggested dishes span dal, fish, greens and the rest the same way.
 TOP_RECIPES_PER_CATEGORY = 3
+
+
+def _cautions(patient: Patient, age: int, nutrition_cautions: list[str]) -> list[str]:
+    """What the reviewing physician should check before approving: where the
+    engine worked from an assumption, or emphasized something that is not
+    safe for every patient. Shown on the review screen, never to the patient."""
+    cautions = []
+    if age < ADULT_AGE:
+        cautions.append(
+            f"This patient is {age}. The energy equation, the body mass index "
+            "categories (and any weight adjustment made from them) and the nutrient "
+            f"reference values are for adults aged {ADULT_AGE} and over; there are none "
+            "here for children or adolescents, so check every target before approving."
+        )
+    if patient.pregnant and patient.pregnancy_trimester is None:
+        cautions.append(
+            "No trimester is recorded, so no pregnancy energy was added (the second "
+            f"trimester adds {PREGNANCY_KCAL[2]} kcal a day, the third {PREGNANCY_KCAL[3]}). "
+            "Record the trimester on the patient to add it."
+        )
+    return cautions + nutrition_cautions
 
 
 def build_assessment(patient: Patient, visit: Visit) -> dict:
@@ -71,6 +96,9 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
         height_cm=patient.height_cm,
         age=age,
         sex=patient.sex,
+        activity=patient.activity_level,
+        pregnant=patient.pregnant,
+        trimester=patient.pregnancy_trimester,
     )
 
     flags = score_biomarkers(visit.biomarkers or {}, patient.sex, patient.pregnant)
@@ -82,8 +110,10 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
     if patient.pregnant and "pregnancy" not in conditions:
         conditions.append("pregnancy")
 
-    exclusions = excluded_tags(conditions)
-    nutrition = nutrient_targets(patient.sex, patient.pregnant, flags)
+    exclusions = excluded_tags(conditions, patient.dietary_restrictions or [])
+    nutrition = nutrient_targets(patient.sex, patient.pregnant, flags,
+                                 conditions=conditions, age=age)
+    cautions = _cautions(patient, age, nutrition.pop("cautions"))
 
     foods = load_foods()
     allowed_foods = filter_items(foods, exclusions.food_tags)
@@ -115,6 +145,8 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
         "bp_category": bp_category(flags),
         "overall_risk": overall_risk(flags),
         "conditions": conditions,
+        "dietary_restrictions": list(exclusions.applied_restrictions),
+        "cautions": cautions,
         "exclusions": {
             "food_tags": sorted(exclusions.food_tags),
             "exercise_tags": sorted(exclusions.exercise_tags),

@@ -40,3 +40,31 @@ def test_the_floor_is_recorded_when_it_sets_the_target():
     assert energy["bmi_category"] == "obese"
     assert energy["target_kcal"] == energy["basis"]["floor_kcal"] == 1200
     assert energy["basis"]["floor_applied"] is True
+
+
+def test_pregnancy_gets_no_weight_loss_deficit():
+    # reported: a pregnant patient at body mass index 24.8 (overweight on the
+    # Asian cutoffs) was given a 400 kcal deficit, a 1396 kcal target
+    not_pregnant = daily_energy_target(62, 158, 28, "female")
+    pregnant = daily_energy_target(62, 158, 28, "female", pregnant=True)
+    assert not_pregnant["basis"]["adjustment_kcal"] == -400
+    assert pregnant["basis"]["adjustment_kcal"] == 0
+    assert pregnant["target_kcal"] == pregnant["tdee_kcal"]
+    # no trimester recorded: nothing added, and the basis says so
+    assert pregnant["basis"]["pregnancy"] == {"trimester": None, "extra_kcal": 0}
+    assert "pregnancy" not in not_pregnant["basis"]
+
+
+def test_pregnancy_adds_the_trimester_energy():
+    base = daily_energy_target(62, 158, 28, "female", pregnant=True, trimester=1)
+    second = daily_energy_target(62, 158, 28, "female", pregnant=True, trimester=2)
+    third = daily_energy_target(62, 158, 28, "female", pregnant=True, trimester=3)
+    assert base["target_kcal"] == base["tdee_kcal"]  # IOM 2005: none in the first
+    assert second["target_kcal"] - base["target_kcal"] == 340
+    assert third["target_kcal"] - base["target_kcal"] == 452
+    assert third["basis"]["pregnancy"] == {"trimester": 3, "extra_kcal": 452}
+
+
+def test_a_trimester_means_nothing_without_pregnancy():
+    plain = daily_energy_target(62, 158, 28, "female")
+    assert daily_energy_target(62, 158, 28, "female", trimester=3) == plain

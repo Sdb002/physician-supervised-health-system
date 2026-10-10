@@ -1,5 +1,9 @@
-# Lab finding → nutrients to emphasize in the diet plan.
+# Finding → nutrients to emphasize in the diet plan. A finding comes from a
+# lab value's risk band or from a condition recorded on the patient.
 # Consumed by src/clinical/deficiency.py. Every entry requires a citation.
+#
+# `rationale` is written for the reviewing physician. `patient_en` and
+# `patient_bn` say the same thing to the patient, in the report.
 
 findings:
   anemia:
@@ -9,6 +13,12 @@ findings:
       Iron deficiency is the dominant cause of anemia in Bangladesh; folate
       deficiency is a co-contributor. Vitamin C is included because it enhances
       non-heme iron absorption, which matters in largely plant-based diets.
+    patient_en: >
+      For anaemia, this plan favours foods rich in iron and folate, together
+      with vitamin C, which helps your body take up the iron in plant foods.
+    patient_bn: >
+      রক্তস্বল্পতার জন্য এই পরিকল্পনায় আয়রন ও ফোলেটসমৃদ্ধ খাবারকে গুরুত্ব দেওয়া
+      হয়েছে, সাথে ভিটামিন সি, যা উদ্ভিজ্জ খাবারের আয়রন শরীরে শোষণে সাহায্য করে।
     citation: >
       WHO (2011) WHO/NMH/NHD/MNM/11.1; Hallberg L, Brune M, Rossander L.
       The role of vitamin C in iron absorption. Int J Vitam Nutr Res Suppl 1989.
@@ -21,6 +31,15 @@ findings:
       pressure; dishes high in sodium are excluded separately by the
       contraindication gate, and each day's cooking salt is set so the day
       stays under 2000 mg of sodium.
+    patient_en: >
+      For high blood pressure, this plan leaves out dishes high in salt, keeps
+      each day's cooking salt low enough to stay under 2000 mg of sodium, and
+      favours vegetables, pulses and fruit, which help lower blood pressure.
+    patient_bn: >
+      উচ্চ রক্তচাপের জন্য এই পরিকল্পনায় বেশি লবণযুক্ত রান্না বাদ দেওয়া হয়েছে,
+      প্রতিদিনের রান্নার লবণ এমনভাবে ঠিক করা হয়েছে যাতে সোডিয়াম ২০০০ মিলিগ্রামের
+      নিচে থাকে, এবং শাকসবজি, ডাল ও ফলকে গুরুত্ব দেওয়া হয়েছে, যা রক্তচাপ কমাতে
+      সাহায্য করে।
     citation: >
       Appel LJ et al. A clinical trial of the effects of dietary patterns on
       blood pressure (DASH). N Engl J Med 1997;336:1117-24; WHO potassium
@@ -33,6 +52,46 @@ findings:
     rationale: >
       Higher dietary fiber improves glycemic control; added-sugar exclusion is
       enforced separately by the contraindication gate.
+    patient_en: >
+      For raised blood sugar, this plan leaves out sweets and sugary dishes and
+      favours fibre-rich foods, which help keep blood sugar steady.
+    patient_bn: >
+      রক্তে শর্করা বেশি থাকায় এই পরিকল্পনায় মিষ্টি ও চিনিযুক্ত খাবার বাদ দেওয়া
+      হয়েছে এবং আঁশসমৃদ্ধ খাবারকে গুরুত্ব দেওয়া হয়েছে, যা রক্তের শর্করা স্থিতিশীল
+      রাখতে সাহায্য করে।
     citation: >
       American Diabetes Association. Standards of Care in Diabetes—2024
       (nutrition therapy).
+
+# Recorded condition → nutrients that are never emphasized for that patient,
+# whatever the findings above ask for.
+suppress:
+  chronic_kidney_disease:
+    nutrients: [potassium_mg]
+    rationale: >
+      Potassium is not emphasized: failing kidneys may not clear it, and
+      dietary potassium in chronic kidney disease is adjusted to the
+      patient's serum potassium, not raised by default.
+    patient_en: >
+      Because of kidney disease, this plan does not add extra potassium-rich
+      foods.
+    patient_bn: >
+      কিডনি রোগের কারণে এই পরিকল্পনায় বাড়তি পটাশিয়ামসমৃদ্ধ খাবারে জোর দেওয়া
+      হয়নি।
+    citation: >
+      KDOQI Clinical Practice Guideline for Nutrition in CKD: 2020 Update.
+      Am J Kidney Dis 2020;76(3 Suppl 1):S1-S107 (dietary potassium).
+
+# Emphasized nutrient → what the reviewing physician must check before
+# approving. Shown on the review screen, never to the patient.
+cautions:
+  potassium_mg:
+    text: >
+      Potassium-rich foods are emphasized. Check kidney function and any
+      potassium-sparing medicine (ACE inhibitor, ARB, spironolactone) before
+      approving. Recording chronic kidney disease on the patient stops the
+      emphasis.
+    citation: >
+      WHO Guideline: Potassium intake for adults and children (2012) — the
+      recommendation excludes people with impaired urinary potassium
+      excretion from a medical condition or drug therapy.

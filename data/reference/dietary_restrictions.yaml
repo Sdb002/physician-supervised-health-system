@@ -1,0 +1,65 @@
+# Dietary restriction → tags to exclude. Consumed by
+# src/clinical/contraindication.py and applied through the same hard gate as
+# the clinical contraindications: a food or dish carrying an excluded tag is
+# removed before anything is ranked or planned, and the physician's plan
+# editor cannot add it back.
+#
+# These are what the patient does not eat, for faith, choice or allergy; they
+# are recorded on the patient, not derived from lab values. The tags come
+# from src/diet/restriction_tags.py, which reads them off each food's group
+# and name; a dish carries the tags of every ingredient, in any amount.
+#
+# An allergy entry removes the foods the system can recognise. It is not an
+# allergen guarantee: the food table does not record traces or shared
+# equipment, and the recipes list household ingredients, not brands.
+
+restrictions:
+  vegetarian:
+    display_en: Vegetarian (no meat or fish; eggs and dairy eaten)
+    display_bn: নিরামিষ (মাছ-মাংস নয়; ডিম ও দুধ চলে)
+    exclude_food_tags: [contains_meat, contains_fish, contains_shellfish]
+
+  vegan:
+    display_en: Vegan (no animal foods)
+    display_bn: সম্পূর্ণ উদ্ভিজ্জ (কোনো প্রাণিজ খাবার নয়)
+    exclude_food_tags: [contains_meat, contains_fish, contains_shellfish, contains_egg, contains_dairy]
+
+  no_beef:
+    display_en: No beef
+    display_bn: গরুর মাংস নয়
+    exclude_food_tags: [contains_beef]
+
+  no_pork:
+    display_en: No pork
+    display_bn: শূকরের মাংস নয়
+    exclude_food_tags: [contains_pork]
+
+  no_egg:
+    display_en: No eggs
+    display_bn: ডিম নয়
+    exclude_food_tags: [contains_egg]
+
+  no_dairy:
+    display_en: No milk or dairy
+    display_bn: দুধ ও দুগ্ধজাত খাবার নয়
+    exclude_food_tags: [contains_dairy]
+
+  no_fish:
+    display_en: No fish
+    display_bn: মাছ নয়
+    exclude_food_tags: [contains_fish]
+
+  no_shellfish:
+    display_en: No prawn, crab or other shellfish
+    display_bn: চিংড়ি, কাঁকড়া বা খোলসযুক্ত জলজ খাবার নয়
+    exclude_food_tags: [contains_shellfish]
+
+  no_nuts:
+    display_en: No nuts or peanuts
+    display_bn: বাদাম নয়
+    exclude_food_tags: [contains_nuts]
+
+  no_gluten:
+    display_en: No wheat or gluten
+    display_bn: গম বা গ্লুটেন নয়
+    exclude_food_tags: [contains_gluten]

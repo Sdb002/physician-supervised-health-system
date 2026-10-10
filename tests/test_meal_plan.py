@@ -380,3 +380,19 @@ def test_a_dish_reports_the_salt_it_is_cooked_with():
     assert dal and all(item["salt_g"] == round(1.0 * item["servings"], 2) for item in dal)
     # a single food has no recipe, so no cooking salt to report
     assert all("salt_g" not in item for item in _all_items(plan) if "food_id" in item)
+
+
+def test_a_patient_who_eats_no_fish_or_meat_gets_egg_or_dal_as_the_main_dish():
+    meatless = [r for r in _big_kitchen() if r.category not in ("Fish", "Meat")]
+    meatless += [_dish(f"egg_curry{i}", "Egg", 200, frequency=6, protein_g=13) for i in range(8)]
+    plan = build_meal_plan(meatless, [_fruit("guava", 68)], 1800, targets={"protein_g": 50},
+                           emphasize=[])
+    mains = [item["category"] for day in plan["days"] for meal in ("lunch", "dinner")
+             for item in day["meals"][meal] if item["course"] == "main"]
+    # every lunch and dinner has a main dish, and dal takes its turn with egg
+    assert len(mains) == 14 and set(mains) == {"Egg", "Dal"}
+    # with fish and meat on offer, dal stays in its own course
+    usual = build_meal_plan(_big_kitchen(), [_fruit("guava", 68)], 1800,
+                            targets={"protein_g": 50}, emphasize=[])
+    assert all(item["category"] in ("Fish", "Meat", "Egg")
+               for item in _all_items(usual) if item.get("course") == "main")

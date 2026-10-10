@@ -210,3 +210,89 @@ def test_recompute_only_while_pending(client):
     response = client.post(f"/review/{assessment['id']}/recompute",
                            json={"meals": {}})
     assert response.status_code == 409
+
+
+def _plan_dishes(result):
+    return [item for day in result["nutrition"]["meal_plan"]["days"]
+            for items in day["meals"].values() for item in items if item.get("recipe_id")]
+
+
+def test_a_vegetarian_patient_is_planned_and_offered_no_meat_or_fish(client):
+    assessment = _pending(client, patient={**PATIENT, "dietary_restrictions": ["vegetarian"]})
+    result = assessment["result"]
+    assert result["dietary_restrictions"] == ["vegetarian"]
+    assert {"contains_meat", "contains_fish"} <= set(result["exclusions"]["food_tags"])
+    dishes = _plan_dishes(result)
+    assert dishes and not {d["category"] for d in dishes} & {"Fish", "Meat"}
+    # every lunch and dinner still has a main dish
+    for day in result["nutrition"]["meal_plan"]["days"]:
+        for meal in ("lunch", "dinner"):
+            assert any(item["course"] == "main" for item in day["meals"][meal])
+    assert not {f["food_group"] for f in result["nutrition"]["top_foods"]} & {"fish", "meat"}
+
+    # the plan editor neither offers nor accepts what the patient does not eat
+    offered = client.get(f"/review/{assessment['id']}/foods").json()
+    assert not {f["food_group"] for f in offered} & {"Fish", "Meat", "fish", "meat"}
+    response = client.post(
+        f"/review/{assessment['id']}/recompute",
+        json={"days": [{"lunch": [{"recipe_id": "BDR-079", "qty_g": 200}]}]},  # a fish curry
+    )
+    assert response.status_code == 422
+    assert "excluded for this patient" in response.json()["detail"]
+
+
+def test_changing_the_patient_rebuilds_the_plan_awaiting_review(client):
+    assessment = _pending(client)
+    patient_id = client.get(f"/review/{assessment['id']}").json()["patient"]["id"]
+    before = {d["category"] for d in _plan_dishes(assessment["result"])}
+    assert before & {"Fish", "Meat"}
+
+    response = client.patch(f"/patients/{patient_id}",
+                            json={"dietary_restrictions": ["vegetarian"],
+                                  "activity_level": "moderate"})
+    assert response.status_code == 200
+    assert response.json()["dietary_restrictions"] == ["vegetarian"]
+    assert response.json()["name"] == PATIENT["name"]  # fields not sent are kept
+
+    rebuilt = client.get(f"/review/{assessment['id']}").json()["assessment"]["result"]
+    assert not {d["category"] for d in _plan_dishes(rebuilt)} & {"Fish", "Meat"}
+    basis = rebuilt["anthropometrics"]["basis"]
+    assert basis["activity"] == "moderate" and basis["activity_assumed"] is False
+
+
+def test_an_approved_plan_is_not_rebuilt_when_the_patient_changes(client):
+    assessment = _pending(client)
+    patient_id = client.get(f"/review/{assessment['id']}").json()["patient"]["id"]
+    client.post(f"/review/{assessment['id']}/decision",
+                json={"decision": "approved", "physician_name": "Dr Edit"})
+    client.patch(f"/patients/{patient_id}", json={"dietary_restrictions": ["vegan"]})
+    report = client.get(f"/report/{assessment['visit_id']}?use_llm=false").json()
+    assert report["result"]["nutrition"]["meal_plan"] == assessment["result"]["nutrition"]["meal_plan"]
+
+
+def test_pregnancy_is_planned_without_a_deficit_and_with_the_trimester(client):
+    pregnant = {**PATIENT, "pregnant": True}
+    assessment = _pending(client, patient=pregnant, visit={"weight_kg": 62, "biomarkers": {}})
+    result = assessment["result"]
+    anthro = result["anthropometrics"]
+    assert anthro["basis"]["adjustment_kcal"] == 0 and anthro["target_kcal"] == anthro["tdee_kcal"]
+    assert {"liver", "high_mercury", "alcohol"} <= set(result["exclusions"]["food_tags"])
+    assert any("No trimester is recorded" in caution for caution in result["cautions"])
+
+    patient_id = client.get(f"/review/{assessment['id']}").json()["patient"]["id"]
+    client.patch(f"/patients/{patient_id}", json={"pregnancy_trimester": 3})
+    rebuilt = client.get(f"/review/{assessment['id']}").json()["assessment"]["result"]
+    assert rebuilt["anthropometrics"]["target_kcal"] == anthro["tdee_kcal"] + 452
+    assert not any("No trimester" in caution for caution in rebuilt["cautions"])
+
+    # no longer pregnant: the trimester goes with it
+    cleared = client.patch(f"/patients/{patient_id}", json={"pregnant": False}).json()
+    assert cleared["pregnancy_trimester"] is None
+
+
+def test_the_physician_is_cautioned_about_a_patient_under_19(client):
+    this_year = __import__("datetime").date.today().year
+    teen = _pending(client, patient={**PATIENT, "birth_year": this_year - 15})
+    assert any("for adults aged 19 and over" in caution for caution in teen["result"]["cautions"])
+    adult = _pending(client)
+    assert not any("for adults aged" in caution for caution in adult["result"]["cautions"])

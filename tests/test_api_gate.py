@@ -66,9 +66,19 @@ def test_full_flow_gate_then_approve(client):
     assert body["approved_by"] == "Dr Test"
     assert "Dear Test Patient" in body["text"]
 
+    # the report says which engine built the plan, so an older one can be told apart
+    assert body["engine_version"] == body["current_engine_version"] == assessment["engine_version"]
+    # "why this plan" is in the patient's words, not the rules file's
+    assert "For high blood pressure, this plan leaves out dishes high in salt" in body["text"]
+    assert "contraindication gate" not in body["text"]
+    assert "DASH" not in body["text"]
+
     report_bn = client.get(f"/report/{visit_id}?lang=bn&use_llm=false")
     assert report_bn.status_code == 200
     assert "প্রিয়" in report_bn.json()["text"]
+    assert "উচ্চ রক্তচাপের জন্য এই পরিকল্পনায়" in report_bn.json()["text"]
+    assert "DASH" not in report_bn.json()["text"]
+    assert "obese" not in report_bn.json()["text"] and "overweight" not in report_bn.json()["text"]
 
     # queue is now empty; second decision conflicts
     assert client.get("/review/queue").json() == []

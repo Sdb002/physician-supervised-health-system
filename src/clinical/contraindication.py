@@ -1,9 +1,11 @@
-"""Hard safety gate: conditions → excluded tags → filtered items.
+"""Hard safety gate: conditions and dietary restrictions → excluded tags →
+filtered items.
 
-Rules live in data/reference/contraindications.yaml (cited per condition).
-This gate runs before any ranking or planning, and its exclusions can never be
-overridden downstream — an item carrying an excluded tag simply does not exist
-for the rest of the pipeline.
+Clinical rules live in data/reference/contraindications.yaml (cited per
+condition); what a patient does not eat for faith, choice or allergy lives in
+data/reference/dietary_restrictions.yaml. This gate runs before any ranking or
+planning, and its exclusions can never be overridden downstream — an item
+carrying an excluded tag simply does not exist for the rest of the pipeline.
 """
 
 from dataclasses import dataclass
@@ -17,6 +19,7 @@ class ExclusionSet:
     food_tags: frozenset[str]
     exercise_tags: frozenset[str]
     applied_conditions: tuple[str, ...]
+    applied_restrictions: tuple[str, ...] = ()
 
 
 @lru_cache(maxsize=1)
@@ -24,13 +27,24 @@ def _rules() -> dict:
     return load_yaml(REFERENCE_DIR / "contraindications.yaml")["conditions"]
 
 
+@lru_cache(maxsize=1)
+def _restrictions() -> dict:
+    return load_yaml(REFERENCE_DIR / "dietary_restrictions.yaml")["restrictions"]
+
+
 def known_conditions() -> list[str]:
     return list(_rules().keys())
 
 
-def excluded_tags(conditions: list[str]) -> ExclusionSet:
-    """Union of exclusions for every recognized condition. Unknown condition
-    keys are ignored (they carry no rules, so nothing can be excluded)."""
+def known_restrictions() -> list[str]:
+    return list(_restrictions().keys())
+
+
+def excluded_tags(conditions: list[str],
+                  restrictions: list[str] | tuple[str, ...] = ()) -> ExclusionSet:
+    """Union of exclusions for every recognized condition and dietary
+    restriction. Unknown keys are ignored (they carry no rules, so nothing
+    can be excluded)."""
     food: set[str] = set()
     exercise: set[str] = set()
     applied: list[str] = []
@@ -41,7 +55,14 @@ def excluded_tags(conditions: list[str]) -> ExclusionSet:
         food.update(rule.get("exclude_food_tags") or [])
         exercise.update(rule.get("exclude_exercise_tags") or [])
         applied.append(cond)
-    return ExclusionSet(frozenset(food), frozenset(exercise), tuple(applied))
+    kept: list[str] = []
+    for restriction in restrictions:
+        rule = _restrictions().get(restriction)
+        if rule is None:
+            continue
+        food.update(rule.get("exclude_food_tags") or [])
+        kept.append(restriction)
+    return ExclusionSet(frozenset(food), frozenset(exercise), tuple(applied), tuple(kept))
 
 
 def is_allowed(item_tags: list[str] | set[str], excluded: frozenset[str]) -> bool:

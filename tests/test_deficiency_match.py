@@ -89,3 +89,54 @@ def test_gate_runs_before_matching():
     ranked = rank_foods(allowed, nutrition["emphasize"], nutrition["targets"])
     assert ranked
     assert all("high_sodium" not in r["tags"] for r in ranked)
+
+
+def test_reference_intakes_follow_the_age_band():
+    assert rdi_group("female", False, 30) == "female_adult"
+    assert rdi_group("female", False, 51) == "female_51_70"
+    assert rdi_group("male", False, 70) == "male_51_70"
+    assert rdi_group("male", False, 71) == "male_over_70"
+    assert rdi_group("female", True, 44) == "pregnant"
+    # reported: a 60-year-old woman kept the 18 mg iron target of a
+    # menstruating adult
+    older = nutrient_targets("female", False, [], age=60)["targets"]
+    assert older["iron_mg"] == 8 and older["calcium_mg"] == 1200
+    assert nutrient_targets("female", False, [], age=30)["targets"]["iron_mg"] == 18
+    assert nutrient_targets("male", False, [], age=75)["targets"]["calcium_mg"] == 1200
+
+
+def test_a_recorded_condition_drives_the_emphasis_without_a_lab_flag():
+    # known hypertension, normal pressure on the day of the visit
+    flags = score_biomarkers({"systolic_bp": 118, "diastolic_bp": 76}, "male")
+    assert nutrient_targets("male", False, flags)["emphasize"] == []
+    nutrition = nutrient_targets("male", False, flags, conditions=["hypertension"])
+    assert nutrition["emphasize"] == ["potassium_mg", "fiber_g"]
+    assert "hypertension" in nutrition["rationales"]
+    # a condition with no emphasis rule adds nothing
+    assert nutrient_targets("male", False, [], conditions=["knee_osteoarthritis"])["emphasize"] == []
+
+
+def test_kidney_disease_stops_the_potassium_emphasis():
+    emphasized = nutrient_targets("male", False, [], conditions=["hypertension"])
+    assert "potassium_mg" in emphasized["emphasize"]
+    # the physician is told to check before approving
+    assert any("kidney function" in caution for caution in emphasized["cautions"])
+
+    kidney = nutrient_targets("male", False, [],
+                              conditions=["hypertension", "chronic_kidney_disease"])
+    assert kidney["emphasize"] == ["fiber_g"]
+    assert kidney["cautions"] == []
+    assert "chronic_kidney_disease" in kidney["rationales"]
+    # with nothing to suppress, the condition has nothing to explain
+    alone = nutrient_targets("male", False, [], conditions=["chronic_kidney_disease"])
+    assert alone["emphasize"] == [] and alone["rationales"] == {}
+
+
+def test_every_finding_explains_itself_to_the_patient_in_both_languages():
+    nutrition = nutrient_targets("female", False, [],
+                                 conditions=["anemia", "hypertension", "diabetes"])
+    assert set(nutrition["patient_rationales"]) == {"anemia", "hypertension", "diabetes"}
+    for text in nutrition["patient_rationales"].values():
+        assert text["en"] and text["bn"] and text["en"] != text["bn"]
+        # the physician's wording stays out of the patient's
+        assert "contraindication gate" not in text["en"]

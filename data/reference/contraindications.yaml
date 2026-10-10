@@ -6,6 +6,9 @@
 # Condition keys are matched against (a) conditions derived from risk scoring
 # (hypertension, diabetes, anemia) and (b) physician-recorded conditions on the
 # patient. Every entry requires a citation.
+#
+# What a patient does not eat for faith, choice or allergy is a separate list,
+# dietary_restrictions.yaml, applied through the same gate.
 
 conditions:
   hypertension:
@@ -41,12 +44,31 @@ conditions:
   pregnancy:
     display_en: Pregnancy
     display_bn: গর্ভাবস্থা
-    exclude_food_tags: []
+    exclude_food_tags: [liver, high_mercury, alcohol]
     exclude_exercise_tags: [high_impact, abdominal_pressure, supine_position]
     citation: >
       ACOG Committee Opinion No. 804 (2020): Physical Activity and Exercise
       During Pregnancy and the Postpartum Period — avoid activities with high
-      fall/contact risk and prolonged supine positioning.
+      fall/contact risk and prolonged supine positioning. Liver: one serving
+      exceeds the 3000 ug/day upper level for preformed vitamin A, set on
+      teratogenicity (Institute of Medicine 2001, Dietary Reference Intakes
+      for Vitamin A; WHO 1998, Safe vitamin A dosage during pregnancy and
+      lactation). High-mercury fish: US FDA/EPA, Advice about Eating Fish
+      (2021 revision) — choices to avoid when pregnant: shark, swordfish,
+      marlin, tilefish, king mackerel, bigeye tuna, orange roughy. Alcohol:
+      ACOG Committee Opinion No. 496 (2011) — no safe amount in pregnancy.
+
+  chronic_kidney_disease:
+    display_en: Chronic kidney disease
+    display_bn: দীর্ঘমেয়াদি কিডনি রোগ
+    exclude_food_tags: []
+    exclude_exercise_tags: []
+    citation: >
+      No blanket exclusions: potassium, phosphorus and protein are adjusted to
+      the individual's laboratory values and stage (KDOQI Clinical Practice
+      Guideline for Nutrition in CKD: 2020 Update. Am J Kidney Dis
+      2020;76(3 Suppl 1):S1-S107). Recording the condition stops the planner
+      emphasising potassium (src/clinical/rules/deficiency_map.yaml).
 
   knee_osteoarthritis:
     display_en: Knee osteoarthritis

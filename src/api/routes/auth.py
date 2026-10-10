@@ -45,8 +45,11 @@ def register(payload: RegisterIn, db: Session = Depends(get_db)):
             birth_year=payload.profile.birth_year,
             height_cm=payload.profile.height_cm,
             pregnant=payload.profile.pregnant,
+            pregnancy_trimester=payload.profile.pregnancy_trimester,
             conditions=payload.profile.conditions,
+            dietary_restrictions=payload.profile.dietary_restrictions,
             fitness_level=payload.profile.fitness_level,
+            activity_level=payload.profile.activity_level,
             notes="self-registered account",
         )
         db.add(patient)

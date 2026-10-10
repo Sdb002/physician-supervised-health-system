@@ -48,9 +48,16 @@ class Patient(Base):
     birth_year: Mapped[int]
     height_cm: Mapped[float]
     pregnant: Mapped[bool] = mapped_column(default=False)
+    # 1-3 while pregnant; None when not pregnant or not recorded
+    pregnancy_trimester: Mapped[int | None] = mapped_column(nullable=True)
     # physician-recorded condition keys, e.g. ["hypertension", "knee_osteoarthritis"]
     conditions: Mapped[list] = mapped_column(JSON, default=list)
+    # keys of data/reference/dietary_restrictions.yaml, e.g. ["no_beef"]
+    dietary_restrictions: Mapped[list] = mapped_column(JSON, default=list, server_default="[]")
     fitness_level: Mapped[str] = mapped_column(String(20), default="beginner")
+    # sedentary | light | moderate | active; None = not recorded, and the
+    # energy target says the level was assumed
+    activity_level: Mapped[str | None] = mapped_column(String(20), nullable=True)
     notes: Mapped[str] = mapped_column(String(2000), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 

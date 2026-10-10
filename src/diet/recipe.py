@@ -20,6 +20,10 @@ Exclusion-tag inheritance (documented heuristic):
 - a recipe is tagged high_sugar when ingredients tagged added_sugar supply
   more than 10% of its energy (WHO 2015 free-sugars guideline) — this is what
   catches milk sweets like payesh, where sugar is a small share of the weight.
+
+Restriction tags (contains_beef, contains_egg, liver, ... - see
+src/diet/restriction_tags.py) are inherited from every ingredient whatever its
+share: a spoon of ghee makes a dish dairy, and a little liver makes it liver.
 """
 
 import csv
@@ -28,6 +32,7 @@ from pathlib import Path
 
 from src.core.config import DATA_DIR
 from src.diet.food_db import NUTRIENT_COLUMNS, Food
+from src.diet.restriction_tags import RESTRICTION_TAGS
 
 RECIPES_CSV = DATA_DIR / "recipe" / "recipes.csv"
 INGREDIENTS_CSV = DATA_DIR / "recipe" / "recipe_ingredients.csv"
@@ -110,6 +115,8 @@ def _inherited_tags(ingredients: list[tuple[str, float]], per_serving: dict,
                     foods: dict[str, Food]) -> set[str]:
     total_weight = sum(q for _, q in ingredients)
     inherited: set[str] = set()
+    for food_id, _ in ingredients:
+        inherited |= set(foods[food_id].tags) & RESTRICTION_TAGS
     if total_weight > 0:
         for food_id, qty_g in ingredients:
             if qty_g / total_weight >= _INHERIT_WEIGHT_SHARE:

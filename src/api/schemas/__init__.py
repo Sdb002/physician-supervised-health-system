@@ -10,15 +10,48 @@ class BiomarkersIn(BaseModel):
     hemoglobin: float | None = Field(None, ge=1, le=25, description="g/dL")
 
 
-class PatientCreate(BaseModel):
-    name: str = Field(min_length=1, max_length=200)
+_ACTIVITY_PATTERN = "^(sedentary|light|moderate|active)$"
+_FITNESS_PATTERN = "^(beginner|intermediate|advanced)$"
+
+
+class PatientProfile(BaseModel):
+    """What the engine reads off a patient, apart from their name."""
+
     sex: str = Field(pattern="^(male|female)$")
     birth_year: int = Field(ge=1900, le=2030)
     height_cm: float = Field(gt=30, lt=260)
     pregnant: bool = False
+    pregnancy_trimester: int | None = Field(None, ge=1, le=3)
     conditions: list[str] = []
-    fitness_level: str = Field("beginner", pattern="^(beginner|intermediate|advanced)$")
+    dietary_restrictions: list[str] = []
+    fitness_level: str = Field("beginner", pattern=_FITNESS_PATTERN)
+    # None = not recorded: the energy target then assumes a level and says so
+    activity_level: str | None = Field(None, pattern=_ACTIVITY_PATTERN)
+
+    @model_validator(mode="after")
+    def _trimester_only_in_pregnancy(self):
+        if not self.pregnant:
+            self.pregnancy_trimester = None
+        return self
+
+
+class PatientCreate(PatientProfile):
+    name: str = Field(min_length=1, max_length=200)
     notes: str = ""
+
+
+class PatientUpdate(BaseModel):
+    """A change to a patient's record: only the fields sent are changed."""
+
+    name: str | None = Field(None, min_length=1, max_length=200)
+    height_cm: float | None = Field(None, gt=30, lt=260)
+    pregnant: bool | None = None
+    pregnancy_trimester: int | None = Field(None, ge=1, le=3)
+    conditions: list[str] | None = None
+    dietary_restrictions: list[str] | None = None
+    fitness_level: str | None = Field(None, pattern=_FITNESS_PATTERN)
+    activity_level: str | None = Field(None, pattern=_ACTIVITY_PATTERN)
+    notes: str | None = None
 
 
 class PatientOut(PatientCreate):
@@ -139,6 +172,10 @@ class ReportOut(BaseModel):
     text: str
     approved_by: str
     approved_at: datetime
+    # the engine that built this plan, and the one running now: a plan from
+    # an older engine stays as approved, and the physician is told it is older
+    engine_version: str = ""
+    current_engine_version: str = ""
     # structured payload so the dashboard can render a full report document;
     # `result` is the approved (possibly physician-edited) assessment
     comment: str = ""
@@ -157,15 +194,8 @@ class OcrResult(BaseModel):
 _EMAIL_PATTERN = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
 
 
-class PatientProfileIn(BaseModel):
+class PatientProfileIn(PatientProfile):
     """Health profile a patient supplies when registering their own account."""
-
-    sex: str = Field(pattern="^(male|female)$")
-    birth_year: int = Field(ge=1900, le=2030)
-    height_cm: float = Field(gt=30, lt=260)
-    pregnant: bool = False
-    conditions: list[str] = []
-    fitness_level: str = Field("beginner", pattern="^(beginner|intermediate|advanced)$")
 
 
 class RegisterIn(BaseModel):

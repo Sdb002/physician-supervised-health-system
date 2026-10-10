@@ -19,4 +19,7 @@ Hard rules:
   commonly the dish is cooked at home; never invent ingredients, quantities or
   steps); the exercise plan; a closing reminder that the plan was reviewed and
   approved by their physician, and to contact them with questions.
+- To say why the plan suits the patient, use nutrition.patient_rationales (the
+  wording for the report's language). nutrition.rationales is written for the
+  physician: do not quote it.
 - Numbers (doses, quantities, targets) must be copied exactly.

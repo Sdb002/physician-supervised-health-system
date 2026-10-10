@@ -1,7 +1,8 @@
-"""Nutrient targets: RDI baseline plus lab-driven emphasis.
+"""Nutrient targets: RDI baseline plus emphasis from findings.
 
-Targets come from data/reference/rdi_values.yaml (cited RDAs). Risk flags map
-to emphasized nutrients via src/clinical/rules/deficiency_map.yaml. This module
+Targets come from data/reference/rdi_values.yaml (cited RDAs). Findings - a
+lab value's risk band, or a condition recorded on the patient - map to
+emphasized nutrients via src/clinical/rules/deficiency_map.yaml. This module
 never invents numbers — it only selects from the reference files.
 """
 
@@ -21,6 +22,9 @@ _LABEL_FINDINGS = {
     "diabetes_range": "diabetes",
 }
 
+# The reference intakes are for adults; rdi_values.yaml has no younger group.
+ADULT_AGE = 19
+
 
 @lru_cache(maxsize=1)
 def _rdi() -> dict:
@@ -28,14 +32,20 @@ def _rdi() -> dict:
 
 
 @lru_cache(maxsize=1)
-def _deficiency_map() -> dict:
-    return load_yaml(_RULES_DIR / "deficiency_map.yaml")["findings"]
+def _rules() -> dict:
+    return load_yaml(_RULES_DIR / "deficiency_map.yaml")
 
 
-def rdi_group(sex: str, pregnant: bool) -> str:
+def rdi_group(sex: str, pregnant: bool, age: int | None = None) -> str:
+    """The reference-intake group. Without an age, the 19-50 group."""
     if pregnant:
         return "pregnant"
-    return "male_adult" if sex == "male" else "female_adult"
+    prefix = "male" if sex == "male" else "female"
+    if age is not None and age > 70:
+        return f"{prefix}_over_70"
+    if age is not None and age > 50:
+        return f"{prefix}_51_70"
+    return f"{prefix}_adult"
 
 
 def findings_from_flags(flags: list[RiskFlag]) -> list[str]:
@@ -47,21 +57,54 @@ def findings_from_flags(flags: list[RiskFlag]) -> list[str]:
     return found
 
 
-def nutrient_targets(sex: str, pregnant: bool, flags: list[RiskFlag]) -> dict:
+def nutrient_targets(sex: str, pregnant: bool, flags: list[RiskFlag],
+                     conditions: list[str] | tuple[str, ...] = (),
+                     age: int | None = None) -> dict:
     """RDI targets for the demographic group, plus emphasized nutrients and
-    hard limits, with rationales quoted from the rules file."""
-    group = rdi_group(sex, pregnant)
+    hard limits, with rationales quoted from the rules file.
+
+    `conditions` are the patient's condition keys, recorded or derived. A
+    recorded condition is a finding in its own right: a patient known to be
+    hypertensive gets the hypertension emphasis on a day their pressure
+    reads normal. A condition can also rule a nutrient out of the emphasis
+    (`suppress` in the rules file), and an emphasized nutrient can carry a
+    caution for the reviewing physician."""
+    group = rdi_group(sex, pregnant, age)
     targets = dict(_rdi()["groups"][group])
     limits = dict(_rdi()["limits"])
+    rules = _rules()
+
+    findings = findings_from_flags(flags)
+    findings += [c for c in conditions if c in rules["findings"] and c not in findings]
 
     emphasize: list[str] = []
     rationales: dict[str, str] = {}
-    for finding in findings_from_flags(flags):
-        rule = _deficiency_map()[finding]
+    patient_rationales: dict[str, dict[str, str]] = {}
+
+    def explain(key: str, rule: dict) -> None:
+        rationales[key] = rule["rationale"].strip()
+        if rule.get("patient_en"):
+            patient_rationales[key] = {
+                "en": rule["patient_en"].strip(),
+                "bn": (rule.get("patient_bn") or rule["patient_en"]).strip(),
+            }
+
+    for finding in findings:
+        rule = rules["findings"][finding]
         for nutrient in rule["boost_nutrients"]:
             if nutrient not in emphasize:
                 emphasize.append(nutrient)
-        rationales[finding] = rule["rationale"].strip()
+        explain(finding, rule)
+
+    for condition in conditions:
+        rule = (rules.get("suppress") or {}).get(condition)
+        if rule is None or not set(rule["nutrients"]) & set(emphasize):
+            continue
+        emphasize = [n for n in emphasize if n not in rule["nutrients"]]
+        explain(condition, rule)
+
+    cautions = [rule["text"].strip() for nutrient, rule in (rules.get("cautions") or {}).items()
+                if nutrient in emphasize]
 
     return {
         "group": group,
@@ -69,4 +112,6 @@ def nutrient_targets(sex: str, pregnant: bool, flags: list[RiskFlag]) -> dict:
         "limits": limits,
         "emphasize": emphasize,
         "rationales": rationales,
+        "patient_rationales": patient_rationales,
+        "cautions": cautions,
     }

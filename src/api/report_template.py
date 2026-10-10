@@ -110,8 +110,17 @@ _RISK_LABELS = {
 }
 
 _CONDITIONS = {
-    "en": {"diabetes": "diabetes", "hypertension": "high blood pressure", "anemia": "anaemia"},
-    "bn": {"diabetes": "ডায়াবেটিস", "hypertension": "উচ্চ রক্তচাপ", "anemia": "রক্তস্বল্পতা"},
+    "en": {"diabetes": "diabetes", "hypertension": "high blood pressure", "anemia": "anaemia",
+           "pregnancy": "pregnancy", "chronic_kidney_disease": "kidney disease",
+           "knee_osteoarthritis": "knee osteoarthritis"},
+    "bn": {"diabetes": "ডায়াবেটিস", "hypertension": "উচ্চ রক্তচাপ", "anemia": "রক্তস্বল্পতা",
+           "pregnancy": "গর্ভাবস্থা", "chronic_kidney_disease": "কিডনি রোগ",
+           "knee_osteoarthritis": "হাঁটুর অস্টিওআর্থ্রাইটিস"},
+}
+
+_BMI_CATEGORIES = {
+    "bn": {"underweight": "কম ওজন", "normal": "স্বাভাবিক ওজন", "overweight": "অতিরিক্ত ওজন",
+           "obese": "স্থূলতা"},
 }
 
 
@@ -177,7 +186,9 @@ def template_report(patient_name: str, result: dict, lang: str = "en",
     lines.append(f"## {t['findings']}")
     anthro = result.get("anthropometrics", {})
     if anthro:
-        lines.append("- " + t["bmi"].format(bmi=anthro.get("bmi"), category=anthro.get("bmi_category")))
+        lines.append("- " + t["bmi"].format(
+            bmi=anthro.get("bmi"),
+            category=_term(_BMI_CATEGORIES, lang, anthro.get("bmi_category") or "")))
     flags = result.get("risk_flags", [])
     abnormal = [f for f in flags if f.get("risk") != "none"]
     if abnormal:
@@ -194,10 +205,14 @@ def template_report(patient_name: str, result: dict, lang: str = "en",
     lines.append("")
 
     rationales = result.get("nutrition", {}).get("rationales") or {}
+    # engine 0.7.0 onwards: each finding in the patient's words and language;
+    # older assessments carry only the rules file's wording for the physician
+    in_patient_words = result.get("nutrition", {}).get("patient_rationales") or {}
     if rationales:
         lines.append(f"## {t['why']}")
         for finding, why in rationales.items():
-            lines.append(f"- {_term(_CONDITIONS, lang, finding)}: {why}")
+            said = (in_patient_words.get(finding) or {}).get(lang)
+            lines.append(f"- {said}" if said else f"- {_term(_CONDITIONS, lang, finding)}: {why}")
         lines.append("")
 
     meal_plan = result.get("nutrition", {}).get("meal_plan", {})

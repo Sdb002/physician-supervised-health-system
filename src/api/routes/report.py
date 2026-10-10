@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from src.api.deps import get_current_user, get_db
 from src.api.report_template import template_report
 from src.api.schemas import ReportOut
+from src.api.services import ENGINE_VERSION
 from src.db.models import User, Visit
 from src.llm.client import LLMNotConfiguredError, LLMRefusedError, llm_available
 
@@ -43,6 +44,9 @@ def get_report(
         )
 
     result = approval.edited_result or assessment.result
+    # cautions are the engine's notes to the reviewing physician: they are not
+    # part of the patient's report, in its text or in what the patient is sent
+    for_patient = {key: value for key, value in result.items() if key != "cautions"}
     patient_name = visit.patient.name
 
     source = "template"
@@ -51,12 +55,12 @@ def get_report(
         from src.llm.report_writer import write_report
 
         try:
-            text = write_report(patient_name, result, lang)
+            text = write_report(patient_name, for_patient, lang)
             source = "llm"
         except (LLMNotConfiguredError, LLMRefusedError):
             text = None
     if text is None:
-        text = template_report(patient_name, result, lang, comment=approval.comment)
+        text = template_report(patient_name, for_patient, lang, comment=approval.comment)
 
     return ReportOut(
         visit_id=visit.id,
@@ -66,8 +70,10 @@ def get_report(
         text=text,
         approved_by=approval.physician_name,
         approved_at=approval.created_at,
+        engine_version=assessment.engine_version,
+        current_engine_version=ENGINE_VERSION,
         comment=approval.comment,
         visit_date=visit.created_at,
-        result=result,
+        result=for_patient if user.role == "patient" else result,
         notes=list(visit.doctor_notes),
     )

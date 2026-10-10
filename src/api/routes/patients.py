@@ -8,14 +8,18 @@ from src.api.schemas import (
     PatientAccountOut,
     PatientCreate,
     PatientOut,
+    PatientUpdate,
     UserOut,
     VisitOut,
 )
+from src.api.services import ENGINE_VERSION, build_assessment
 from src.core import audit
 from src.core.security import hash_password
-from src.db.models import Patient, User, Visit
+from src.db.models import Assessment, Patient, User, Visit
 
 router = APIRouter(prefix="/patients", tags=["patients"])
+
+_CLEARABLE = {"pregnancy_trimester", "activity_level"}
 
 
 @router.post("", response_model=PatientOut, status_code=201)
@@ -38,6 +42,45 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.get(Patient, patient_id)
     if patient is None:
         raise HTTPException(404, "patient not found")
+    return patient
+
+
+@router.patch("/{patient_id}", response_model=PatientOut)
+def update_patient(
+    patient_id: int,
+    payload: PatientUpdate,
+    db: Session = Depends(get_db),
+    staff: User = Depends(get_current_user),
+):
+    """Change a patient's record. A plan still awaiting review was built from
+    the old record, so it is rebuilt from the new one; approved and rejected
+    assessments stay exactly as they were signed off."""
+    patient = db.get(Patient, patient_id)
+    if patient is None:
+        raise HTTPException(404, "patient not found")
+    changes = payload.model_dump(exclude_unset=True)
+    for field, value in changes.items():
+        # only the trimester and the activity level can be cleared
+        if value is None and field not in _CLEARABLE:
+            continue
+        setattr(patient, field, value)
+    if not patient.pregnant:
+        patient.pregnancy_trimester = None
+    db.flush()
+
+    rebuilt = []
+    pending = db.scalars(
+        select(Assessment).join(Visit).where(
+            Visit.patient_id == patient.id, Assessment.status == "pending")
+    )
+    for assessment in pending:
+        assessment.result = build_assessment(patient, assessment.visit)
+        assessment.engine_version = ENGINE_VERSION
+        rebuilt.append(assessment.id)
+    audit.record(db, actor=staff.email, action="patient.update", entity="patient",
+                 entity_id=patient.id,
+                 detail={"fields": sorted(changes), "assessments_rebuilt": rebuilt})
+    db.commit()
     return patient
 
 

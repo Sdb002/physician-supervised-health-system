@@ -1,14 +1,24 @@
+import os
+import tempfile
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from src.api.deps import get_db
-from src.api.main import app
-from src.core.security import create_token, hash_password
-from src.db.models import Base, User
-from src.diet import recommender
+# The app migrates its configured database and creates the default admin at
+# startup. Point it at a throwaway file before anything reads the settings,
+# so running the tests never touches the developer's health.db.
+_APP_DB_DIR = tempfile.TemporaryDirectory(prefix="health-tests-", ignore_cleanup_errors=True)
+os.environ["DATABASE_URL"] = f"sqlite:///{(Path(_APP_DB_DIR.name) / 'app.db').as_posix()}"
+
+from src.api.deps import get_db  # noqa: E402
+from src.api.main import app  # noqa: E402
+from src.core.security import create_token, hash_password  # noqa: E402
+from src.db.models import Base, User  # noqa: E402
+from src.diet import recommender  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
