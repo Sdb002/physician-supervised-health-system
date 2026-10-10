@@ -39,15 +39,32 @@ def ensure_default_admin() -> None:
         )
 
 
+def check_published_defaults(config=settings) -> None:
+    """Refuse to start a deployment on the auth settings published in the
+    README: with the default SECRET_KEY anyone can forge a session token, and
+    the default admin password is an admin login. On a developer's machine
+    they only earn a warning."""
+    defaults = config.published_defaults()
+    if not defaults:
+        return
+    names = " and ".join(defaults)
+    if config.is_local:
+        logging.getLogger(__name__).warning(
+            "%s still at the published default — fine on this machine, never "
+            "for a deployment. Set your own in .env.", names,
+        )
+        return
+    raise RuntimeError(
+        f"refusing to start: {names} still at the value published in the README, "
+        "and this is not a local development setup (ENVIRONMENT, DATABASE_URL or "
+        "CORS_ORIGINS says so). Set your own in .env."
+    )
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
-    if settings.secret_key == "dev-secret-change-me":
-        logging.getLogger(__name__).warning(
-            "SECRET_KEY is still the published default — session tokens can be "
-            "forged by anyone who has read the README. Set a random SECRET_KEY "
-            "in .env outside local development."
-        )
+    check_published_defaults()
     init_db()
     ensure_default_admin()
     yield
