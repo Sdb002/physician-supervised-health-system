@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { api, User } from "@/lib/api";
 import { formatDate } from "@/lib/clinical-terms";
 import { did, pid } from "@/lib/format";
+import { useT } from "@/lib/use-t";
 import { IconUsers } from "@/components/icons";
 import {
   Avatar,
@@ -15,6 +16,16 @@ import {
   Skeleton,
 } from "@/components/ui";
 
+/* Roles and account states as the table says them. */
+const WORDS: Record<string, string> = {
+  admin: "Admin",
+  doctor: "Doctor",
+  patient: "Patient",
+  pending: "Pending",
+  active: "Active",
+  rejected: "Rejected",
+};
+
 function userDisplayId(user: User): string | null {
   if (user.role === "doctor") return did(user.id);
   if (user.role === "patient" && user.patient_id != null) return pid(user.patient_id);
@@ -25,6 +36,7 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[] | null>(null);
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { t, lang } = useT();
 
   useEffect(() => {
     api.adminUsers().then(setUsers).catch((e) => setError(e.message));
@@ -47,13 +59,13 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Users"
-        subtitle={users ? `${users.length} accounts across all roles` : undefined}
+        title={t("Users")}
+        subtitle={users ? t("{count} accounts across all roles", { count: users.length }) : undefined}
         action={
           <SearchInput
             value={query}
             onChange={setQuery}
-            placeholder="Search name, email, PID or DID"
+            placeholder={t("Search name, email, PID or DID")}
           />
         }
       />
@@ -62,7 +74,7 @@ export default function AdminUsersPage() {
         <Skeleton className="h-48" />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={query ? "No users match your search" : "No users yet"}
+          title={query ? t("No users match your search") : t("No users yet")}
           icon={<IconUsers className="h-5 w-5" />}
         />
       ) : (
@@ -70,10 +82,10 @@ export default function AdminUsersPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th scope="col" className="px-5 py-3 font-semibold">User</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Role</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Status</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Joined</th>
+                <th scope="col" className="px-5 py-3 font-semibold">{t("User")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Role")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Status")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Joined")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -92,13 +104,13 @@ export default function AdminUsersPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <Badge kind={user.role}>{user.role}</Badge>
+                    <Badge kind={user.role}>{t(WORDS[user.role] ?? user.role)}</Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <Badge kind={user.status}>{user.status}</Badge>
+                    <Badge kind={user.status}>{t(WORDS[user.status] ?? user.status)}</Badge>
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
-                    {formatDate(user.created_at)}
+                    {formatDate(user.created_at, lang)}
                   </td>
                 </tr>
               ))}

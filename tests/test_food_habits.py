@@ -6,15 +6,31 @@ chilli, raw-and-boiled duplicates of one leafy green and three sweet-potato
 leaf cultivars at the top of "foods that suit your plan".
 """
 
-from src.diet.food_db import NUTRIENT_COLUMNS, Food, display_name, food_index, load_foods
+import pytest
+
+from src.diet.food_db import (
+    NUTRIENT_COLUMNS,
+    Food,
+    display_name,
+    eaten_in_portions,
+    food_index,
+    load_foods,
+    recommendable_foods,
+)
 from src.diet.habits import (
+    MAIN_MEALS_PER_WEEK,
+    MEALS_PER_WEEK_MIDPOINT,
     FoodHabit,
     familiarity_map,
     food_habits,
     habitual_foods,
+    meals_per_week,
+    meals_per_week_map,
+    median_meals_per_week,
+    portion_map,
     variant_key,
 )
-from src.diet.matcher import rank_foods
+from src.diet.matcher import meal_frequency_weight, rank_foods
 from src.diet.recipe import Recipe, load_recipes
 
 
@@ -91,15 +107,76 @@ def test_ranking_caps_entries_per_food_group():
     assert groups.count("vegetable") == 2 and "legume" in groups
 
 
-def test_ranking_weighs_familiarity_and_usual_portion():
+def test_ranking_weighs_meals_per_week_and_usual_portion():
     # per 100 g sesame wins on iron; per usual portion (10 g vs 80 g) and
-    # familiarity (a festive sweet vs everyday shak) the leafy green does
+    # how often it is eaten (a festive sweet vs everyday shak) the leafy
+    # green does
     foods = [_food("sesame", "other", name_bn="তিল", iron_mg=15),
              _food("shak", "vegetable", name_bn="লাল শাক", iron_mg=5)]
     ranked = rank_foods(foods, ["iron_mg"], {"iron_mg": 18},
-                        familiarity={"sesame": 2, "shak": 6},
+                        meals_per_week={"sesame": 0.1, "shak": 2.5},
                         portion_g={"sesame": 10, "shak": 80})
     assert ranked[0]["food_id"] == "shak"
+
+
+def test_more_frequent_food_scores_more_in_proportion():
+    # same nutrients, same portion: the food eaten at twice the meals
+    # scores twice as high, and a once-a-week fish loses to daily dal
+    foods = [_food("fish", "fish", name_bn="কাতলা", protein_g=20),
+             _food("dal", "legume", name_bn="মসুর", protein_g=20)]
+    # a large fit, so the 3-decimal rounding of the reported score stays
+    # well inside the tolerance
+    ranked = rank_foods(foods, ["protein_g"], {"protein_g": 2},
+                        meals_per_week={"fish": 1.5, "dal": 13.0})
+    assert [f["food_id"] for f in ranked] == ["dal", "fish"]
+    assert ranked[0]["score"] / ranked[1]["score"] == pytest.approx(13.0 / 1.5, rel=1e-2)
+    assert meal_frequency_weight(21) == 1.0 and meal_frequency_weight(40) == 1.0
+    assert meal_frequency_weight(0) == 0.0
+
+
+def test_meals_per_week_combines_dishes_without_passing_21():
+    assert meals_per_week([]) == 0.0
+    assert meals_per_week([14.0]) == pytest.approx(14.0)
+    # two dishes a week each: almost four meals, a little less because
+    # they sometimes fall on the same meal
+    assert 3.5 < meals_per_week([2.0, 2.0]) < 4.0
+    assert meals_per_week([14.0] * 200) <= MAIN_MEALS_PER_WEEK
+
+
+def test_habits_count_only_portion_sized_uses_as_meals():
+    habits = food_habits([
+        _recipe("plain_rice", 10, [("rice", 400)]),  # 100 g a serving
+        _recipe("dal", 9, [("lentil", 120)]),  # 30 g a serving
+        _recipe("pakora", 3, [("lentil", 20)]),  # 5 g a serving: batter, not dal
+    ])
+    assert habits["rice"].meals_per_week == pytest.approx(MEALS_PER_WEEK_MIDPOINT[10])
+    assert habits["lentil"].meals_per_week == pytest.approx(MEALS_PER_WEEK_MIDPOINT[9])
+    # fruit no dish uses takes the median of the foods that have a figure
+    foods = [_food("rice", "grain"), _food("lentil", "legume"), _food("guava", "fruit")]
+    meals = meals_per_week_map(foods, habits, unknown=median_meals_per_week(habits))
+    assert meals["guava"] == pytest.approx((14.0 + 7.0) / 2)
+
+
+def test_real_dataset_ranks_everyday_foods_first():
+    # the reported "rank the foods by how often people eat them": with no
+    # nutrient emphasized (nutrient density), the foods of everyday meals
+    # lead and foods one weekly dish uses do not
+    foods = load_foods()
+    habits = food_habits(load_recipes(food_index(foods)))
+    pool = habitual_foods(eaten_in_portions(recommendable_foods(foods)), habits)
+    names = [display_name(f.name_en) for f in pool]
+    assert not any(name.startswith("Onion") for name in names)  # a seasoning
+    meals = meals_per_week_map(pool, habits, unknown=median_meals_per_week(habits))
+    by_name = {f.name_en: meals[f.food_id] for f in pool}
+    assert by_name["Lentil, dried, raw"] > 10 and by_name["Egg, chicken, farmed, raw"] > 10
+    assert by_name["Catla, raw"] < 2
+    ranked = rank_foods(pool, [], {}, top_n=10, meals_per_week=meals, per_group=3,
+                        portion_g=portion_map(pool, habits))
+    top = [f["name_en"] for f in ranked]
+    for everyday in ("Egg, chicken, farmed", "Lentil, dried"):
+        assert everyday in top, top
+    for rare in ("Bottle gourd leaves", "Gourd, ash", "Buttermilk, fluid, low fat"):
+        assert rare not in top, top
 
 
 def test_display_name_drops_table_noise():

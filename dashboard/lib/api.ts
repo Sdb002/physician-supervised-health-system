@@ -100,6 +100,8 @@ export interface Patient {
   conditions: string[];
   /** keys of the engine's dietary restrictions, e.g. "no_beef" */
   dietary_restrictions: string[];
+  /** the single foods and dishes the patient does not eat, beyond those */
+  excluded_foods: ExcludedFood[];
   fitness_level: string;
   /** sedentary | light | moderate | active; null = not recorded */
   activity_level: string | null;
@@ -107,16 +109,50 @@ export interface Patient {
   created_at: string;
 }
 
+/** A food or dish a patient does not eat. A food stands for every form of it
+ * in the food table, and takes every dish that uses it along. */
+export interface ExcludedFood {
+  /** a food-table or recipe id; the forms send it back with the name */
+  id: string;
+  kind: "food" | "recipe";
+  name_en: string;
+  name_bn: string;
+}
+
+/** Something the patient forms can exclude (GET /foods/catalogue). */
+export interface ExcludableFood extends ExcludedFood {
+  /** food group, or the dish's recipe category */
+  food_group: string;
+  /** table rows left out with the food: raw and boiled, each cultivar, and
+   * every row named as a form of it */
+  forms: number;
+  /** dishes left out with it; 1 for a dish */
+  dishes: number;
+  /** the names of those rows, so a search finds the food by any of them */
+  keywords: string;
+}
+
+/** A chosen food or dish as the forms send it: the id, with the name it was
+ * shown under. After a food-table replacement an id can be another food; the
+ * name lets the API tell an entry sent back unchanged from a fresh pick. */
+export type ExcludedFoodPick = Pick<ExcludedFood, "id" | "name_en">;
+
+/** A patient as the forms send one: excluded foods go by id and name. */
+export type PatientIn = Omit<Patient, "id" | "created_at" | "excluded_foods"> & {
+  excluded_foods: ExcludedFoodPick[];
+};
+
 /** A change to a patient's record: only the fields sent are changed. */
 export type PatientUpdate = Partial<
   Pick<
-    Patient,
+    PatientIn,
     | "name"
     | "height_cm"
     | "pregnant"
     | "pregnancy_trimester"
     | "conditions"
     | "dietary_restrictions"
+    | "excluded_foods"
     | "fitness_level"
     | "activity_level"
     | "notes"
@@ -148,6 +184,65 @@ export interface RecommendedFood {
   // present on assessments generated after kcal was added to the ranking
   food_group?: string;
   kcal_per_100g?: number;
+}
+
+/** A food or dish one of the patient's conditions rules out, with the
+ * excluded tags it carries (high_sodium, high_sugar, solid_fat, liver...). */
+export interface ConditionAvoidItem {
+  food_id?: string;
+  recipe_id?: string;
+  name_en: string;
+  name_bn: string;
+  food_group?: string;
+  category?: string;
+  reasons: string[];
+}
+
+/** One condition's foods: what to eat for it (real sources of its
+ * nutrients, the most often eaten first) and what its rule leaves out
+ * (engine 0.13.0 onwards). */
+export interface ConditionFoods {
+  condition: string;
+  nutrients: string[];
+  eat: RecommendedFood[];
+  avoid_tags: string[];
+  avoid_foods: ConditionAvoidItem[];
+  avoid_dishes: ConditionAvoidItem[];
+}
+
+/** One of today's tasks: a meal of today's plan, or an exercise group the
+ * weekly schedule puts on today (src/api/daily_tasks.py). */
+export interface DailyTask {
+  key: string;
+  kind: "meal" | "exercise";
+  /** breakfast | lunch | dinner | snack, or aerobic | strength | flexibility | balance */
+  group: string;
+  items: (Pick<MealItem, "food_id" | "recipe_id" | "name_en" | "name_bn" | "qty_g" | "servings" | "kcal"> & {
+    exercise_id?: string;
+    dose?: string;
+    use_easier_version?: boolean;
+    easier_version?: string;
+  })[];
+  /** a meal's energy */
+  kcal?: number;
+  /** brisk activity: minutes for the session */
+  minutes?: number | null;
+  done: boolean;
+}
+
+export type DayStatus = "complete" | "partial" | "missed" | "today" | "none";
+
+export interface TodayTasks {
+  /** the clinic's calendar day, YYYY-MM-DD */
+  date: string;
+  weekday: string;
+  plan: { visit_id: number; approved_at: string; approved_by: string } | null;
+  tasks: DailyTask[];
+  done: number;
+  total: number;
+  streak: { current: number; best: number };
+  /** the last seven days, oldest first, today last */
+  recent: { date: string; weekday: string; status: DayStatus }[];
 }
 
 export interface RecipeIngredient {
@@ -248,14 +343,24 @@ export interface AssessmentResult {
   conditions: string[];
   /** what the patient does not eat (engine 0.7.0 onwards) */
   dietary_restrictions?: string[];
+  /** the single foods and dishes the patient does not eat (engine 0.11.0 onwards) */
+  excluded_foods?: ExcludedFood[];
   /** what the reviewing physician should check before approving (engine
    * 0.7.0 onwards); never sent to the patient */
   cautions?: string[];
-  exclusions: { food_tags: string[]; exercise_tags: string[] };
+  exclusions: {
+    food_tags: string[];
+    exercise_tags: string[];
+    /** every row and dish the patient's excluded foods take out (engine 0.11.0 onwards) */
+    food_ids?: string[];
+    recipe_ids?: string[];
+  };
   nutrition: {
     group: string;
     targets: Record<string, number>;
     limits: Record<string, number>;
+    /** the findings behind the emphasis (engine 0.8.0 onwards) */
+    findings?: string[];
     emphasize: string[];
     rationales: Record<string, string>;
     /** each finding in the patient's words (engine 0.7.0 onwards) */
@@ -264,6 +369,8 @@ export interface AssessmentResult {
     recipe_scoring_backend?: "ml" | "linear";
     top_foods: RecommendedFood[];
     top_recipes: RecommendedRecipe[];
+    /** per condition, what to eat and what to avoid (engine 0.13.0 onwards) */
+    condition_foods?: ConditionFoods[];
     meal_plan: {
       /** a week, Saturday to Friday (engine 0.4.0 onwards) */
       days?: ({
@@ -288,13 +395,45 @@ export interface AssessmentResult {
   };
   exercise_plan: {
     note?: string;
-    frequency?: { aerobic_days: number; strength_days: number; flexibility_days: number };
+    /** balance_days only for patients 65 and over (engine 0.12.0 onwards) */
+    frequency?: { aerobic_days: number; strength_days: number; flexibility_days: number; balance_days?: number };
     intensity?: { level: string; target_hr_bpm: [number, number] };
     time?: { aerobic_min_per_session: number; aerobic_min_per_week: number };
-    type?: Record<string, { exercise_id: string; name_en: string; name_bn: string; met_value: number; equipment: string }[]>;
+    type?: Record<string, ExerciseItem[]>;
     volume?: { met_min_per_week: number; est_kcal_per_week: number; volume_factor: number };
     progression?: string;
+    /** "ml" when the trained exercise model ranked the plan */
+    scoring_backend?: string;
   };
+}
+
+/** One exercise of the prescription. Everything after `equipment` comes from
+ * the exercise safety dataset (engine 0.12.0); older plans have only a name. */
+export interface ExerciseItem {
+  exercise_id: string;
+  name_en: string;
+  name_bn: string;
+  /** aerobic exercises only (2024 Compendium) */
+  met_value: number | null;
+  equipment: string;
+  category?: string;
+  intensity_level?: string;
+  fitness_level?: string;
+  /** the dose as a patient reads it (none for an aerobic activity: its
+   * minutes are the prescription's) */
+  dose?: string;
+  /** the dataset's dose text as the source gives it, for staff */
+  dose_source?: string;
+  how_to?: string;
+  easier_version?: string;
+  safety_notes?: string;
+  /** the dataset's note for each of the patient's conditions it has one for;
+   * `modify`: the exercise is allowed with care for that condition */
+  condition_notes?: { condition: string; note: string; modify: boolean }[];
+  /** 65 and over, and suitable at that age only in its easier version */
+  use_easier_version?: boolean;
+  video?: { url: string; title: string; channel: string; match: string } | null;
+  source?: { name: string; url: string };
 }
 
 export interface Assessment {
@@ -341,6 +480,10 @@ export interface Report {
 export interface OcrResult {
   biomarkers: Biomarkers;
   notes: string;
+  /** "PDF text" or "RapidOCR" (read on this server), or "Claude" */
+  engine?: string;
+  /** the text lines the local reader saw, kept with the visit */
+  text?: string[];
 }
 
 export interface PatientProfileIn {
@@ -351,6 +494,8 @@ export interface PatientProfileIn {
   pregnancy_trimester?: number | null;
   conditions?: string[];
   dietary_restrictions?: string[];
+  /** picks from the food catalogue */
+  excluded_foods?: ExcludedFoodPick[];
   fitness_level?: string;
   activity_level?: string | null;
 }
@@ -408,6 +553,8 @@ export interface AllowedFood {
   food_group: string;
   kcal_per_100g: number;
   serving_size_g?: number;
+  /** other names a search should find it by */
+  keywords?: string;
 }
 
 type PlanEditItem = { food_id?: string; recipe_id?: string; qty_g: number; name_en?: string };
@@ -421,6 +568,7 @@ export interface PlanEdit {
     aerobic_days: number;
     strength_days: number;
     flexibility_days: number;
+    balance_days?: number;
     aerobic_min_per_session: number;
     type: Record<string, string[]>;
   };
@@ -447,13 +595,22 @@ export const api = {
   adminAudit: (limit = 25) => request<AuditEntry[]>(`/admin/audit?limit=${limit}`),
 
   myDashboard: () => request<PatientDashboard>("/me/dashboard"),
+  myTasks: () => request<TodayTasks>("/me/tasks"),
+  tickTask: (key: string, done: boolean) =>
+    request<TodayTasks>(`/me/tasks/${encodeURIComponent(key)}`, {
+      method: "PUT",
+      body: JSON.stringify({ done }),
+    }),
 
-  health: () => request<{ status: string; llm_configured: boolean }>("/health"),
+  health: () =>
+    request<{ status: string; llm_configured: boolean; ocr_reader?: "RapidOCR" | "Claude" | null }>("/health"),
 
   listPatients: () => request<Patient[]>("/patients"),
   getPatient: (id: number | string) => request<Patient>(`/patients/${id}`),
-  createPatient: (data: Omit<Patient, "id" | "created_at">) =>
+  createPatient: (data: PatientIn) =>
     request<Patient>("/patients", { method: "POST", body: JSON.stringify(data) }),
+  /** every dish and everyday food a patient record can exclude; needs no sign-in */
+  foodCatalogue: () => request<ExcludableFood[]>("/foods/catalogue"),
   updatePatient: (id: number | string, data: PatientUpdate) =>
     request<Patient>(`/patients/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   listVisits: (patientId: number | string) => request<Visit[]>(`/patients/${patientId}/visits`),

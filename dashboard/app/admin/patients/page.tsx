@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { api, Patient } from "@/lib/api";
 import { conditionName, formatDate } from "@/lib/clinical-terms";
 import { pid } from "@/lib/format";
+import { useT } from "@/lib/use-t";
 import { IconHeartPulse } from "@/components/icons";
 import {
   Avatar,
@@ -24,6 +25,7 @@ export default function AdminPatientsPage() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const { t, n, lang } = useT();
 
   useEffect(() => {
     api.adminPatients().then(setRows).catch((e) => setError(e.message));
@@ -47,13 +49,13 @@ export default function AdminPatientsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Patients"
-        subtitle={rows ? `${rows.length} registered patients` : undefined}
+        title={t("Patients")}
+        subtitle={rows ? t("{count} registered patients", { count: rows.length }) : undefined}
         action={
           <SearchInput
             value={query}
             onChange={setQuery}
-            placeholder="Search name, PID, email"
+            placeholder={t("Search name, PID, email")}
           />
         }
       />
@@ -62,8 +64,8 @@ export default function AdminPatientsPage() {
         <Skeleton className="h-48" />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={query ? "No patients match your search" : "No patients yet"}
-          hint={query ? "Try a different name, PID, or email." : undefined}
+          title={query ? t("No patients match your search") : t("No patients yet")}
+          hint={query ? t("Try a different name, PID, or email.") : undefined}
           icon={<IconHeartPulse className="h-5 w-5" />}
         />
       ) : (
@@ -71,11 +73,11 @@ export default function AdminPatientsPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th scope="col" className="px-5 py-3 font-semibold">Patient</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Sex, age</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Conditions</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Login</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Registered</th>
+                <th scope="col" className="px-5 py-3 font-semibold">{t("Patient")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Sex, age")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Conditions")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Login")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Registered")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -90,28 +92,28 @@ export default function AdminPatientsPage() {
                       </span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 capitalize text-ink-soft">
-                    {patient.sex}, {new Date().getFullYear() - patient.birth_year}
+                  <td className="px-4 py-3 text-ink-soft">
+                    {t(patient.sex === "male" ? "Male" : "Female")}, {n(new Date().getFullYear() - patient.birth_year)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1.5">
-                      {patient.pregnant && <Badge kind="flag">Pregnant</Badge>}
+                      {patient.pregnant && <Badge kind="flag">{t("Pregnant")}</Badge>}
                       {patient.conditions.length === 0 && !patient.pregnant ? (
-                        <span className="text-ink-muted">None</span>
+                        <span className="text-ink-muted">{t("None")}</span>
                       ) : (
                         patient.conditions.map((c) => (
                           <Badge key={c} kind="condition">
-                            {conditionName(c)}
+                            {conditionName(c, lang)}
                           </Badge>
                         ))
                       )}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-ink-soft">
-                    {account_email ?? <span className="text-ink-muted">No login</span>}
+                    {account_email ?? <span className="text-ink-muted">{t("No login")}</span>}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-ink-muted">
-                    {formatDate(patient.created_at)}
+                    {formatDate(patient.created_at, lang)}
                   </td>
                 </tr>
               ))}

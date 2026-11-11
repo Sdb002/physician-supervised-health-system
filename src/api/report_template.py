@@ -27,6 +27,9 @@ _LABELS = {
         "aerobic": "Aerobic activity: {min} minutes per session, {days} days a week (target heart rate {lo}-{hi} beats/min)",
         "strength": "Strength training: {days} days a week",
         "flexibility": "Flexibility / stretching: {days} days a week",
+        "balance": "Balance: {days} days a week",
+        "easier": "Start with the easier version: {text}",
+        "with_condition": "With your {condition}: {note}",
         "progression": "How to progress: {text}",
         "safety": "For your safety, foods and exercises that are not suitable for your condition were removed before this plan was made.",
         "comment": "A note from your physician: {comment}",
@@ -54,6 +57,9 @@ _LABELS = {
         "aerobic": "অ্যারোবিক ব্যায়াম: প্রতিবার {min} মিনিট, সপ্তাহে {days} দিন (লক্ষ্য হৃদস্পন্দন {lo}-{hi} বার/মিনিট)",
         "strength": "শক্তি ব্যায়াম: সপ্তাহে {days} দিন",
         "flexibility": "নমনীয়তা / স্ট্রেচিং: সপ্তাহে {days} দিন",
+        "balance": "ভারসাম্যের ব্যায়াম: সপ্তাহে {days} দিন",
+        "easier": "সহজ রূপটি দিয়ে শুরু করুন: {text}",
+        "with_condition": "আপনার {condition} থাকায়: {note}",
         "progression": "কীভাবে এগোবেন: {text}",
         "safety": "আপনার নিরাপত্তার জন্য, আপনার অবস্থার সাথে মানানসই নয় এমন খাবার ও ব্যায়াম এই পরিকল্পনা তৈরির আগেই বাদ দেওয়া হয়েছে।",
         "comment": "আপনার চিকিৎসকের মন্তব্য: {comment}",
@@ -111,9 +117,11 @@ _RISK_LABELS = {
 
 _CONDITIONS = {
     "en": {"diabetes": "diabetes", "hypertension": "high blood pressure", "anemia": "anaemia",
+           "high_cholesterol": "high cholesterol",
            "pregnancy": "pregnancy", "chronic_kidney_disease": "kidney disease",
            "knee_osteoarthritis": "knee osteoarthritis"},
     "bn": {"diabetes": "ডায়াবেটিস", "hypertension": "উচ্চ রক্তচাপ", "anemia": "রক্তস্বল্পতা",
+           "high_cholesterol": "উচ্চ কোলেস্টেরল",
            "pregnancy": "গর্ভাবস্থা", "chronic_kidney_disease": "কিডনি রোগ",
            "knee_osteoarthritis": "হাঁটুর অস্টিওআর্থ্রাইটিস"},
 }
@@ -173,6 +181,24 @@ _FREQUENCY_TIERS = {
 }
 _TOP_FOODS_IN_REPORT = 8
 _TOP_RECIPES_IN_REPORT = 6
+
+
+def _exercise_lines(lines: list[str], t: dict, lang: str, exercises: list[dict],
+                    name_key: str) -> None:
+    """One line per exercise with its dose, then what the patient should do
+    differently: the easier version at 65 and over, and the exercise
+    dataset's note for each of their conditions it is rated "modify" for.
+    The dataset's text is English (an exercise planned before engine 0.12.0
+    has only a name)."""
+    for ex in exercises:
+        label = ex.get(name_key) or ex["name_en"]
+        lines.append(f"  - {label}" + (f": {ex['dose']}" if ex.get("dose") else ""))
+        if ex.get("use_easier_version") and ex.get("easier_version"):
+            lines.append("    - " + t["easier"].format(text=ex["easier_version"]))
+        for note in ex.get("condition_notes") or []:
+            if note.get("modify"):
+                lines.append("    - " + t["with_condition"].format(
+                    condition=_term(_CONDITIONS, lang, note["condition"]), note=note["note"]))
 
 
 def template_report(patient_name: str, result: dict, lang: str = "en",
@@ -285,12 +311,14 @@ def template_report(patient_name: str, result: dict, lang: str = "en",
             days=plan["frequency"]["aerobic_days"],
             lo=hr_lo, hi=hr_hi,
         ))
-        lines.append("- " + t["strength"].format(days=plan["frequency"]["strength_days"]))
-        lines.append("- " + t["flexibility"].format(days=plan["frequency"]["flexibility_days"]))
-        for group in ("aerobic", "strength", "flexibility"):
-            for ex in plan.get("type", {}).get(group, []):
-                label = ex.get(name_key) or ex["name_en"]
-                lines.append(f"  - {label}")
+        _exercise_lines(lines, t, lang, plan.get("type", {}).get("aerobic", []), name_key)
+        groups = [("strength", "strength_days"), ("flexibility", "flexibility_days"),
+                  ("balance", "balance_days")]
+        for group, days_key in groups:
+            if days_key not in plan["frequency"]:
+                continue  # balance is planned from 65
+            lines.append("- " + t[group].format(days=plan["frequency"][days_key]))
+            _exercise_lines(lines, t, lang, plan.get("type", {}).get(group, []), name_key)
         if plan.get("progression"):
             lines.append("- " + t["progression"].format(text=plan["progression"]))
     lines.append("")

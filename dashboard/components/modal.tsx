@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef } from "react";
 import { IconX } from "@/components/icons";
+import { useT } from "@/lib/use-t";
 
 /** Everything inside the dialog that can hold focus. Used to keep Tab from
  * wandering out into the page behind the overlay. */
@@ -25,6 +26,7 @@ export function Modal({
 }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const { t } = useT();
 
   // Move focus into the dialog on open and put it back where it came from on
   // close. Without this a keyboard or screen-reader user stays parked on the
@@ -91,7 +93,7 @@ export function Modal({
         // Point at the visible heading so the name a screen reader announces
         // is the same text a sighted user reads.
         aria-labelledby={title ? titleId : undefined}
-        aria-label={title ? undefined : "Dialog"}
+        aria-label={title ? undefined : t("Dialog")}
         tabIndex={-1}
       >
         <div className="mb-4 flex items-center justify-between">
@@ -106,7 +108,7 @@ export function Modal({
             type="button"
             onClick={onClose}
             className="shrink-0 rounded-md p-1.5 text-ink-muted hover:bg-surface-soft hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-clinical"
-            aria-label="Close"
+            aria-label={t("Close")}
           >
             <IconX className="h-5 w-5" />
           </button>

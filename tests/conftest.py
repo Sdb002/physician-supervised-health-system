@@ -19,11 +19,13 @@ from src.api.main import app  # noqa: E402
 from src.core.security import create_token, hash_password  # noqa: E402
 from src.db.models import Base, User  # noqa: E402
 from src.diet import recommender  # noqa: E402
+from src.lifestyle import recommender as exercise_recommender  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
 def _no_trained_model(monkeypatch):
-    """Pin the whole suite to the deterministic scoring fallback by default.
+    """Pin the whole suite to the deterministic scoring fallback by default
+    (foods, recipes and exercises).
 
     Without this, tests/test_deficiency_match.py, tests/test_meal_plan.py and
     tests/test_recipe_ranking.py (which assert exact deterministic-formula
@@ -35,6 +37,7 @@ def _no_trained_model(monkeypatch):
     """
     monkeypatch.setattr(recommender, "load_model", lambda: None)
     monkeypatch.setattr(recommender, "load_recipe_model", lambda: None)
+    monkeypatch.setattr(exercise_recommender, "load_model", lambda: None)
 
 
 @pytest.fixture()

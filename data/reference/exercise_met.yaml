@@ -1,0 +1,74 @@
+# Energy cost (MET) of the exercises in data/lifestyle/raw/exercise_safety_dataset.csv,
+# read into data/lifestyle/exercises.csv by scripts/convert_datasets.py.
+#
+# Every value is a Specific Activity Code of the 2024 Adult Compendium of
+# Physical Activities (Herrmann SD, Willis EA, Ainsworth BE et al. 2024 Adult
+# Compendium of Physical Activities: a third update of the energy costs of
+# human activities. J Sport Health Sci 2024;13(1):6-12), checked against
+# pacompendium.com on 2026-10-23. `page` is the Compendium major heading the
+# code is listed under (pacompendium.com/<page>/).
+#
+# match:
+#   stated   the dataset row itself gives this MET from the Compendium; the
+#            converter checks the row still says so
+#   exact    the code names the activity (brisk walking, jogging, rope skipping)
+#   example  the code lists the exercise among its examples (calisthenics:
+#            jumping jacks, burpees; interval training: mountain climbers)
+#   closest  no code names the activity; the nearest by activity and by the
+#            effort the dataset row describes (dancing, stationary and outdoor
+#            cycling)
+#
+# The MET sets an aerobic exercise's intensity band (light < 3, moderate
+# 3-5.9, vigorous >= 6; ACSM GETP 11th ed.) and the plan's weekly MET-minutes
+# and energy estimate (kcal = MET x weight kg x hours). Only aerobic exercises
+# need one. An aerobic row with no entry here (a warm-up drill the Compendium
+# has no code for: march or jog on the spot, heel digs, knee lifts, standing
+# punches, high knees, butt kicks, high kicks, side taps, seated walking) is
+# kept in the table but is never planned as the week's aerobic activity: its
+# minutes could not be counted.
+
+exercises:
+  EX049: {met: 4.8, code: "17200", page: walking, match: exact,
+          activity: "Walking, 3.5-3.9 mph, level, brisk, firm surface, walking for exercise"}
+  EX050: {met: 7.5, code: "12020", page: running, match: exact,
+          activity: "Jogging, general, self-selected pace"}
+  EX051: {met: 4.5, code: "17133", page: walking, match: exact,
+          activity: "Stair climbing, slow pace (the row climbs steadily at a talk-test pace)"}
+  EX052: {met: 4.5, code: "03025", page: dancing, match: closest,
+          activity: "Ethnic or cultural dancing (the Compendium has no general dancing code)"}
+  EX055: {met: 5.0, code: "01216", page: bicycling, match: closest,
+          activity: "Bicycling, stationary, 60 W, light to moderate effort (the row pedals at a moderate cadence)"}
+  EX056: {met: 5.8, code: "01019", page: bicycling, match: closest,
+          activity: "Bicycling, leisure, 9.4 mph (the row rides at moderate effort)"}
+  EX134: {met: 11.0, code: "02068", page: conditioning-exercise, match: exact,
+          activity: "Rope skipping exercise, general"}
+  EX159: {met: 11.0, code: "02214", page: conditioning-exercise, match: example,
+          activity: "High intensity interval exercise, burpees, mountain climbers, squat jumps, Tabata, vigorous effort"}
+  EX254: {met: 9.8, code: "02058", page: conditioning-exercise, match: stated,
+          activity: "Kettlebell swings"}
+  EX309: {met: 5.0, code: "02048", page: conditioning-exercise, match: stated,
+          activity: "Elliptical trainer, moderate effort"}
+  EX310: {met: 5.0, code: "02071", page: conditioning-exercise, match: stated,
+          activity: "Rowing, stationary ergometer, general, <100 watts, moderate effort"}
+  EX311: {met: 9.3, code: "02065", page: conditioning-exercise, match: stated,
+          activity: "Stair treadmill ergometer, general"}
+  EX312: {met: 4.8, code: "02005", page: conditioning-exercise, match: stated,
+          activity: "Aerobic dance, low impact, moderate effort"}
+  EX317: {met: 2.8, code: "02117", page: conditioning-exercise, match: stated,
+          activity: "Arm ergometer, hand bike, 25-30 W"}
+  EX320: {met: 11.0, code: "02078", page: conditioning-exercise, match: stated,
+          activity: "Shuttle running, forward/backward/lateral"}
+  EX325: {met: 5.3, code: "17082", page: walking, match: stated,
+          activity: "Hiking or walking at a normal pace through fields and hillsides, no load"}
+  EX326: {met: 3.5, code: "17352", page: walking, match: stated,
+          activity: "Walking, treadmill, 2.5-2.9 mph (4.0-4.7 km/h), 0% grade"}
+  EX328: {met: 6.0, code: "12010", page: running, match: stated,
+          activity: "Jog/walk combination (jogging component of less than 10 minutes)"}
+  EX329: {met: 4.8, code: "12025", page: running, match: stated,
+          activity: "Jogging, in place"}
+  EX419: {met: 7.5, code: "02020", page: conditioning-exercise, match: example,
+          activity: "Calisthenics (e.g., pushups, sit ups, pull-ups, jumping jacks, burpees), vigorous effort"}
+  EX433: {met: 7.5, code: "02020", page: conditioning-exercise, match: example,
+          activity: "Calisthenics (e.g., pushups, sit ups, pull-ups, jumping jacks, burpees), vigorous effort"}
+  EX440: {met: 4.0, code: "17255", page: walking, match: closest,
+          activity: "Walking, self-selected speed, indoor track or outdoors (the row walks a loop as briskly as is comfortable)"}

@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode } from "react";
 import { IconChevronLeft } from "@/components/icons";
 import { Brand } from "@/components/brand";
 import { StethoscopeArt } from "@/components/stethoscope-art";
 import { focusRing } from "@/components/ui";
+import { LangSwitch } from "@/components/lang-switch";
+import { useT } from "@/lib/use-t";
 
 /** Frame for the sign-in and registration forms: the brand, one form on a
  * sheet, a way back to the portal chooser, and the stethoscope beside it -
@@ -23,6 +27,7 @@ export function AuthLayout({
   wide?: boolean;
   back?: boolean;
 }) {
+  const { t } = useT();
   return (
     <div className="relative min-h-screen overflow-x-clip">
       <div className="mx-auto grid min-h-screen max-w-6xl gap-10 px-4 sm:px-8 lg:grid-cols-2">
@@ -35,9 +40,12 @@ export function AuthLayout({
             className="pointer-events-none absolute -top-1 right-0 w-28 sm:w-36 lg:hidden"
           />
 
-          <Link href="/login" className={`relative inline-flex rounded-lg ${focusRing}`}>
-            <Brand />
-          </Link>
+          <div className="relative flex flex-wrap items-center justify-between gap-3">
+            <Link href="/login" className={`inline-flex rounded-lg ${focusRing}`}>
+              <Brand />
+            </Link>
+            <LangSwitch />
+          </div>
 
           <div className="relative mt-8 rounded-2xl border border-line bg-surface px-6 py-7 shadow-[0_24px_48px_-32px_rgb(22_35_77/0.45)] sm:px-8">
             <h1 className="font-display text-2xl font-bold leading-8 text-ink">{title}</h1>
@@ -52,7 +60,7 @@ export function AuthLayout({
               className={`relative mt-5 inline-flex items-center gap-1 rounded text-sm font-medium text-ink-muted hover:text-ink ${focusRing}`}
             >
               <IconChevronLeft className="h-4 w-4" />
-              Choose a different portal
+              {t("Choose a different portal")}
             </Link>
           )}
         </div>

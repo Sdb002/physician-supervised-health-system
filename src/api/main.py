@@ -5,7 +5,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.deps import require_staff
-from src.api.routes import admin, auth, intake, me, notes, patients, report, review
+from src.api.routes import admin, auth, foods, intake, me, notes, patients, report, review
 from src.core.config import settings
 from src.core.logging import setup_logging
 from src.core.security import hash_password
@@ -100,6 +100,8 @@ async def security_headers(request, call_next):
 app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(me.router)
+# food and dish names only, and the sign-up form needs them before any account exists
+app.include_router(foods.router)
 # clinical workflow routes are staff-only (doctor or admin); the report route
 # manages its own access because patients may fetch their own approved reports
 app.include_router(patients.router, dependencies=[Depends(require_staff)])
@@ -112,4 +114,10 @@ app.include_router(notes.router)
 
 @app.get("/health", tags=["meta"])
 def health():
-    return {"status": "ok", "llm_configured": llm_available()}
+    reader = intake.available_ocr_reader()
+    return {
+        "status": "ok",
+        "llm_configured": llm_available(),
+        # who reads a lab slip on this server: "RapidOCR" (locally), "Claude", or null
+        "ocr_reader": {"local": "RapidOCR", "claude": "Claude"}.get(reader),
+    }

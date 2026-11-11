@@ -94,6 +94,10 @@ times the nutritional fit of a daily staple to outrank it (see
 - `high_sodium` when one serving has > 600 mg sodium.
 - `high_sugar` when `added_sugar` ingredients supply > 10% of the energy (WHO
   2015) — matches the dataset's own added-sugar flag on all 39 recipes.
+- The tags read off a food's name and group (`src/diet/restriction_tags.py`:
+  `contains_meat`, `liver`, `solid_fat`, …) are inherited from every
+  ingredient, in any amount: a dish finished with a spoon of ghee carries
+  `solid_fat`, which the high-cholesterol rule excludes (25 dishes).
 
 ## Validation rules
 

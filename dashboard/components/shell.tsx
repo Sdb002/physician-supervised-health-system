@@ -14,6 +14,7 @@ import {
   IconFileText,
   IconHeartPulse,
   IconHome,
+  IconListChecks,
   IconLogout,
   IconStethoscope,
   IconUsers,
@@ -32,26 +33,27 @@ interface NavItem {
 
 const ROLE_CONFIG: Record<Role, { portal: string | Record<Lang, string>; nav: NavItem[] }> = {
   admin: {
-    portal: "Administration",
+    portal: { en: "Administration", bn: "প্রশাসন" },
     nav: [
-      { href: "/admin", label: "Overview", icon: (c) => <IconDashboard className={c} /> },
-      { href: "/admin/doctors", label: "Doctors", icon: (c) => <IconStethoscope className={c} /> },
-      { href: "/admin/patients", label: "Patients", icon: (c) => <IconHeartPulse className={c} /> },
-      { href: "/admin/users", label: "Users", icon: (c) => <IconUsers className={c} /> },
+      { href: "/admin", label: { en: "Overview", bn: "সারসংক্ষেপ" }, icon: (c) => <IconDashboard className={c} /> },
+      { href: "/admin/doctors", label: { en: "Doctors", bn: "চিকিৎসক" }, icon: (c) => <IconStethoscope className={c} /> },
+      { href: "/admin/patients", label: { en: "Patients", bn: "রোগী" }, icon: (c) => <IconHeartPulse className={c} /> },
+      { href: "/admin/users", label: { en: "Users", bn: "ব্যবহারকারী" }, icon: (c) => <IconUsers className={c} /> },
     ],
   },
   doctor: {
-    portal: "Physician",
+    portal: { en: "Physician", bn: "চিকিৎসক" },
     nav: [
-      { href: "/doctor", label: "Today", icon: (c) => <IconHome className={c} /> },
-      { href: "/doctor/review", label: "Review queue", icon: (c) => <IconClipboard className={c} /> },
-      { href: "/doctor/patients", label: "Patients", icon: (c) => <IconUsers className={c} /> },
+      { href: "/doctor", label: { en: "Today", bn: "আজ" }, icon: (c) => <IconHome className={c} /> },
+      { href: "/doctor/review", label: { en: "Review queue", bn: "পর্যালোচনার তালিকা" }, icon: (c) => <IconClipboard className={c} /> },
+      { href: "/doctor/patients", label: { en: "Patients", bn: "রোগী" }, icon: (c) => <IconUsers className={c} /> },
     ],
   },
   patient: {
     portal: { en: "Patient", bn: "রোগী" },
     nav: [
       { href: "/patient", label: { en: "Home", bn: "হোম" }, icon: (c) => <IconHome className={c} /> },
+      { href: "/patient/today", label: { en: "Today", bn: "আজ" }, icon: (c) => <IconListChecks className={c} /> },
       { href: "/patient/reports", label: { en: "Reports", bn: "রিপোর্ট" }, icon: (c) => <IconFileText className={c} /> },
       { href: "/patient/foods", label: { en: "Meals", bn: "খাবার" }, icon: (c) => <IconUtensils className={c} /> },
       { href: "/patient/recipes", label: { en: "Recipes", bn: "রান্না" }, icon: (c) => <IconCookingPot className={c} /> },
@@ -61,6 +63,8 @@ const ROLE_CONFIG: Record<Role, { portal: string | Record<Lang, string>; nav: Na
 };
 
 const SIGN_OUT: Record<Lang, string> = { en: "Sign out", bn: "সাইন আউট" };
+const SKIP: Record<Lang, string> = { en: "Skip to main content", bn: "মূল অংশে যান" };
+const NAV: Record<Lang, string> = { en: "Main", bn: "প্রধান মেনু" };
 
 const text = (value: string | Record<Lang, string>, lang: Lang) =>
   typeof value === "string" ? value : value[lang];
@@ -74,11 +78,9 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
   const { session, ready, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  const [storedLang] = useLang();
+  const [lang] = useLang();
   const config = ROLE_CONFIG[role];
   const home = config.nav[0].href;
-  // Only the patient portal is bilingual; staff screens stay in English.
-  const lang: Lang = role === "patient" ? storedLang : "en";
 
   useEffect(() => {
     if (ready && (session === null || session.user.role !== role)) {
@@ -104,7 +106,7 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg focus:outline-2 focus:outline-offset-2 focus:outline-clinical"
       >
-        Skip to main content
+        {SKIP[lang]}
       </a>
 
       {/* desktop rail */}
@@ -113,7 +115,7 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
           <Brand caption={text(config.portal, lang)} lang={lang} />
         </Link>
 
-        <nav aria-label="Main" className="mt-6 flex-1 space-y-1 overflow-y-auto px-3">
+        <nav aria-label={NAV[lang]} className="mt-6 flex-1 space-y-1 overflow-y-auto px-3">
           {config.nav.map((item) => {
             const active = isActive(pathname, item.href, home);
             return (
@@ -136,7 +138,7 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
         </nav>
 
         <div className="space-y-2 border-t border-line p-3">
-          {role === "patient" && <LangSwitch className="flex w-full" />}
+          <LangSwitch className="flex w-full" />
           <ThemeToggle />
           <div className="flex items-center gap-3 rounded-xl bg-surface-soft p-2.5">
             <Avatar name={user.name} />
@@ -166,7 +168,7 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
             </span>
           </Link>
           <div className="flex shrink-0 items-center gap-1.5">
-            {role === "patient" && <LangSwitch />}
+            <LangSwitch />
             <button
               onClick={signOut}
               aria-label={SIGN_OUT[lang]}
@@ -186,7 +188,7 @@ export function Shell({ role, children }: { role: Role; children: ReactNode }) {
 
         {/* bottom tab bar: thumb-reachable, labels always visible */}
         <nav
-          aria-label="Main (compact)"
+          aria-label={NAV[lang]}
           className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden print:hidden!"
         >
           <ul className="mx-auto flex max-w-lg">

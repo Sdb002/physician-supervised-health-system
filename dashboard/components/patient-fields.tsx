@@ -2,6 +2,7 @@
 
 import { ACTIVITY_OPTIONS, Option, TRIMESTER_OPTIONS } from "@/lib/patient-options";
 import { Field, checkboxClass, inputClass } from "@/components/ui";
+import { useT } from "@/lib/use-t";
 
 /* The parts of a patient record every patient form asks for the same way:
  * the staff's new-patient and edit forms, and the patient's own registration. */
@@ -21,6 +22,7 @@ export function OptionChecks({
   value: string[];
   onChange: (next: string[]) => void;
 }) {
+  const { t } = useT();
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       {options.map((o) => (
@@ -32,8 +34,8 @@ export function OptionChecks({
             onChange={(e) => onChange(e.target.checked ? [...value, o.key] : value.filter((x) => x !== o.key))}
           />
           <span>
-            {o.label}
-            {o.hint && <span className="block text-xs text-ink-muted">{o.hint}</span>}
+            {t(o.label)}
+            {o.hint && <span className="block text-xs text-ink-muted">{t(o.hint)}</span>}
           </span>
         </label>
       ))}
@@ -49,8 +51,8 @@ export function PregnancyFields({
   onChange,
   label,
   hint,
-  trimesterLabel = "Trimester",
-  notRecorded = "Not recorded",
+  trimesterLabel,
+  notRecorded,
 }: {
   pregnant: boolean;
   trimester: number | null;
@@ -60,6 +62,7 @@ export function PregnancyFields({
   trimesterLabel?: string;
   notRecorded?: string;
 }) {
+  const { t } = useT();
   return (
     <div className="space-y-3">
       <label className={choiceRow}>
@@ -77,7 +80,10 @@ export function PregnancyFields({
         </span>
       </label>
       {pregnant && (
-        <Field label={trimesterLabel} hint="Sets the extra energy the plan adds; none is added until it is recorded.">
+        <Field
+          label={trimesterLabel ?? t("Trimester")}
+          hint={t("Sets the extra energy the plan adds; none is added until it is recorded.")}
+        >
           <select
             className={inputClass}
             value={trimester ?? ""}
@@ -85,9 +91,9 @@ export function PregnancyFields({
               onChange({ pregnant, pregnancy_trimester: e.target.value ? Number(e.target.value) : null })
             }
           >
-            <option value="">{notRecorded}</option>
+            <option value="">{notRecorded ?? t("Not recorded")}</option>
             {TRIMESTER_OPTIONS.map((o) => (
-              <option key={o.key} value={o.key}>{o.label}</option>
+              <option key={o.key} value={o.key}>{t(o.label)}</option>
             ))}
           </select>
         </Field>
@@ -100,9 +106,9 @@ export function PregnancyFields({
 export function ActivityField({
   value,
   onChange,
-  label = "Daily activity",
-  hint = "Sets the energy target. Left unrecorded, light activity is assumed and the report says so.",
-  notRecorded = "Not recorded",
+  label,
+  hint,
+  notRecorded,
 }: {
   value: string | null;
   onChange: (next: string | null) => void;
@@ -110,13 +116,17 @@ export function ActivityField({
   hint?: string;
   notRecorded?: string;
 }) {
+  const { t } = useT();
   return (
-    <Field label={label} hint={hint}>
+    <Field
+      label={label ?? t("Daily activity")}
+      hint={hint ?? t("Sets the energy target. Left unrecorded, light activity is assumed and the report says so.")}
+    >
       <select className={inputClass} value={value ?? ""} onChange={(e) => onChange(e.target.value || null)}>
-        <option value="">{notRecorded}</option>
+        <option value="">{notRecorded ?? t("Not recorded")}</option>
         {ACTIVITY_OPTIONS.map((o) => (
           <option key={o.key} value={o.key}>
-            {o.label}: {o.hint}
+            {t(o.label)}: {t(o.hint ?? "")}
           </option>
         ))}
       </select>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, User } from "@/lib/api";
 import { formatDate } from "@/lib/clinical-terms";
 import { did } from "@/lib/format";
+import { useT } from "@/lib/use-t";
 import { IconCheck, IconStethoscope, IconX } from "@/components/icons";
 import {
   Avatar,
@@ -26,6 +27,12 @@ const FILTER_LABELS: Record<Filter, string> = {
   active: "Active",
   rejected: "Rejected",
 };
+const EMPTY_TITLES: Record<Filter, string> = {
+  all: "No doctors yet",
+  pending: "No waiting doctors",
+  active: "No active doctors",
+  rejected: "No rejected doctors",
+};
 
 export default function AdminDoctorsPage() {
   const [doctors, setDoctors] = useState<User[] | null>(null);
@@ -33,6 +40,7 @@ export default function AdminDoctorsPage() {
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [actioning, setActioning] = useState<number | null>(null);
+  const { t, n, lang } = useT();
 
   const load = useCallback(() => {
     api.adminDoctors().then(setDoctors).catch((e) => setError(e.message));
@@ -71,14 +79,18 @@ export default function AdminDoctorsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Doctors"
-        subtitle={doctors ? `${doctors.length} registered, ${pendingCount} waiting for approval` : undefined}
+        title={t("Doctors")}
+        subtitle={
+          doctors
+            ? t("{count} registered, {pending} waiting for approval", { count: doctors.length, pending: pendingCount })
+            : undefined
+        }
       />
 
       {error && <ErrorNote message={error} />}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div role="group" aria-label="Filter by status" className="inline-flex w-fit rounded-lg border border-line-strong bg-surface p-0.5">
+        <div role="group" aria-label={t("Filter by status")} className="inline-flex w-fit rounded-lg border border-line-strong bg-surface p-0.5">
           {FILTERS.map((f) => (
             <button
               key={f}
@@ -88,28 +100,28 @@ export default function AdminDoctorsPage() {
                 filter === f ? "bg-clinical text-on-clinical" : "text-ink-soft hover:bg-surface-soft"
               }`}
             >
-              {FILTER_LABELS[f]}
+              {t(FILTER_LABELS[f])}
               {f === "pending" && pendingCount > 0 && (
                 <span
                   className={`rounded-full px-1.5 text-xs ${
                     filter === f ? "bg-on-clinical/20" : "bg-watch-tint text-watch-ink"
                   }`}
                 >
-                  {pendingCount}
+                  {n(pendingCount)}
                 </span>
               )}
             </button>
           ))}
         </div>
-        <SearchInput value={query} onChange={setQuery} placeholder="Search name, DID, specialty" />
+        <SearchInput value={query} onChange={setQuery} placeholder={t("Search name, DID, specialty")} />
       </div>
 
       {visible === null ? (
         <Skeleton className="h-48" />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={filter === "all" ? "No doctors yet" : `No ${FILTER_LABELS[filter].toLowerCase()} doctors`}
-          hint="Applications from the doctor registration page appear here."
+          title={t(EMPTY_TITLES[filter])}
+          hint={t("Applications from the doctor registration page appear here.")}
           icon={<IconStethoscope className="h-5 w-5" />}
         />
       ) : (
@@ -117,12 +129,12 @@ export default function AdminDoctorsPage() {
           <table className="w-full min-w-3xl text-left text-sm">
             <thead className="border-b border-line bg-surface-soft text-ink-muted">
               <tr>
-                <th scope="col" className="px-5 py-3 font-semibold">Doctor</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Specialty</th>
-                <th scope="col" className="px-4 py-3 font-semibold">BMDC no.</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Applied</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Status</th>
-                <th scope="col" className="px-5 py-3"><span className="sr-only">Decision</span></th>
+                <th scope="col" className="px-5 py-3 font-semibold">{t("Doctor")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Specialty")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("BMDC no.")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Applied")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Status")}</th>
+                <th scope="col" className="px-5 py-3"><span className="sr-only">{t("Decision")}</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -143,9 +155,9 @@ export default function AdminDoctorsPage() {
                   <td className="px-4 py-3 text-ink-soft">
                     {doc.license_no || <span className="text-ink-muted">—</span>}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{formatDate(doc.created_at)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{formatDate(doc.created_at, lang)}</td>
                   <td className="px-4 py-3">
-                    <Badge kind={doc.status}>{doc.status === "pending" ? "Waiting" : doc.status}</Badge>
+                    <Badge kind={doc.status}>{t(FILTER_LABELS[doc.status as Filter] ?? doc.status)}</Badge>
                   </td>
                   <td className="px-5 py-3 text-right">
                     {doc.status === "pending" && (
@@ -155,14 +167,14 @@ export default function AdminDoctorsPage() {
                           disabled={actioning === doc.id}
                           className={`${buttonDanger} min-h-8 px-3`}
                         >
-                          <IconX className="h-4 w-4" /> Reject
+                          <IconX className="h-4 w-4" /> {t("Reject")}
                         </button>
                         <button
                           onClick={() => decide(doc.id, "approved")}
                           disabled={actioning === doc.id}
                           className={`${buttonPrimary} min-h-8 px-3`}
                         >
-                          <IconCheck className="h-4 w-4" /> Approve
+                          <IconCheck className="h-4 w-4" /> {t("Approve")}
                         </button>
                       </div>
                     )}

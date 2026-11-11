@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { ExcludedFood, api } from "@/lib/api";
 import { CONDITION_OPTIONS, DIETARY_RESTRICTION_OPTIONS } from "@/lib/patient-options";
 import { ActivityField, OptionChecks, PregnancyFields, choiceRow } from "@/components/patient-fields";
+import { ExcludedFoodsField, excludedFoodPicks } from "@/components/excluded-foods";
 import {
   ErrorNote,
   Field,
@@ -13,11 +14,13 @@ import {
   checkboxClass,
   inputClass,
 } from "@/components/ui";
+import { useT } from "@/lib/use-t";
 
 const sectionClass = "grid gap-x-8 gap-y-4 px-5 py-6 md:grid-cols-[14rem_1fr]";
 
 export default function NewPatientPage() {
   const router = useRouter();
+  const { t } = useT();
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [createdId, setCreatedId] = useState<number | null>(null);
@@ -32,6 +35,7 @@ export default function NewPatientPage() {
     pregnancy_trimester: null as number | null,
     conditions: [] as string[],
     dietary_restrictions: [] as string[],
+    excluded_foods: [] as ExcludedFood[],
     fitness_level: "beginner",
     activity_level: null as string | null,
     notes: "",
@@ -47,8 +51,10 @@ export default function NewPatientPage() {
       // don't create the patient twice if a previous attempt failed only on the account step
       let patientId = createdId;
       if (patientId === null) {
+        // the record keeps the excluded foods by id; the name goes with it
+        const record = { ...form, excluded_foods: excludedFoodPicks(form.excluded_foods) };
         const patient = await api.createPatient(
-          form.sex === "female" ? form : { ...form, pregnant: false, pregnancy_trimester: null }
+          form.sex === "female" ? record : { ...record, pregnant: false, pregnancy_trimester: null }
         );
         patientId = patient.id;
         setCreatedId(patientId);
@@ -60,8 +66,10 @@ export default function NewPatientPage() {
     } catch (err) {
       setError(
         createdId !== null
-          ? `The patient was saved, but the login could not be created: ${(err as Error).message}. ` +
-            "Fix the email or password and save again, or untick the login option to continue."
+          ? t(
+              "The patient was saved, but the login could not be created: {reason}. Fix the email or password and save again, or untick the login option to continue.",
+              { reason: t((err as Error).message) }
+            )
           : (err as Error).message
       );
       setSaving(false);
@@ -71,9 +79,9 @@ export default function NewPatientPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
-        title="New patient"
-        subtitle="After saving, you go straight to their first visit."
-        back={{ href: "/doctor/patients", label: "Patients" }}
+        title={t("New patient")}
+        subtitle={t("After saving, you go straight to their first visit.")}
+        back={{ href: "/doctor/patients", label: t("Patients") }}
       />
 
       {error && <ErrorNote message={error} />}
@@ -81,27 +89,27 @@ export default function NewPatientPage() {
       <form onSubmit={submit} className="divide-y divide-line rounded-xl border border-line bg-surface">
         <section className={sectionClass}>
           <div>
-            <h2 className="font-semibold text-ink">Identity</h2>
-            <p className="mt-0.5 text-sm text-ink-muted">Sex, age and pregnancy change clinical cutoffs.</p>
+            <h2 className="font-semibold text-ink">{t("Identity")}</h2>
+            <p className="mt-0.5 text-sm text-ink-muted">{t("Sex, age and pregnancy change clinical cutoffs.")}</p>
           </div>
           <div className="space-y-4">
-            <Field label="Full name">
+            <Field label={t("Full name")}>
               <input
                 className={inputClass}
                 required
                 value={form.name}
                 onChange={(e) => set("name", e.target.value)}
-                placeholder="e.g. Ayesha Rahman"
+                placeholder={t("e.g. Ayesha Rahman")}
               />
             </Field>
             <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Sex">
+              <Field label={t("Sex")}>
                 <select className={inputClass} value={form.sex} onChange={(e) => set("sex", e.target.value)}>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
+                  <option value="female">{t("Female")}</option>
+                  <option value="male">{t("Male")}</option>
                 </select>
               </Field>
-              <Field label="Year of birth">
+              <Field label={t("Year of birth")}>
                 <input
                   className={inputClass}
                   type="number"
@@ -113,7 +121,7 @@ export default function NewPatientPage() {
                   onChange={(e) => set("birth_year", Number(e.target.value))}
                 />
               </Field>
-              <Field label="Height (cm)">
+              <Field label={t("Height (cm)")}>
                 <input
                   className={inputClass}
                   type="number"
@@ -132,8 +140,8 @@ export default function NewPatientPage() {
                 pregnant={form.pregnant}
                 trimester={form.pregnancy_trimester}
                 onChange={(next) => setForm((f) => ({ ...f, ...next }))}
-                label="Currently pregnant"
-                hint="Changes anaemia cutoffs, nutrient targets, excluded foods and exercises; no weight-loss deficit is applied."
+                label={t("Currently pregnant")}
+                hint={t("Changes anaemia cutoffs, nutrient targets, excluded foods and exercises; no weight-loss deficit is applied.")}
               />
             )}
           </div>
@@ -141,14 +149,14 @@ export default function NewPatientPage() {
 
         <section className={sectionClass}>
           <div>
-            <h2 className="font-semibold text-ink">Clinical background</h2>
+            <h2 className="font-semibold text-ink">{t("Clinical background")}</h2>
             <p className="mt-0.5 text-sm text-ink-muted">
-              The engine also derives conditions from lab values. Tick what is already diagnosed.
+              {t("The engine also derives conditions from lab values. Tick what is already diagnosed.")}
             </p>
           </div>
           <div className="space-y-4">
             <fieldset>
-              <legend className="mb-1.5 text-sm font-semibold text-ink-strong">Diagnosed conditions</legend>
+              <legend className="mb-1.5 text-sm font-semibold text-ink-strong">{t("Diagnosed conditions")}</legend>
               <OptionChecks
                 options={CONDITION_OPTIONS}
                 value={form.conditions}
@@ -156,9 +164,9 @@ export default function NewPatientPage() {
               />
             </fieldset>
             <fieldset>
-              <legend className="text-sm font-semibold text-ink-strong">Food the patient does not eat</legend>
+              <legend className="text-sm font-semibold text-ink-strong">{t("Food the patient does not eat")}</legend>
               <p className="mb-1.5 text-xs text-ink-muted">
-                For faith, choice or allergy. These foods and any dish containing them are never planned or offered.
+                {t("For faith, choice or allergy. These foods and any dish containing them are never planned or offered.")}
               </p>
               <OptionChecks
                 options={DIETARY_RESTRICTION_OPTIONS}
@@ -166,21 +174,28 @@ export default function NewPatientPage() {
                 onChange={(restrictions) => set("dietary_restrictions", restrictions)}
               />
             </fieldset>
+            <fieldset>
+              <legend className="text-sm font-semibold text-ink-strong">{t("Other foods and dishes to leave out")}</legend>
+              <p className="mb-1.5 text-xs text-ink-muted">
+                {t("A single food the patient is allergic to or will not eat, or a dish. A food is left out in every form, with every dish that uses it.")}
+              </p>
+              <ExcludedFoodsField value={form.excluded_foods} onChange={(foods) => set("excluded_foods", foods)} />
+            </fieldset>
             <div className="grid gap-4 sm:grid-cols-2">
               <ActivityField value={form.activity_level} onChange={(level) => set("activity_level", level)} />
-              <Field label="Fitness level" hint="Scales the starting exercise volume.">
+              <Field label={t("Fitness level")} hint={t("Scales the starting exercise volume.")}>
                 <select
                   className={inputClass}
                   value={form.fitness_level}
                   onChange={(e) => set("fitness_level", e.target.value)}
                 >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="beginner">{t("Beginner")}</option>
+                  <option value="intermediate">{t("Intermediate")}</option>
+                  <option value="advanced">{t("Advanced")}</option>
                 </select>
               </Field>
             </div>
-            <Field label="Notes (optional)">
+            <Field label={t("Notes (optional)")}>
               <textarea
                 className={inputClass}
                 rows={3}
@@ -193,8 +208,8 @@ export default function NewPatientPage() {
 
         <section className={sectionClass}>
           <div>
-            <h2 className="font-semibold text-ink">Patient login</h2>
-            <p className="mt-0.5 text-sm text-ink-muted">Optional. Lets the patient read approved reports online.</p>
+            <h2 className="font-semibold text-ink">{t("Patient login")}</h2>
+            <p className="mt-0.5 text-sm text-ink-muted">{t("Optional. Lets the patient read approved reports online.")}</p>
           </div>
           <div className="space-y-4">
             <label className={choiceRow}>
@@ -204,11 +219,11 @@ export default function NewPatientPage() {
                 checked={withAccount}
                 onChange={(e) => setWithAccount(e.target.checked)}
               />
-              Create a login for this patient
+              {t("Create a login for this patient")}
             </label>
             {withAccount && (
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Patient email">
+                <Field label={t("Patient email")}>
                   <input
                     className={inputClass}
                     type="email"
@@ -219,7 +234,7 @@ export default function NewPatientPage() {
                     placeholder="patient@example.com"
                   />
                 </Field>
-                <Field label="Temporary password" hint="At least 8 characters. Give it to the patient.">
+                <Field label={t("Temporary password")} hint={t("At least 8 characters. Give it to the patient.")}>
                   <input
                     className={inputClass}
                     type="text"
@@ -237,7 +252,7 @@ export default function NewPatientPage() {
 
         <div className="flex justify-end bg-surface-soft px-5 py-4">
           <button type="submit" disabled={saving} className={buttonPrimary}>
-            {saving ? "Saving…" : "Save and start visit"}
+            {saving ? t("Saving…") : t("Save and start visit")}
           </button>
         </div>
       </form>

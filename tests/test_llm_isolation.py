@@ -46,3 +46,15 @@ def test_scanner_catches_planted_import(tmp_path):
     (pkg / "fine.py").write_text("import math\n", encoding="utf-8")
     offenders = scan_for_llm_imports(tmp_path, packages=("clinical",))
     assert len(offenders) == 2
+
+
+def test_deterministic_packages_never_import_the_ocr_reader():
+    """Lab-slip OCR (src/ocr) only prefills the intake form for the physician
+    to confirm; no clinical rule may read its output directly."""
+    offenders = []
+    for package in ISOLATED_PACKAGES:
+        for py_file in sorted((SRC / package).rglob("*.py")):
+            offenders += [f"{py_file.relative_to(SRC)} imports {module}"
+                          for module in _imports_in(py_file)
+                          if module == "src.ocr" or module.startswith("src.ocr.")]
+    assert offenders == [], "OCR isolation violated:\n" + "\n".join(offenders)

@@ -1,4 +1,4 @@
-"""Convert the raw food and recipe datasets into the app's canonical CSVs.
+"""Convert the raw food, recipe and exercise datasets into the app's canonical CSVs.
 
 Inputs (raw exports — never hand-edited; every change to a source value is a
 documented, logged correction below):
@@ -12,6 +12,13 @@ documented, logged correction below):
       which also holds the method, Sources, retention/yield factor tables and
       the FCTB cooked-dish benchmark). Each ingredient's food_no is the No. of
       a row in the food file above.
+  data/lifestyle/raw/exercise_safety_dataset.csv
+      408 exercises from 88 cited sources (NHS, AAOS OrthoInfo, NIA, ACE,
+      the 2024 Compendium...), each rated safe / modify / avoid for 12 body
+      regions and five conditions, with dose, method, an easier version,
+      safety notes and a demonstration video. Read with
+  data/reference/exercise_met.yaml
+      the 2024 Compendium MET of each exercise that has one.
 
 Outputs:
   data/food/bd_food.csv                schema: data/food/schema.md
@@ -19,6 +26,7 @@ Outputs:
   data/recipe/recipes.csv              schema: data/recipe/schema.md
   data/recipe/recipe_ingredients.csv
   data/recipe/recipe_steps.csv
+  data/lifestyle/exercises.csv         schema: data/lifestyle/schema.md
 
 Run from the project root:  .venv\\Scripts\\python.exe scripts\\convert_datasets.py
 then validate:              .venv\\Scripts\\python.exe scripts\\validate_datasets.py
@@ -98,6 +106,53 @@ are written cell by cell to data/food/corrections_log.csv:
     (4 x protein + 9 x fat + 4 x carbohydrate + 2 x fibre) where the macros
     exist: 8 IFCT oils ("energy not reported by IFCT for pure oils") and
     nigella seed. Five USDA dried herbs have no macros and stay at 0 kcal.
+
+Exercises — every source row is kept and keeps its id (EX001-EX469, with the
+source's own gaps), so each one traces back to its row:
+- category: aerobic/cardio -> aerobic; strength and pelvic floor -> strength
+  (pelvic floor training is resistance training of those muscles, NHS);
+  flexibility/stretching and mobility/range-of-motion -> flexibility (ACSM's
+  flexibility component is range of motion); balance -> balance (ACSM's
+  neuromotor component); breathing/relaxation -> breathing, which the
+  prescription does not plan. exercise_type keeps the source value.
+- MET and intensity come from data/reference/exercise_met.yaml; an entry the
+  row itself states ("Compendium: 5.0 MET") must still be stated there, or
+  the conversion stops. intensity_level is the MET band (light < 3, moderate
+  3-5.9, vigorous >= 6); rows with no MET have neither.
+- condition_reasons is split on its "P: / H: / D: / A: / K:" prefixes into one
+  note per condition (pregnancy, hypertension, diabetes, anemia, knee
+  osteoarthritis); text before the first prefix is note_general. modify_for
+  lists the conditions rated "modify".
+- contra_tags are what the safety gate excludes on (contraindications.yaml):
+    avoid_<condition>     the row rates that condition "avoid"
+    supine_position       its pregnancy note says the exercise is done lying
+                          on the back ("lying flat on the back should be kept
+                          to a few minutes in later pregnancy" and the like),
+                          which the pregnancy rule already excluded
+    not_for_older_adults  older_adult_suitable = no
+    female_only / male_only  sex_suitability
+- traits are what the ranking reads (src/lifestyle/ranking.py), each derived
+  from a column or the wording of a note:
+    pelvic_floor           exercise_type pelvic floor
+    pregnancy_recommended  the pregnancy note recommends or encourages it, or
+                           names the pregnancy guide or workout it comes from
+    knee_oa_strengthening  a strength exercise for the quadriceps or the hip
+                           abductors, or one whose knee note cites OARSI/NICE
+                           (OARSI 2019: muscle strengthening is core treatment)
+    high_impact / low_impact  the knee note says so
+    post_meal              the diabetes note suggests it after meals
+    isometric_hold         the hypertension note is about a held position
+                           ("isometric", "15-s hold", "short holds")
+    falls_prevention       from a falls-prevention programme (Otago, the NHS
+                           Wales falls-prevention leaflet)
+    seated                 done sitting on a chair
+- injury_avoid / injury_modify list the body regions rated avoid / modify
+  (inj_none is "safe" on every row and is dropped). Nothing reads them yet:
+  the patient record has no injuries.
+- name_bn is empty: the source has no Bangla names, and the app shows the
+  English name in their place.
+- One cell is cleared: EX094's youtube_note repeats its youtube_match
+  ("exact").
 """
 
 import csv
@@ -105,14 +160,19 @@ import re
 import sys
 from pathlib import Path
 
+from ruamel.yaml import YAML
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FOOD_RAW = PROJECT_ROOT / "data" / "food" / "raw" / "Bangladeshi_Indian_Foods_Nutrition_700_antioxidants.csv"
 RECIPE_RAW = PROJECT_ROOT / "data" / "recipe" / "raw"
+EXERCISE_RAW = PROJECT_ROOT / "data" / "lifestyle" / "raw" / "exercise_safety_dataset.csv"
+EXERCISE_MET = PROJECT_ROOT / "data" / "reference" / "exercise_met.yaml"
 FOOD_OUT = PROJECT_ROOT / "data" / "food" / "bd_food.csv"
 CORRECTIONS_OUT = PROJECT_ROOT / "data" / "food" / "corrections_log.csv"
 RECIPES_OUT = PROJECT_ROOT / "data" / "recipe" / "recipes.csv"
 INGREDIENTS_OUT = PROJECT_ROOT / "data" / "recipe" / "recipe_ingredients.csv"
 STEPS_OUT = PROJECT_ROOT / "data" / "recipe" / "recipe_steps.csv"
+EXERCISES_OUT = PROJECT_ROOT / "data" / "lifestyle" / "exercises.csv"
 
 RECIPE_SOURCE = "Bangladeshi Recipe Dataset 250, v2 (2026-09-27)"
 
@@ -510,6 +570,174 @@ INGREDIENT_COLUMNS = [
 STEP_COLUMNS = ["recipe_id", "step_no", "instruction"]
 CORRECTION_COLUMNS = ["food_id", "name_en", "column", "source_value", "new_value", "rule", "evidence"]
 
+# --- exercises -----------------------------------------------------------
+
+EXERCISE_CATEGORIES = {
+    "aerobic/cardio": "aerobic",
+    "strength": "strength",
+    "pelvic floor": "strength",
+    "flexibility/stretching": "flexibility",
+    "mobility/range-of-motion": "flexibility",
+    "balance": "balance",
+    "breathing/relaxation": "breathing",
+}
+# raw rating column -> condition key of data/reference/contraindications.yaml,
+# and the prefix condition_reasons gives that condition's note
+EXERCISE_CONDITIONS = {
+    "cond_pregnancy": ("pregnancy", "P"),
+    "cond_hypertension": ("hypertension", "H"),
+    "cond_diabetes": ("diabetes", "D"),
+    "cond_anemia": ("anemia", "A"),
+    "cond_knee_oa": ("knee_osteoarthritis", "K"),
+}
+INJURY_REGIONS = ["neck", "shoulder", "chest", "upperarm_elbow", "forearm_wrist_hand",
+                  "upper_back", "lower_back", "waist_core", "hip", "knee", "ankle", "foot"]
+OLDER_ADULT = {"yes": "yes", "with modification": "modify", "no": "no"}
+_NOTE_PREFIX = re.compile(r"(?:^|;\s*)([PHDAK]):\s")
+_SUPINE = re.compile(r"lying (flat|on (the|your) back)")
+_NOT_SUPINE = re.compile(r"avoids lying flat")
+_RECOMMENDED_IN_PREGNANCY = re.compile(
+    r"recommended|encouraged|advised for|pregnancy (workout|guide|leaflet|booklet)|"
+    r"part of Tommy's")
+_OA_STRENGTHENING_MUSCLES = re.compile(r"quadriceps|gluteus medius|hip abductors")
+_OA_CITED = re.compile(r"OARSI|NICE")
+_ISOMETRIC = re.compile(r"isometric|\d-s hold|\bholds\b")
+_STATED_MET = re.compile(r"(\d+(?:\.\d+)?) MET")
+_FALLS_PROGRAMME = re.compile(r"Otago|falls-prevention")
+# cells that are demonstrably wrong in the source: (id, column) -> value
+EXERCISE_CELL_FIXES = {("EX094", "youtube_note"): ""}  # repeats youtube_match
+
+EXERCISE_COLUMNS = [
+    "exercise_id", "name_en", "name_bn", "category", "exercise_type", "body_region",
+    "muscles", "fitness_level", "met_value", "met_code", "intensity_level",
+    "equipment", "needs_equipment", "setting", "sex", "older_adult",
+    "contra_tags", "traits", "modify_for",
+    "note_general", *(f"note_{key}" for key, _ in EXERCISE_CONDITIONS.values()),
+    "injury_avoid", "injury_modify",
+    "dose", "how_to", "easier_version", "safety_notes", "sex_note",
+    "source", "source_url", "source_detail", "evidence_basis",
+    "video_url", "video_title", "video_channel", "video_match", "video_note",
+]
+
+
+def _condition_notes(reasons: str) -> dict[str, str]:
+    """condition_reasons split on its one-letter prefixes:
+    "D: check feet if neuropathy; P: hold support" -> {"D": ..., "P": ...}.
+    A semicolon inside a note ("...[NHS]; from the 2nd trimester...") stays in
+    it: only "; X: " with a condition letter starts the next one."""
+    parts = _NOTE_PREFIX.split(reasons)
+    notes = {"general": parts[0].strip(" ;")}
+    for letter, text in zip(parts[1::2], parts[2::2]):
+        notes[letter] = text.strip(" ;")
+    return notes
+
+
+def _intensity(met: float) -> str:
+    return "light" if met < 3 else "moderate" if met < 6 else "vigorous"
+
+
+def convert_exercises() -> list[dict]:
+    raw_rows = _read_csv(EXERCISE_RAW)
+    met_table = YAML(typ="safe").load(EXERCISE_MET.read_text(encoding="utf-8"))["exercises"]
+    unknown = set(met_table) - {r["exercise_id"] for r in raw_rows}
+    if unknown:
+        raise SystemExit(f"exercise_met.yaml lists exercises not in the dataset: {sorted(unknown)}")
+
+    out = []
+    for raw in raw_rows:
+        eid = raw["exercise_id"]
+        for (fix_id, column), value in EXERCISE_CELL_FIXES.items():
+            if fix_id == eid:
+                raw[column] = value
+        notes = _condition_notes(raw["condition_reasons"])
+        category = EXERCISE_CATEGORIES[raw["exercise_type"]]
+
+        met = met_table.get(eid)
+        stated = [float(v) for v in _STATED_MET.findall(raw["recommended_dose"])]
+        if met and met["match"] == "stated" and float(met["met"]) not in stated:
+            raise SystemExit(f"{eid}: exercise_met.yaml says the row states {met['met']} MET, "
+                             f"but its dose gives {stated or 'none'}")
+
+        tags = [f"avoid_{key}" for col, (key, _) in EXERCISE_CONDITIONS.items()
+                if raw[col] == "avoid"]
+        pregnancy_note = notes.get("P", "")
+        if _SUPINE.search(pregnancy_note) and not _NOT_SUPINE.search(pregnancy_note):
+            tags.append("supine_position")
+        if raw["older_adult_suitable"] == "no":
+            tags.append("not_for_older_adults")
+        if raw["sex_suitability"] == "female":
+            tags.append("female_only")
+        elif raw["sex_suitability"] == "male":
+            tags.append("male_only")
+
+        traits = []
+        if raw["exercise_type"] == "pelvic floor":
+            traits.append("pelvic_floor")
+        if _RECOMMENDED_IN_PREGNANCY.search(pregnancy_note):
+            traits.append("pregnancy_recommended")
+        knee_note = notes.get("K", "")
+        if ((category == "strength" and _OA_STRENGTHENING_MUSCLES.search(raw["primary_muscles"]))
+                or _OA_CITED.search(knee_note)):
+            traits.append("knee_oa_strengthening")
+        if "high impact" in knee_note:
+            traits.append("high_impact")
+        if re.search(r"low[- ]impact", knee_note):
+            traits.append("low_impact")
+        if "post-meal" in notes.get("D", ""):
+            traits.append("post_meal")
+        if _ISOMETRIC.search(notes.get("H", "")):
+            traits.append("isometric_hold")
+        if _FALLS_PROGRAMME.search(raw["source_name"] + " " + raw["source_url"]):
+            traits.append("falls_prevention")
+        if raw["equipment_type"] == "chair" and (
+                re.match(r"sit\b", raw["how_to"], re.IGNORECASE)
+                or "seated" in raw["exercise_name"].lower()):
+            traits.append("seated")
+
+        row = {
+            "exercise_id": eid,
+            "name_en": raw["exercise_name"],
+            "name_bn": "",
+            "category": category,
+            "exercise_type": raw["exercise_type"],
+            "body_region": raw["primary_body_region"],
+            "muscles": raw["primary_muscles"],
+            "fitness_level": raw["fitness_level"],
+            "met_value": _fmt(float(met["met"])) if met else "",
+            "met_code": met["code"] if met else "",
+            "intensity_level": _intensity(float(met["met"])) if met else "",
+            "equipment": raw["equipment_type"],
+            "needs_equipment": raw["equipment_required"],
+            "setting": raw["setting"],
+            "sex": raw["sex_suitability"],
+            "older_adult": OLDER_ADULT[raw["older_adult_suitable"]],
+            "contra_tags": "|".join(tags),
+            "traits": "|".join(traits),
+            "modify_for": "|".join(key for col, (key, _) in EXERCISE_CONDITIONS.items()
+                                   if raw[col] == "modify"),
+            "note_general": notes["general"],
+            "injury_avoid": "|".join(r for r in INJURY_REGIONS if raw[f"inj_{r}"] == "avoid"),
+            "injury_modify": "|".join(r for r in INJURY_REGIONS if raw[f"inj_{r}"] == "modify"),
+            "dose": raw["recommended_dose"],
+            "how_to": raw["how_to"],
+            "easier_version": raw["modification_or_easier_version"],
+            "safety_notes": raw["safety_notes"],
+            "sex_note": raw["sex_note"],
+            "source": raw["source_name"],
+            "source_url": raw["source_url"],
+            "source_detail": raw["source_detail"],
+            "evidence_basis": raw["evidence_basis"],
+            "video_url": raw["youtube_url"],
+            "video_title": raw["youtube_title"],
+            "video_channel": raw["youtube_channel"],
+            "video_match": raw["youtube_match"],
+            "video_note": raw["youtube_note"],
+        }
+        for col, (key, letter) in EXERCISE_CONDITIONS.items():
+            row[f"note_{key}"] = notes.get(letter, "")
+        out.append(row)
+    return out
+
 
 def main() -> int:
     foods, corrections, excluded = convert_foods()
@@ -535,6 +763,15 @@ def main() -> int:
         print(f"  {n:4}  {rule}")
     print(f"wrote {len(recipes)} recipes, {len(ingredients)} ingredient rows, "
           f"{len(steps)} steps to {RECIPES_OUT.parent.relative_to(PROJECT_ROOT)}/")
+
+    exercises = convert_exercises()
+    _write_csv(EXERCISES_OUT, EXERCISE_COLUMNS, exercises)
+    categories: dict[str, int] = {}
+    for e in exercises:
+        categories[e["category"]] = categories.get(e["category"], 0) + 1
+    print(f"wrote {len(exercises)} exercises to {EXERCISES_OUT.relative_to(PROJECT_ROOT)} "
+          f"({sum(1 for e in exercises if e['met_value'])} with a Compendium MET)")
+    print(f"categories: {dict(sorted(categories.items()))}")
     return 0
 
 

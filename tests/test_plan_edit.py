@@ -241,6 +241,53 @@ def test_a_vegetarian_patient_is_planned_and_offered_no_meat_or_fish(client):
     assert "excluded for this patient" in response.json()["detail"]
 
 
+def test_high_cholesterol_is_planned_and_offered_nothing_cooked_in_solid_fat(client):
+    from src.diet.food_db import food_index, load_foods
+    from src.diet.recipe import load_recipes
+
+    assessment = _pending(client, patient={**PATIENT, "conditions": ["high_cholesterol"]},
+                          visit={"weight_kg": 62, "biomarkers": {}})
+    result = assessment["result"]
+    nutrition = result["nutrition"]
+    assert result["conditions"] == ["high_cholesterol"]
+    assert result["exclusions"]["food_tags"] == ["solid_fat"]
+    # no exercise is excluded for high cholesterol: only the other sex's rows
+    assert result["exclusions"]["exercise_tags"] == ["male_only"]
+    assert nutrition["findings"] == ["high_cholesterol"] and nutrition["emphasize"] == ["fiber_g"]
+    # the review screen says what the food table cannot count
+    assert any("no saturated fat" in caution for caution in result["cautions"])
+
+    # no planned or suggested dish is cooked in ghee, butter or another solid fat
+    tags = {r.recipe_id: r.tags for r in load_recipes(food_index(load_foods()))}
+    cooked_in_ghee = {recipe_id for recipe_id, dish_tags in tags.items() if "solid_fat" in dish_tags}
+    assert "BDR-152" in cooked_in_ghee  # ghee rice
+    dishes = _plan_dishes(result)
+    assert dishes and not {d["recipe_id"] for d in dishes} & cooked_in_ghee
+    assert not {r["recipe_id"] for r in nutrition["top_recipes"]} & cooked_in_ghee
+    # every meal of the week is still a whole meal without them
+    for day in result["nutrition"]["meal_plan"]["days"]:
+        assert {item["course"] for item in day["meals"]["lunch"]} == {"staple", "dal", "main", "vegetable"}
+
+    # the plan editor neither offers nor accepts one
+    offered = {f["name_en"] for f in client.get(f"/review/{assessment['id']}/foods").json()}
+    assert not offered & {"Ghee Rice", "Chicken Korma", "Ghee, cow", "Butter, salted", "Vanaspati"}
+    assert {"Plain Boiled Rice", "Mustard oil", "Hilsa", "Almond"} <= offered
+    response = client.post(f"/review/{assessment['id']}/recompute",
+                           json={"days": [{"lunch": [{"recipe_id": "BDR-152", "qty_g": 200}]}]})
+    assert response.status_code == 422
+    assert "excluded for this patient" in response.json()["detail"]
+
+    # the patient is told why, in their own language
+    client.post(f"/review/{assessment['id']}/decision",
+                json={"decision": "approved", "physician_name": "Dr Edit"})
+    report = client.get(f"/report/{assessment['visit_id']}?lang=bn&use_llm=false").json()
+    assert "উচ্চ কোলেস্টেরলের জন্য এই পরিকল্পনায়" in report["text"]
+    # ...and the note to the reviewing physician stays out of their report
+    report_en = client.get(f"/report/{assessment['visit_id']}?lang=en&use_llm=false").json()
+    assert "For high cholesterol, this plan leaves out dishes cooked in solid fats" in report_en["text"]
+    assert "saturated fat" not in report_en["text"]
+
+
 def test_changing_the_patient_rebuilds_the_plan_awaiting_review(client):
     assessment = _pending(client)
     patient_id = client.get(f"/review/{assessment['id']}").json()["patient"]["id"]

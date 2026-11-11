@@ -54,6 +54,7 @@ const CONDITIONS: Record<Lang, Record<string, string>> = {
   en: {
     diabetes: "Diabetes",
     hypertension: "High blood pressure",
+    high_cholesterol: "High cholesterol",
     anemia: "Anaemia",
     pregnancy: "Pregnancy",
     chronic_kidney_disease: "Kidney disease",
@@ -62,6 +63,7 @@ const CONDITIONS: Record<Lang, Record<string, string>> = {
   bn: {
     diabetes: "ডায়াবেটিস",
     hypertension: "উচ্চ রক্তচাপ",
+    high_cholesterol: "উচ্চ কোলেস্টেরল",
     anemia: "রক্তস্বল্পতা",
     pregnancy: "গর্ভাবস্থা",
     chronic_kidney_disease: "কিডনি রোগ",
@@ -142,6 +144,19 @@ export const weekdayName = (key: string, lang: Lang = "en", short = false) =>
 /** Today's weekday key; Date.getDay() counts from Sunday = 0. */
 const JS_DAY_KEYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 export const todayWeekday = () => JS_DAY_KEYS[new Date().getDay()];
+
+/** Whether an assessment was built by engine `minimum` or later. Compared
+ * number by number: as text, "0.10.0" sorts before "0.3.0". */
+export function engineAtLeast(version: string | undefined, minimum: string): boolean {
+  const numbers = (v: string) => v.split(".").map((part) => Number.parseInt(part, 10) || 0);
+  const have = numbers(version ?? "");
+  const need = numbers(minimum);
+  for (let i = 0; i < Math.max(have.length, need.length); i++) {
+    const difference = (have[i] ?? 0) - (need[i] ?? 0);
+    if (difference !== 0) return difference > 0;
+  }
+  return true;
+}
 
 /** One day of a plan, whatever the plan's age: a week plan's day, or the
  * single "every day" plan of an assessment made before engine 0.4.0. */
@@ -225,6 +240,99 @@ export function portionText(
 /** Food and exercise names in the reader's language, English as fallback. */
 export const localName = (item: { name_en: string; name_bn?: string }, lang: Lang) =>
   (lang === "bn" && item.name_bn) || item.name_en;
+
+/** The exercise prescription's groups in plan order. Balance training is
+ * planned from 65 (engine 0.12.0), so a plan lists it only when its
+ * frequency has balance days. */
+export const EXERCISE_GROUPS = ["aerobic", "strength", "flexibility", "balance"] as const;
+export type ExerciseGroup = (typeof EXERCISE_GROUPS)[number];
+
+type PlanFrequency = {
+  aerobic_days: number;
+  strength_days: number;
+  flexibility_days: number;
+  balance_days?: number;
+};
+
+export function planGroups(frequency: PlanFrequency): ExerciseGroup[] {
+  return EXERCISE_GROUPS.filter((g) => g !== "balance" || frequency.balance_days != null);
+}
+
+/** Days a week for one group of the prescription. */
+export function groupDays(frequency: PlanFrequency, group: ExerciseGroup): number {
+  return {
+    aerobic: frequency.aerobic_days,
+    strength: frequency.strength_days,
+    flexibility: frequency.flexibility_days,
+    balance: frequency.balance_days ?? 0,
+  }[group];
+}
+
+/** Whether an exercise needs anything beyond the body. Plans before engine
+ * 0.12.0 say "none", later ones "none (bodyweight)". */
+export const needsEquipment = (equipment: string) => !/^none\b/.test(equipment);
+
+const EQUIPMENT_BN: Record<string, string> = {
+  chair: "চেয়ার",
+  wall: "দেয়াল",
+  mat: "মাদুর",
+  table: "টেবিল",
+  towel: "তোয়ালে",
+  "rolled towel": "গোল করে পাকানো তোয়ালে",
+  "water bottle": "পানির বোতল",
+  "water bottles": "পানির বোতল",
+  step: "সিঁড়ির ধাপ",
+  pillow: "বালিশ",
+  ball: "বল",
+  stick: "লাঠি",
+  "resistance band": "রেজিস্ট্যান্স ব্যান্ড",
+  dumbbells: "ডাম্বেল",
+  bicycle: "সাইকেল",
+};
+
+/** "household item (water bottle)" reads as "water bottle" ("পানির বোতল"). */
+export const equipmentName = (equipment: string, lang: Lang = "en") => {
+  const name = equipment.replace(/^household item \((.*)\)$/, "$1");
+  return (lang === "bn" && EQUIPMENT_BN[name]) || name;
+};
+
+const EXERCISE_TAGS: Record<string, string> = {
+  avoid_pregnancy: "rated avoid in pregnancy",
+  avoid_hypertension: "rated avoid with high blood pressure",
+  avoid_diabetes: "rated avoid with diabetes",
+  avoid_anemia: "rated avoid with anaemia",
+  avoid_knee_osteoarthritis: "rated avoid with knee osteoarthritis",
+  supine_position: "done lying on the back",
+  not_for_older_adults: "not for 65 and over",
+  female_only: "for women only",
+  male_only: "for men only",
+};
+
+/** An exercise exclusion tag as the review screen says it (staff, English). */
+export const exerciseTagName = (tag: string) => EXERCISE_TAGS[tag] ?? tag.replace(/_/g, " ");
+
+/* Why a condition leaves a food out: the food tags each condition excludes
+ * (data/reference/contraindications.yaml), in the patient's words. */
+const AVOID_REASONS: Record<Lang, Record<string, string>> = {
+  en: {
+    high_sodium: "high in salt",
+    high_sugar: "high in sugar",
+    solid_fat: "solid cooking fat",
+    liver: "liver",
+    high_mercury: "high-mercury fish",
+    alcohol: "alcohol",
+  },
+  bn: {
+    high_sodium: "বেশি লবণ",
+    high_sugar: "বেশি চিনি",
+    solid_fat: "জমাট রান্নার চর্বি",
+    liver: "কলিজা",
+    high_mercury: "বেশি পারদযুক্ত মাছ",
+    alcohol: "অ্যালকোহল",
+  },
+};
+export const avoidReasonName = (tag: string, lang: Lang = "en") =>
+  AVOID_REASONS[lang][tag] ?? AVOID_REASONS.en[tag] ?? tag.replace(/_/g, " ");
 
 /** Dates as people say them ("30 Aug 2026"), not as 8/30/2026, which reads
  * as 8 March to most of the app's users. */

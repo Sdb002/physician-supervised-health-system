@@ -3,18 +3,22 @@
 The rest of the suite is pinned to the deterministic scorers (conftest.py), so
 this is the one place the two trained models rank a real patient's foods and
 dishes end to end. A model may reorder what the gate allows; it must never
-bring back what the gate removed or break a rule of the planner.
+bring back what the gate removed or break a rule of the planner, and its
+scores must move the way the training constraints say they do.
 
 The models are build artifacts (data/models is not in the repository). Without
 them these tests are skipped, not passed: run scripts/train_recommenders.py.
 """
 
+from dataclasses import replace
+
+import numpy as np
 import pytest
 
 from src.api.services import build_assessment
 from src.db.models import Patient, Visit
-from src.diet import recommender
-from src.diet.food_db import food_index, load_foods
+from src.diet import matcher, recommender
+from src.diet.food_db import NUTRIENT_COLUMNS, food_index, load_foods
 from src.diet.meal_plan import MAX_WEEKLY_SERVINGS, plannable
 from src.diet.recipe import load_recipes
 
@@ -40,6 +44,10 @@ _PATIENTS = {
              conditions=["hypertension", "chronic_kidney_disease"], activity_level="sedentary"),
         dict(weight_kg=74),
     ),
+    "woman with high cholesterol and raised glucose": (
+        dict(sex="female", birth_year=1968, height_cm=155, conditions=["high_cholesterol"]),
+        dict(weight_kg=66, biomarkers={"fasting_glucose": 112}),
+    ),
 }
 
 
@@ -60,20 +68,22 @@ def tags_by_id():
     return tags, {r.recipe_id: r for r in recipes}
 
 
-@pytest.mark.parametrize("who", _PATIENTS)
-def test_a_plan_ranked_by_the_trained_models_keeps_every_rule(who, models, tags_by_id, monkeypatch):
+def _assess(who: str, models, monkeypatch) -> dict:
     food_model, recipe_model = models
     monkeypatch.setattr(recommender, "load_model", lambda: food_model)
     monkeypatch.setattr(recommender, "load_recipe_model", lambda: recipe_model)
-    tags, recipes = tags_by_id
     patient_fields, visit_fields = _PATIENTS[who]
     patient = Patient(**{"name": who, "pregnant": False, "pregnancy_trimester": None,
                          "conditions": [], "dietary_restrictions": [],
                          "fitness_level": "beginner", "activity_level": None, "notes": "",
                          **patient_fields})
-    visit = Visit(**{"biomarkers": {}, **visit_fields})
+    return build_assessment(patient, Visit(**{"biomarkers": {}, **visit_fields}))
 
-    result = build_assessment(patient, visit)
+
+@pytest.mark.parametrize("who", _PATIENTS)
+def test_a_plan_ranked_by_the_trained_models_keeps_every_rule(who, models, tags_by_id, monkeypatch):
+    tags, recipes = tags_by_id
+    result = _assess(who, models, monkeypatch)
     nutrition = result["nutrition"]
     assert nutrition["scoring_backend"] == "ml" and nutrition["recipe_scoring_backend"] == "ml"
 
@@ -104,3 +114,42 @@ def test_a_plan_ranked_by_the_trained_models_keeps_every_rule(who, models, tags_
                 key = line.get("recipe_id") or line["food_id"]
                 served[key] = served.get(key, 0) + 1
     assert max(served.values()) <= MAX_WEEKLY_SERVINGS
+
+
+@pytest.mark.parametrize("who", _PATIENTS)
+def test_trained_scores_move_the_right_way_with_every_nutrient(who, models, monkeypatch):
+    """The monotonic constraints the models are fitted under, checked on the
+    real food and recipe tables: a richer copy of an item never scores lower,
+    a saltier one never higher. Energy is the one nutrient free to move a
+    score either way (it is the denominator of the density score)."""
+    nutrition = _assess(who, models, monkeypatch)["nutrition"]
+    foods = load_foods()
+    recipes = load_recipes(food_index(foods))
+    # the patient's full emphasis, and none: where a planned day ends up
+    for emphasize in (nutrition["emphasize"], []):
+        context = (emphasize, nutrition["targets"], nutrition["findings"], nutrition["limits"])
+        for items, field, score in ((foods, "nutrients", matcher.score_foods),
+                                    (recipes, "per_serving", matcher.score_recipes)):
+            scores = np.array(score(items, *context))
+            for nutrient in NUTRIENT_COLUMNS:
+                if nutrient == "kcal":
+                    continue
+                richer = [replace(item, **{field: {**getattr(item, field),
+                                                   nutrient: getattr(item, field)[nutrient] * 1.5 + 1.0}})
+                          for item in items]
+                change = np.array(score(richer, *context)) - scores
+                if nutrient == "sodium_mg":
+                    assert (change <= 1e-9).all(), (nutrient, emphasize)
+                else:
+                    assert (change >= -1e-9).all(), (nutrient, emphasize)
+
+
+def test_a_more_commonly_cooked_dish_never_scores_lower(models, monkeypatch):
+    nutrition = _assess("hypertensive, diabetic and anaemic", models, monkeypatch)["nutrition"]
+    context = (nutrition["emphasize"], nutrition["targets"], nutrition["findings"], nutrition["limits"])
+    recipes = [r for r in load_recipes(food_index(load_foods())) if r.weekly_frequency_score]
+    as_cooked = np.array(matcher.score_recipes(recipes, *context))
+    as_a_daily_dish = np.array(matcher.score_recipes(
+        [replace(r, weekly_frequency_score=10) for r in recipes], *context))
+    assert (as_a_daily_dish >= as_cooked).all()
+    assert (as_a_daily_dish > as_cooked).any()

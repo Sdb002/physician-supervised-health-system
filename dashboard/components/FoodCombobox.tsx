@@ -2,7 +2,8 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AllowedFood } from "@/lib/api";
-import { mealItemKey } from "@/lib/clinical-terms";
+import { localName, mealItemKey } from "@/lib/clinical-terms";
+import { useT, type T } from "@/lib/use-t";
 import { IconSearch, IconStar } from "@/components/icons";
 
 /** Dishes group under their recipe category ("Dal", "Fish"); single foods
@@ -14,10 +15,13 @@ const groupLabel = (f: AllowedFood) =>
 
 /** Energy as the physician will portion it: per serving for a dish, per
  * 100 g for a single food. */
-const energyText = (f: AllowedFood) =>
+const energyText = (f: AllowedFood, t: T) =>
   f.kind === "recipe" && f.serving_size_g
-    ? `${Math.round((f.kcal_per_100g * f.serving_size_g) / 100)} kcal per ${f.serving_size_g} g serving`
-    : `${f.kcal_per_100g} kcal/100g`;
+    ? t("{kcal} kcal per {grams} g serving", {
+        kcal: Math.round((f.kcal_per_100g * f.serving_size_g) / 100),
+        grams: f.serving_size_g,
+      })
+    : t("{kcal} kcal/100g", { kcal: f.kcal_per_100g });
 
 interface FoodCombobox {
   /** Live, contraindication-filtered candidates (never null once loaded). */
@@ -29,7 +33,15 @@ interface FoodCombobox {
   placeholder?: string;
   /** Accessible name for the field. The visible label is an icon only. */
   label?: string;
+  /** What each row says on the right; its energy unless the caller has
+   * something more to the point (what excluding it takes out). */
+  detail?: (food: AllowedFood) => string;
+  /** The order of search matches, after the recommended ones; by name
+   * unless the caller knows which matches the searcher most likely means. */
+  compare?: (a: AllowedFood, b: AllowedFood) => number;
 }
+
+const byName = (a: AllowedFood, b: AllowedFood) => a.name_en.localeCompare(b.name_en);
 
 /** Searchable dish-and-food picker: type to filter by English or Bangla name
  * across the whole (gate-filtered) catalog; browsing with an empty query shows
@@ -40,7 +52,16 @@ interface FoodCombobox {
  * row is published via aria-activedescendant, so the rows are deliberately
  * kept out of the tab order (tabIndex -1) — tabbing through several hundred
  * foods would be unusable. */
-export function FoodCombobox({ foods, recommended, onSelect, placeholder, label }: FoodCombobox) {
+export function FoodCombobox({
+  foods,
+  recommended,
+  onSelect,
+  placeholder,
+  label,
+  detail,
+  compare = byName,
+}: FoodCombobox) {
+  const { t, lang } = useT();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(0);
@@ -67,15 +88,18 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
   const searchResults = useMemo(() => {
     if (!trimmed) return [];
     const matches = foods.filter(
-      (f) => f.name_en.toLowerCase().includes(trimmed) || f.name_bn.includes(trimmed)
+      (f) =>
+        f.name_en.toLowerCase().includes(trimmed) ||
+        f.name_bn.includes(trimmed) ||
+        (f.keywords ?? "").toLowerCase().includes(trimmed)
     );
-    // recommended matches first (in rank order), then the rest alphabetically
+    // recommended matches first (in rank order), then the rest in the caller's order
     return matches.sort((a, b) => {
       const ar = recommendedIds.has(mealItemKey(a)) ? 0 : 1;
       const br = recommendedIds.has(mealItemKey(b)) ? 0 : 1;
-      return ar !== br ? ar - br : a.name_en.localeCompare(b.name_en);
+      return ar !== br ? ar - br : compare(a, b);
     });
-  }, [foods, trimmed, recommendedIds]);
+  }, [foods, trimmed, recommendedIds, compare]);
 
   const flatList = trimmed ? searchResults : [...recommended, ...groups.flatMap(([, items]) => items)];
   const noMatches = trimmed !== "" && searchResults.length === 0;
@@ -105,6 +129,9 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!open && (e.key === "ArrowDown" || e.key === "Enter")) {
+      // Enter here opens the list; without this it would submit the form
+      // the field sits in (the patient forms' "does not eat" picker)
+      e.preventDefault();
       setOpen(true);
       return;
     }
@@ -143,17 +170,19 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
       }`}
     >
       <span className="min-w-0 truncate text-ink-strong">
-        {food.name_en}
-        {food.name_bn && <span className="text-ink-muted"> · {food.name_bn}</span>}
+        {localName(food, lang)}
+        {food.name_bn && (
+          <span className="text-ink-muted"> · {lang === "bn" ? food.name_en : food.name_bn}</span>
+        )}
         {recommendedIds.has(mealItemKey(food)) && (
           <>
             <IconStar className="ml-1.5 inline h-3.5 w-3.5 text-clinical" />
-            <span className="sr-only"> (recommended for this patient)</span>
+            <span className="sr-only"> ({t("recommended for this patient")})</span>
           </>
         )}
       </span>
       <span className="shrink-0 text-xs text-ink-muted">
-        {energyText(food)}
+        {detail ? detail(food) : energyText(food, t)}
       </span>
     </button>
   );
@@ -167,7 +196,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
       }}
     >
       <label className="relative block">
-        <span className="sr-only">{label ?? "Search dishes and foods"}</span>
+        <span className="sr-only">{label ?? t("Search dishes and foods")}</span>
         <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
         <input
           type="text"
@@ -183,7 +212,7 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
             setOpen(true);
           }}
           onKeyDown={onKeyDown}
-          placeholder={placeholder ?? "Search dishes and foods (safety-filtered)…"}
+          placeholder={placeholder ?? t("Search dishes and foods (safety-filtered)…")}
           className="w-full rounded-lg border border-field bg-surface py-1.5 pl-9 pr-3 text-base placeholder:text-ink-muted focus:border-clinical focus:outline-none focus:ring-2 focus:ring-clinical/20 sm:text-sm"
         />
       </label>
@@ -191,8 +220,10 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
       <p className="sr-only" role="status">
         {open && trimmed
           ? noMatches
-            ? `Nothing matches ${query}`
-            : `${searchResults.length} item${searchResults.length === 1 ? "" : "s"} available`
+            ? t("Nothing matches “{query}”", { query })
+            : searchResults.length === 1
+              ? t("1 item available")
+              : t("{count} items available", { count: searchResults.length })
           : ""}
       </p>
 
@@ -205,23 +236,23 @@ export function FoodCombobox({ foods, recommended, onSelect, placeholder, label 
             * and groups, and this row is neither. */}
           {noMatches && (
             <p className="px-3 py-4 text-center text-sm text-ink-muted">
-              Nothing matches &ldquo;{query}&rdquo;
+              {t("Nothing matches “{query}”", { query })}
             </p>
           )}
           {/* Rendered even while empty so the input's aria-controls always
             * resolves to a real element. */}
-          <div role="listbox" id={listboxId} aria-label={label ?? "Dishes and foods"}>
+          <div role="listbox" id={listboxId} aria-label={label ?? t("Dishes and foods")}>
             {trimmed ? (
               searchResults.map((f, i) => row(f, i))
             ) : (
               <>
                 {recommended.length > 0 && (
-                  <div role="group" aria-label="Recommended for this patient">
+                  <div role="group" aria-label={t("Recommended for this patient")}>
                     <p
                       aria-hidden="true"
                       className="sticky top-0 bg-surface px-3 py-1.5 text-xs font-semibold text-clinical"
                     >
-                      Recommended for this patient
+                      {t("Recommended for this patient")}
                     </p>
                     {recommended.map((f, i) => row(f, i))}
                   </div>

@@ -16,7 +16,8 @@ _DEFAULT_DB = f"sqlite:///{(PROJECT_ROOT / 'health.db').as_posix()}"
 # an open door anywhere else.
 DEFAULT_SECRET_KEY = "dev-secret-change-me"
 DEFAULT_ADMIN_PASSWORD = "admin12345"
-_LOCAL_HOSTS = ("localhost", "127.0.0.1", "[::1]")
+# as urlsplit().hostname gives them: an IPv6 address comes without its brackets
+_LOCAL_HOSTS = ("localhost", "127.0.0.1", "::1")
 
 
 class Settings(BaseSettings):
@@ -27,6 +28,13 @@ class Settings(BaseSettings):
     )
 
     anthropic_api_key: str = ""
+    # who reads an uploaded lab slip: "local" (RapidOCR on this server, see
+    # src/ocr), "claude" (needs ANTHROPIC_API_KEY, sends the image to
+    # Anthropic) or "auto" (local when installed, else Claude when configured)
+    ocr_engine: str = "auto"
+    # the clinic's clock, for a patient's "today" in the daily task list:
+    # Bangladesh Standard Time is UTC+6 all year (no daylight saving since 2009)
+    clinic_utc_offset_hours: float = 6.0
     database_url: str = _DEFAULT_DB
     cors_origins: str = "http://localhost:3000"
     # "development" on a developer's machine; anything else is a deployment

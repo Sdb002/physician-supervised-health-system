@@ -57,9 +57,9 @@ def test_a_database_from_before_migrations_is_adopted_with_its_rows(tmp_path):
     assert _schema(engine)["patients"]["activity_level"] is True
     with engine.connect() as connection:
         row = connection.execute(text(
-            "SELECT name, conditions, dietary_restrictions, activity_level, "
+            "SELECT name, conditions, dietary_restrictions, excluded_foods, activity_level, "
             "pregnancy_trimester FROM patients"
         )).one()
     assert row.name == "Ayesha" and json.loads(row.conditions) == ["anemia"]
-    assert json.loads(row.dietary_restrictions) == []
+    assert json.loads(row.dietary_restrictions) == [] and json.loads(row.excluded_foods) == []
     assert row.activity_level is None and row.pregnancy_trimester is None

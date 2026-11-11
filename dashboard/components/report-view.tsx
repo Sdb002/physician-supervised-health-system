@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, DoctorNote, Report } from "@/lib/api";
 import { useLang } from "@/lib/use-lang";
-import { bmiCategoryName, conditionName, formatDate, localName, planDays } from "@/lib/clinical-terms";
+import { bmiCategoryName, conditionName, formatDate, groupDays, planDays, planGroups } from "@/lib/clinical-terms";
+import { ExerciseItemView } from "@/components/exercise-item";
 import { WeekPlan } from "@/components/week-plan";
 import { IconChevronLeft, IconLock, IconPrinter, IconRx, IconSparkles } from "@/components/icons";
 import {
@@ -27,6 +28,7 @@ import {
   RecommendedRecipesList,
   RecommendedRecipesTable,
 } from "@/components/recommendations";
+import { ConditionFoodsGuide } from "@/components/condition-foods";
 
 const L = {
   en: {
@@ -62,6 +64,7 @@ const L = {
     plannedTotal: "Planned total",
     plannedAverage: "Planned, average day",
     recommendedFoods: "Foods that suit this plan",
+    conditionFoods: "What to eat and avoid for each condition",
     recommendedRecipes: "Recommended home recipes",
     recipesHint:
       "Ranked for this plan. Among dishes that suit it, the ones most commonly cooked at home come first.",
@@ -70,6 +73,7 @@ const L = {
     aerobic: "Brisk activity",
     strength: "Strength",
     flexibility: "Stretching",
+    balance: "Balance",
     perWeek: (n: number) => `${n} days a week`,
     minPerSession: (n: number) => `${n} minutes each time`,
     targetHr: (lo: number, hi: number) => `Heart rate ${lo}–${hi} bpm`,
@@ -128,6 +132,7 @@ const L = {
     plannedTotal: "পরিকল্পিত মোট",
     plannedAverage: "পরিকল্পিত, গড় একটি দিন",
     recommendedFoods: "এই পরিকল্পনার উপযোগী খাবার",
+    conditionFoods: "প্রতিটি সমস্যায় কী খাবেন, কী এড়িয়ে চলবেন",
     recommendedRecipes: "সুপারিশকৃত ঘরোয়া রান্না",
     recipesHint:
       "এই পরিকল্পনা অনুযায়ী সাজানো। উপযোগী রান্নাগুলোর মধ্যে যেগুলো ঘরে বেশি রান্না হয়, সেগুলো আগে।",
@@ -136,6 +141,7 @@ const L = {
     aerobic: "দ্রুত ব্যায়াম",
     strength: "শক্তির ব্যায়াম",
     flexibility: "স্ট্রেচিং",
+    balance: "ভারসাম্য",
     perWeek: (n: number) => `সপ্তাহে ${n.toLocaleString("bn-BD")} দিন`,
     minPerSession: (n: number) => `প্রতিবার ${n.toLocaleString("bn-BD")} মিনিট`,
     targetHr: (lo: number, hi: number) =>
@@ -666,6 +672,16 @@ export function ReportView({
                         staff={viewer === "doctor"}
                       />
                     )}
+                    {(r?.nutrition?.condition_foods ?? []).length > 0 && (
+                      <section>
+                        <SectionTitle>{t.conditionFoods}</SectionTitle>
+                        <ConditionFoodsGuide
+                          guide={r.nutrition.condition_foods ?? []}
+                          rationales={r.nutrition.patient_rationales}
+                          lang={lang}
+                        />
+                      </section>
+                    )}
                     {(r?.nutrition?.top_foods ?? []).length > 0 && (
                       <section>
                         <SectionTitle>{t.recommendedFoods}</SectionTitle>
@@ -700,27 +716,33 @@ export function ReportView({
                       {plan && plan.time && (
                         <section>
                           <SectionTitle>{t.exercise}</SectionTitle>
-                          <div className="grid divide-y divide-line rounded-md border border-line sm:grid-cols-3 sm:divide-x sm:divide-y-0 print:grid-cols-3 print:divide-x print:divide-y-0">
-                            {(
-                              [
-                                ["aerobic", t.aerobic, plan.frequency!.aerobic_days],
-                                ["strength", t.strength, plan.frequency!.strength_days],
-                                ["flexibility", t.flexibility, plan.frequency!.flexibility_days],
-                              ] as const
-                            ).map(([group, name, days]) => (
-                              <div key={group} className="px-4 py-4">
-                                <h3 className="font-semibold text-ink">{name}</h3>
-                                <p className="text-sm font-semibold text-clinical">{t.perWeek(days)}</p>
-                                {group === "aerobic" && (
-                                  <p className="text-sm text-ink-soft">
-                                    {t.minPerSession(plan.time!.aerobic_min_per_session)}
-                                    <br />
-                                    {t.targetHr(plan.intensity!.target_hr_bpm[0], plan.intensity!.target_hr_bpm[1])}
+                          {/* one row per group: what and how often on the left, the
+                              exercises with their doses beside it (four groups do
+                              not fit side by side on paper) */}
+                          <div className="divide-y divide-line rounded-md border border-line">
+                            {planGroups(plan.frequency!).map((group) => (
+                              <div
+                                key={group}
+                                className="grid gap-x-6 gap-y-3 px-4 py-4 sm:grid-cols-[11rem_1fr] print:grid-cols-[11rem_1fr] print:break-inside-avoid"
+                              >
+                                <div>
+                                  <h3 className="font-semibold text-ink">{t[group]}</h3>
+                                  <p className="text-sm font-semibold text-clinical">
+                                    {t.perWeek(groupDays(plan.frequency!, group))}
                                   </p>
-                                )}
-                                <ul className="mt-3 space-y-1 text-ink-strong">
+                                  {group === "aerobic" && (
+                                    <p className="text-sm text-ink-soft">
+                                      {t.minPerSession(plan.time!.aerobic_min_per_session)}
+                                      <br />
+                                      {t.targetHr(plan.intensity!.target_hr_bpm[0], plan.intensity!.target_hr_bpm[1])}
+                                    </p>
+                                  )}
+                                </div>
+                                <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2 print:grid-cols-2">
                                   {(plan.type?.[group] ?? []).map((ex) => (
-                                    <li key={ex.exercise_id}>{localName(ex, lang)}</li>
+                                    <li key={ex.exercise_id}>
+                                      <ExerciseItemView ex={ex} lang={lang} compact />
+                                    </li>
                                   ))}
                                 </ul>
                               </div>

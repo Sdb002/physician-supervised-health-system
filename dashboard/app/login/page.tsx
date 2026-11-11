@@ -10,26 +10,25 @@ import {
 import { Brand } from "@/components/brand";
 import { StethoscopeArt } from "@/components/stethoscope-art";
 import { focusRing } from "@/components/ui";
+import { LangSwitch } from "@/components/lang-switch";
+import { useT } from "@/lib/use-t";
 
 const PORTALS = [
   {
     role: "patient",
     title: "Patient",
-    titleBn: "রোগী",
     description: "Read the plan your doctor approved for you.",
     icon: <IconHeartPulse className="h-5 w-5" />,
   },
   {
     role: "doctor",
     title: "Doctor",
-    titleBn: null,
     description: "Record check-ups, review plans and approve them.",
     icon: <IconStethoscope className="h-5 w-5" />,
   },
   {
     role: "admin",
     title: "Administrator",
-    titleBn: null,
     description: "Approve doctor accounts and oversee the service.",
     icon: <IconShield className="h-5 w-5" />,
   },
@@ -42,12 +41,19 @@ const STEPS = [
   "You get the plan once they approve it",
 ];
 
+const HEADLINE = {
+  en: "Your diet and exercise plan, signed by your doctor.",
+  bn: "আপনার খাদ্য ও ব্যায়ামের পরিকল্পনা, চিকিৎসকের অনুমোদনসহ।",
+} as const;
+
 export default function PortalChooser() {
+  const { t, n, lang } = useT();
   return (
     <div className="relative min-h-screen overflow-x-clip">
       <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-6 sm:px-8 lg:py-8">
-        <header>
+        <header className="flex flex-wrap items-center justify-between gap-3">
           <Brand />
+          <LangSwitch />
         </header>
 
         <div className="grid flex-1 items-center gap-6 py-6 lg:grid-cols-[minmax(0,32rem)_1fr] lg:gap-10 lg:py-10">
@@ -57,11 +63,12 @@ export default function PortalChooser() {
           </div>
 
           <main className="relative">
+            {/* the headline in the reader's language, the other one under it */}
             <h1 className="font-display text-[2.5rem] font-bold leading-[1.1] text-ink sm:text-[3.25rem]">
-              Your diet and exercise plan, signed by your doctor.
+              {HEADLINE[lang]}
             </h1>
-            <p lang="bn" className="font-display mt-3 text-xl font-medium leading-8 text-ink-soft sm:text-2xl">
-              আপনার খাদ্য ও ব্যায়ামের পরিকল্পনা, চিকিৎসকের অনুমোদনসহ।
+            <p className="font-display mt-3 text-xl font-medium leading-8 text-ink-soft sm:text-2xl">
+              {HEADLINE[lang === "bn" ? "en" : "bn"]}
             </p>
 
             <ol className="mt-6 grid gap-2.5 sm:grid-cols-3 sm:gap-3">
@@ -71,9 +78,9 @@ export default function PortalChooser() {
                     aria-hidden="true"
                     className="font-display flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-clinical-tint text-sm font-bold text-clinical"
                   >
-                    {i + 1}
+                    {n(i + 1)}
                   </span>
-                  {step}
+                  {t(step)}
                 </li>
               ))}
             </ol>
@@ -86,7 +93,7 @@ export default function PortalChooser() {
                 id="portal-heading"
                 className="font-display border-b border-line px-5 pb-2.5 pt-3.5 text-lg font-bold text-ink"
               >
-                Sign in as
+                {t("Sign in as")}
               </h2>
               <ul className="divide-y divide-line">
                 {PORTALS.map((portal) => (
@@ -100,14 +107,9 @@ export default function PortalChooser() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-base font-semibold text-ink">
-                          {portal.title}
-                          {portal.titleBn && (
-                            <span lang="bn" className="ml-2 font-medium text-ink-muted">
-                              {portal.titleBn}
-                            </span>
-                          )}
+                          {t(portal.title)}
                         </span>
-                        <span className="block text-sm text-ink-muted">{portal.description}</span>
+                        <span className="block text-sm text-ink-muted">{t(portal.description)}</span>
                       </span>
                       <IconChevronRight className="h-5 w-5 shrink-0 text-ink-muted transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-clinical" />
                     </Link>
@@ -118,15 +120,15 @@ export default function PortalChooser() {
 
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 px-1 text-sm text-ink-muted">
               <p>
-                New patient?{" "}
+                {t("New patient?")}{" "}
                 <Link href="/register/patient" className="font-semibold text-clinical hover:underline">
-                  Create an account
+                  {t("Create an account")}
                 </Link>
               </p>
               <p>
-                Doctor?{" "}
+                {t("Doctor?")}{" "}
                 <Link href="/register/doctor" className="font-semibold text-clinical hover:underline">
-                  Apply for an account
+                  {t("Apply for an account")}
                 </Link>
               </p>
             </div>
@@ -134,8 +136,7 @@ export default function PortalChooser() {
         </div>
 
         <footer className="relative max-w-xl text-xs leading-5 text-ink-muted">
-          Plans come from a rule engine that cites clinical guidelines (ADA, ACC/AHA, WHO, ACSM). They
-          support a consultation and do not replace one.
+          {t("Plans come from a rule engine that cites clinical guidelines (ADA, ACC/AHA, WHO, ACSM). They support a consultation and do not replace one.")}
         </footer>
       </div>
     </div>

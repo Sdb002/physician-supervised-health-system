@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { ExcludedFood, api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth-layout";
 import { CONDITION_OPTIONS_PLAIN, DIETARY_RESTRICTION_OPTIONS } from "@/lib/patient-options";
 import { ActivityField, OptionChecks, PregnancyFields, choiceRow } from "@/components/patient-fields";
+import { ExcludedFoodsField, excludedFoodPicks } from "@/components/excluded-foods";
 import { ErrorNote, Field, buttonPrimary, inputClass } from "@/components/ui";
+import { useT } from "@/lib/use-t";
 
 const legendClass = "text-base font-semibold text-ink";
 
@@ -17,6 +19,7 @@ export default function PatientRegisterPage() {
   const { signIn } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const { t } = useT();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -28,6 +31,7 @@ export default function PatientRegisterPage() {
     pregnancy_trimester: null as number | null,
     conditions: [] as string[],
     dietary_restrictions: [] as string[],
+    excluded_foods: [] as ExcludedFood[],
     fitness_level: "beginner",
     activity_level: null as string | null,
   });
@@ -52,6 +56,7 @@ export default function PatientRegisterPage() {
           pregnancy_trimester: form.sex === "female" ? form.pregnancy_trimester : null,
           conditions: form.conditions,
           dietary_restrictions: form.dietary_restrictions,
+          excluded_foods: excludedFoodPicks(form.excluded_foods),
           fitness_level: form.fitness_level,
           activity_level: form.activity_level,
         },
@@ -68,13 +73,13 @@ export default function PatientRegisterPage() {
   return (
     <AuthLayout
       wide
-      title="Create your patient account"
-      subtitle="Your doctor uses these details at your visits. You see a plan only after your doctor approves it."
+      title={t("Create your patient account")}
+      subtitle={t("Your doctor uses these details at your visits. You see a plan only after your doctor approves it.")}
       footer={
         <>
-          Already have an account?{" "}
+          {t("Already have an account?")}{" "}
           <Link href="/login/patient" className="font-semibold text-clinical hover:underline">
-            Sign in
+            {t("Sign in")}
           </Link>
         </>
       }
@@ -83,18 +88,18 @@ export default function PatientRegisterPage() {
         {error && <ErrorNote message={error} />}
 
         <fieldset className="space-y-4">
-          <legend className={legendClass}>Your account</legend>
-          <Field label="Full name">
+          <legend className={legendClass}>{t("Your account")}</legend>
+          <Field label={t("Full name")}>
             <input
               className={inputClass}
               required
               autoComplete="name"
               value={form.name}
               onChange={(e) => set("name", e.target.value)}
-              placeholder="e.g. Ayesha Rahman"
+              placeholder={t("e.g. Ayesha Rahman")}
             />
           </Field>
-          <Field label="Email">
+          <Field label={t("Email")}>
             <input
               className={inputClass}
               type="email"
@@ -104,7 +109,7 @@ export default function PatientRegisterPage() {
               onChange={(e) => set("email", e.target.value)}
             />
           </Field>
-          <Field label="Password" hint="At least 8 characters.">
+          <Field label={t("Password")} hint={t("At least 8 characters.")}>
             <input
               className={inputClass}
               type="password"
@@ -118,9 +123,9 @@ export default function PatientRegisterPage() {
         </fieldset>
 
         <fieldset className="space-y-4 border-t border-line pt-6">
-          <legend className={`${legendClass} float-left mb-4 w-full`}>About you</legend>
-          <div className="clear-both" role="radiogroup" aria-label="Sex">
-            <span className="text-sm font-semibold text-ink-strong">Sex</span>
+          <legend className={`${legendClass} float-left mb-4 w-full`}>{t("About you")}</legend>
+          <div className="clear-both" role="radiogroup" aria-label={t("Sex")}>
+            <span className="text-sm font-semibold text-ink-strong">{t("Sex")}</span>
             <div className="mt-1.5 grid grid-cols-2 gap-2">
               {(["female", "male"] as const).map((s) => (
                 <label key={s} className={choiceRow}>
@@ -131,13 +136,13 @@ export default function PatientRegisterPage() {
                     checked={form.sex === s}
                     onChange={() => set("sex", s)}
                   />
-                  {s === "female" ? "Female" : "Male"}
+                  {s === "female" ? t("Female") : t("Male")}
                 </label>
               ))}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Year of birth">
+            <Field label={t("Year of birth")}>
               <input
                 className={inputClass}
                 type="number"
@@ -149,7 +154,7 @@ export default function PatientRegisterPage() {
                 onChange={(e) => set("birth_year", Number(e.target.value))}
               />
             </Field>
-            <Field label="Height (cm)">
+            <Field label={t("Height (cm)")}>
               <input
                 className={inputClass}
                 type="number"
@@ -166,19 +171,19 @@ export default function PatientRegisterPage() {
           <ActivityField
             value={form.activity_level}
             onChange={(level) => set("activity_level", level)}
-            label="What is a usual day like?"
-            hint="Used to work out how much energy your meals should give you."
-            notRecorded="I'm not sure"
+            label={t("What is a usual day like?")}
+            hint={t("Used to work out how much energy your meals should give you.")}
+            notRecorded={t("I'm not sure")}
           />
-          <Field label="How used to exercise are you?" hint="Used to set a safe starting point for exercise.">
+          <Field label={t("How used to exercise are you?")} hint={t("Used to set a safe starting point for exercise.")}>
             <select
               className={inputClass}
               value={form.fitness_level}
               onChange={(e) => set("fitness_level", e.target.value)}
             >
-              <option value="beginner">I rarely exercise</option>
-              <option value="intermediate">I exercise some weeks</option>
-              <option value="advanced">I exercise most days</option>
+              <option value="beginner">{t("I rarely exercise")}</option>
+              <option value="intermediate">{t("I exercise some weeks")}</option>
+              <option value="advanced">{t("I exercise most days")}</option>
             </select>
           </Field>
           {form.sex === "female" && (
@@ -186,16 +191,16 @@ export default function PatientRegisterPage() {
               pregnant={form.pregnant}
               trimester={form.pregnancy_trimester}
               onChange={(next) => setForm((f) => ({ ...f, ...next }))}
-              label="I am currently pregnant"
-              trimesterLabel="Which trimester?"
-              notRecorded="I'm not sure"
+              label={t("I am currently pregnant")}
+              trimesterLabel={t("Which trimester?")}
+              notRecorded={t("I'm not sure")}
             />
           )}
         </fieldset>
 
         <fieldset className="border-t border-line pt-6">
-          <legend className={`${legendClass} float-left w-full`}>Conditions a doctor has diagnosed</legend>
-          <p className="clear-both pt-1 text-sm text-ink-muted">Tick any that apply. Leave all unticked if none.</p>
+          <legend className={`${legendClass} float-left w-full`}>{t("Conditions a doctor has diagnosed")}</legend>
+          <p className="clear-both pt-1 text-sm text-ink-muted">{t("Tick any that apply. Leave all unticked if none.")}</p>
           <div className="mt-3">
             <OptionChecks
               options={CONDITION_OPTIONS_PLAIN}
@@ -206,9 +211,9 @@ export default function PatientRegisterPage() {
         </fieldset>
 
         <fieldset className="border-t border-line pt-6">
-          <legend className={`${legendClass} float-left w-full`}>Food you do not eat</legend>
+          <legend className={`${legendClass} float-left w-full`}>{t("Food you do not eat")}</legend>
           <p className="clear-both pt-1 text-sm text-ink-muted">
-            For faith, choice or allergy. Your meal plan will leave these out. Leave all unticked if none.
+            {t("For faith, choice or allergy. Your meal plan will leave these out. Leave all unticked if none.")}
           </p>
           <div className="mt-3">
             <OptionChecks
@@ -217,10 +222,21 @@ export default function PatientRegisterPage() {
               onChange={(restrictions) => set("dietary_restrictions", restrictions)}
             />
           </div>
+          <p className="pt-5 text-sm font-semibold text-ink-strong">{t("Any other food or dish you do not eat")}</p>
+          <p className="pt-1 text-sm text-ink-muted">
+            {t("Search for it and pick it from the list. It is left out however it is cooked, with every dish that uses it.")}
+          </p>
+          <div className="mt-3">
+            <ExcludedFoodsField
+              value={form.excluded_foods}
+              onChange={(foods) => set("excluded_foods", foods)}
+              label={t("Search a food or dish you do not eat")}
+            />
+          </div>
         </fieldset>
 
         <button type="submit" disabled={busy} className={`${buttonPrimary} w-full`}>
-          {busy ? "Creating account…" : "Create account"}
+          {busy ? t("Creating account…") : t("Create account")}
         </button>
       </form>
     </AuthLayout>

@@ -2,12 +2,11 @@
 
 import { useLatestReport } from "@/lib/use-latest-report";
 import { useLang } from "@/lib/use-lang";
-import { localName } from "@/lib/clinical-terms";
+import { groupDays, planGroups } from "@/lib/clinical-terms";
 import { IconActivity } from "@/components/icons";
 import { ApprovedLine } from "@/components/approved-line";
+import { ExerciseItemView } from "@/components/exercise-item";
 import { EmptyState, ErrorNote, InfoNote, MetricRow, Note, PageHeader, Skeleton } from "@/components/ui";
-
-const GROUPS = ["aerobic", "strength", "flexibility"] as const;
 
 const LABELS = {
   en: {
@@ -29,8 +28,8 @@ const LABELS = {
       aerobic: { name: "Brisk activity", hint: "Walking, cycling and similar activity that raises your breathing." },
       strength: { name: "Strength", hint: "Builds muscle and keeps joints supported." },
       flexibility: { name: "Stretching", hint: "Slow and gentle. Stop before it hurts." },
+      balance: { name: "Balance", hint: "Steadies you on your feet. Keep a chair or wall within reach." },
     },
-    equipment: (e: string) => `Needs: ${e}`,
   },
   bn: {
     title: "ব্যায়াম",
@@ -52,8 +51,8 @@ const LABELS = {
       aerobic: { name: "দ্রুত ব্যায়াম", hint: "হাঁটা, সাইকেল চালানো বা এমন কাজ যাতে শ্বাস একটু দ্রুত হয়।" },
       strength: { name: "শক্তির ব্যায়াম", hint: "পেশি গড়ে ও জয়েন্টকে সাপোর্ট দেয়।" },
       flexibility: { name: "স্ট্রেচিং", hint: "ধীরে ও আলতোভাবে; কখনো ব্যথা পর্যন্ত নয়।" },
+      balance: { name: "ভারসাম্য", hint: "পায়ে স্থির থাকতে সাহায্য করে। কাছে একটি চেয়ার বা দেয়াল রাখুন।" },
     },
-    equipment: (e: string) => `লাগবে: ${e}`,
   },
 } as const;
 
@@ -142,33 +141,28 @@ export default function PatientExercisePage() {
         ]}
       />
 
-      <div className="grid overflow-hidden rounded-xl border border-line bg-surface md:grid-cols-3">
-        {GROUPS.map((group, i) => {
-          const days =
-            group === "aerobic"
-              ? plan.frequency!.aerobic_days
-              : group === "strength"
-                ? plan.frequency!.strength_days
-                : plan.frequency!.flexibility_days;
+      <div className="space-y-4">
+        {planGroups(plan.frequency).map((group) => {
           const exercises = plan.type?.[group] ?? [];
           return (
-            <section
-              key={group}
-              className={`px-5 py-5 ${i > 0 ? "border-t border-line md:border-l md:border-t-0" : ""}`}
-            >
-              <h2 className="font-display text-lg font-bold leading-7 text-ink">{t.groups[group].name}</h2>
-              <p className="text-sm font-semibold text-clinical">{t.daysAWeek(days)}</p>
-              <p className="mt-1 text-sm text-ink-muted">{t.groups[group].hint}</p>
-              <ul className="mt-4 space-y-2.5">
-                {exercises.map((ex) => (
-                  <li key={ex.exercise_id}>
-                    <p className="font-medium text-ink">{localName(ex, lang)}</p>
-                    {ex.equipment !== "none" && (
-                      <p className="text-sm text-ink-muted">{t.equipment(ex.equipment)}</p>
-                    )}
+            <section key={group} className="overflow-hidden rounded-xl border border-line bg-surface">
+              <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-4">
+                <div>
+                  <h2 className="font-display text-lg font-bold leading-7 text-ink">{t.groups[group].name}</h2>
+                  <p className="text-sm text-ink-muted">{t.groups[group].hint}</p>
+                </div>
+                <p className="text-sm font-semibold text-clinical">{t.daysAWeek(groupDays(plan.frequency!, group))}</p>
+              </header>
+              <ul className="grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0">
+                {exercises.map((ex, i) => (
+                  <li
+                    key={ex.exercise_id}
+                    className={`px-5 py-4 ${i > 1 ? "sm:border-t sm:border-line" : ""} ${i % 2 === 1 ? "sm:border-l sm:border-line" : ""}`}
+                  >
+                    <ExerciseItemView ex={ex} lang={lang} />
                   </li>
                 ))}
-                {exercises.length === 0 && <li className="text-sm text-ink-muted">—</li>}
+                {exercises.length === 0 && <li className="px-5 py-4 text-sm text-ink-muted">—</li>}
               </ul>
             </section>
           );

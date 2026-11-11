@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { api, ApiError, OcrResult, Patient } from "@/lib/api";
 import { pid } from "@/lib/format";
+import { useT } from "@/lib/use-t";
 import { IconCheck, IconFileText, IconSparkles } from "@/components/icons";
 import {
   ErrorNote,
@@ -95,6 +96,7 @@ export default function IntakePage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const fileInput = useRef<HTMLInputElement>(null);
+  const { t } = useT();
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -109,6 +111,7 @@ export default function IntakePage() {
   const [prefilled, setPrefilled] = useState<Set<string>>(new Set());
   const [ocrState, setOcrState] = useState<"idle" | "running" | "done" | "unavailable">("idle");
   const [ocrNotes, setOcrNotes] = useState("");
+  const [ocrFound, setOcrFound] = useState(0);
   const [ocrRaw, setOcrRaw] = useState<OcrResult | null>(null);
 
   useEffect(() => {
@@ -129,6 +132,7 @@ export default function IntakePage() {
       });
       setPrefilled(new Set(extracted));
       setOcrNotes(result.notes);
+      setOcrFound(extracted.length);
       setOcrState("done");
     } catch (err) {
       if (err instanceof ApiError && err.status === 503) {
@@ -165,9 +169,9 @@ export default function IntakePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="New visit"
-        subtitle="Enter today's measurements. Leave a field empty if it wasn't measured; the assessment scores only what you enter."
-        back={{ href: `/doctor/patients/${id}`, label: patient ? patient.name : "Patient record" }}
+        title={t("New visit")}
+        subtitle={t("Enter today's measurements. Leave a field empty if it wasn't measured; the assessment scores only what you enter.")}
+        back={{ href: `/doctor/patients/${id}`, label: patient ? patient.name : t("Patient record") }}
       />
 
       {patient ? (
@@ -189,12 +193,12 @@ export default function IntakePage() {
       <div className="grid items-start gap-6 lg:grid-cols-[1fr_20rem]">
         <form onSubmit={submit} className="rounded-xl border border-line bg-surface">
           <div className="border-b border-line px-5 py-4">
-            <h2 className="font-display text-lg font-bold leading-7 text-ink">Measurements</h2>
+            <h2 className="font-display text-lg font-bold leading-7 text-ink">{t("Measurements")}</h2>
           </div>
           <div className="divide-y divide-line">
             <div className="grid gap-x-6 gap-y-1 px-5 py-4 sm:grid-cols-[1fr_12rem] sm:items-center">
               <label htmlFor="weight" className="font-semibold text-ink">
-                Weight <span className="font-normal text-ink-muted">(required)</span>
+                {t("Weight")} <span className="font-normal text-ink-muted">{t("(required)")}</span>
               </label>
               <MeasureInput id="weight" unit="kg" value={weight} onChange={setWeight} required min={3} max={350} />
             </div>
@@ -202,9 +206,9 @@ export default function IntakePage() {
               <div key={b.key} className="grid gap-x-6 gap-y-1 px-5 py-4 sm:grid-cols-[1fr_12rem] sm:items-center">
                 <div>
                   <label htmlFor={b.key} className="font-semibold text-ink">
-                    {b.label}
+                    {t(b.label)}
                   </label>
-                  <p className="text-sm text-ink-muted">{b.normal}</p>
+                  <p className="text-sm text-ink-muted">{t(b.normal)}</p>
                 </div>
                 <MeasureInput
                   id={b.key}
@@ -218,7 +222,7 @@ export default function IntakePage() {
                       return next;
                     });
                   }}
-                  placeholder="Not measured"
+                  placeholder={t("Not measured")}
                   prefilled={prefilled.has(b.key)}
                 />
               </div>
@@ -226,11 +230,10 @@ export default function IntakePage() {
           </div>
           <div className="flex flex-col gap-3 border-t border-line bg-surface-soft px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-ink-muted">
-              The assessment is created instantly and waits for your review. The patient sees nothing until you
-              approve it.
+              {t("The assessment is created instantly and waits for your review. The patient sees nothing until you approve it.")}
             </p>
             <button type="submit" disabled={saving || !weight} className={`${buttonPrimary} shrink-0`}>
-              {saving ? "Creating assessment…" : "Create assessment"}
+              {saving ? t("Creating assessment…") : t("Create assessment")}
             </button>
           </div>
         </form>
@@ -238,16 +241,15 @@ export default function IntakePage() {
         <aside className="rounded-xl border border-line bg-surface p-5">
           <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
             <IconSparkles className="h-4.5 w-4.5 text-clinical" />
-            Fill from a lab slip
+            {t("Fill from a lab slip")}
           </h2>
           <p className="mt-1.5 text-sm text-ink-soft">
-            Upload a photo of the lab report and the values are read into the form. Check each one against the
-            slip before you submit.
+            {t("Upload a photo of the lab report, or the PDF the lab sent, and the values are read into the form. Check each one against the slip before you submit.")}
           </p>
           <input
             ref={fileInput}
             type="file"
-            accept="image/png,image/jpeg,image/webp"
+            accept="image/png,image/jpeg,image/webp,application/pdf"
             className="hidden"
             onChange={(e) => e.target.files?.[0] && runOcr(e.target.files[0])}
           />
@@ -258,20 +260,33 @@ export default function IntakePage() {
             onClick={() => fileInput.current?.click()}
           >
             <IconFileText className="h-4 w-4" />
-            {ocrState === "running" ? "Reading the slip…" : "Upload lab slip photo"}
+            {ocrState === "running" ? t("Reading the slip…") : t("Upload lab slip photo or PDF")}
           </button>
           {ocrState === "done" && (
             <div className="mt-3 space-y-2 text-sm">
-              <p className="flex items-start gap-1.5 text-ok-ink">
-                <IconCheck className="mt-0.5 h-4 w-4 shrink-0" />
-                Values filled in and highlighted. Check each one against the slip.
-              </p>
-              {ocrNotes && <p className="text-watch-ink">Reader notes: {ocrNotes}</p>}
+              {ocrFound > 0 ? (
+                <p className="flex items-start gap-1.5 text-ok-ink">
+                  <IconCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                  {t("Values filled in and highlighted. Check each one against the slip.")}
+                </p>
+              ) : (
+                <p className="text-watch-ink">{t("No values could be read from this photo. Type them in from the slip.")}</p>
+              )}
+              {ocrNotes && <p className="text-watch-ink">{t("Reader notes: {notes}", { notes: ocrNotes })}</p>}
+              {ocrRaw?.engine && (
+                <p className="text-xs text-ink-muted">
+                  {ocrRaw.engine === "PDF text"
+                    ? t("Read from the PDF's own text, on this server.")
+                    : ocrRaw.engine === "RapidOCR"
+                      ? t("Read by RapidOCR, on this server.")
+                      : t("Read by {engine}.", { engine: ocrRaw.engine })}
+                </p>
+              )}
             </div>
           )}
           {ocrState === "unavailable" && (
             <p className="mt-3 text-sm text-ink-muted">
-              Lab-slip reading isn&apos;t set up on this server (no API key). Typing the values works the same.
+              {t("Lab-slip reading isn't set up on this server. Typing the values works the same.")}
             </p>
           )}
         </aside>

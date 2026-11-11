@@ -7,12 +7,12 @@ import { api, ApiError, Role } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { AuthLayout } from "@/components/auth-layout";
 import { ErrorNote, Field, InfoNote, buttonPrimary, inputClass } from "@/components/ui";
+import { useT } from "@/lib/use-t";
 
 const ROLE_UI: Record<
   Role,
   {
     title: string;
-    titleBn?: string;
     blurb: string;
     register: { href: string; prompt: string; label: string } | null;
   }
@@ -29,7 +29,6 @@ const ROLE_UI: Record<
   },
   patient: {
     title: "Patient sign in",
-    titleBn: "রোগী হিসেবে সাইন ইন",
     blurb: "Read the plan your doctor approved for you.",
     register: { href: "/register/patient", prompt: "New here?", label: "Create a patient account" },
   },
@@ -44,6 +43,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [pendingNotice, setPendingNotice] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { t, rich } = useT();
 
   if (!(role in ROLE_UI)) notFound();
   const ui = ROLE_UI[role as Role];
@@ -69,23 +69,14 @@ export default function LoginPage() {
 
   return (
     <AuthLayout
-      title={
-        <>
-          {ui.title}
-          {ui.titleBn && (
-            <span lang="bn" className="mt-0.5 block text-base font-medium text-ink-muted">
-              {ui.titleBn}
-            </span>
-          )}
-        </>
-      }
-      subtitle={ui.blurb}
+      title={t(ui.title)}
+      subtitle={t(ui.blurb)}
       footer={
         ui.register && (
           <>
-            {ui.register.prompt}{" "}
+            {t(ui.register.prompt)}{" "}
             <Link href={ui.register.href} className="font-semibold text-clinical hover:underline">
-              {ui.register.label}
+              {t(ui.register.label)}
             </Link>
           </>
         )
@@ -95,11 +86,12 @@ export default function LoginPage() {
         {error && <ErrorNote message={error} />}
         {pendingNotice && (
           <InfoNote>
-            Your registration is still <strong>waiting for admin approval</strong>. You can sign in
-            as soon as an admin approves your account.
+            {rich("Your registration is still {waiting}. You can sign in as soon as an admin approves your account.", {
+              waiting: <strong>{t("waiting for admin approval")}</strong>,
+            })}
           </InfoNote>
         )}
-        <Field label="Email">
+        <Field label={t("Email")}>
           <input
             className={inputClass}
             type="email"
@@ -110,7 +102,7 @@ export default function LoginPage() {
             placeholder="you@example.com"
           />
         </Field>
-        <Field label="Password">
+        <Field label={t("Password")}>
           <input
             className={inputClass}
             type="password"
@@ -121,7 +113,7 @@ export default function LoginPage() {
           />
         </Field>
         <button type="submit" disabled={busy} className={`${buttonPrimary} w-full`}>
-          {busy ? "Signing in…" : "Sign in"}
+          {busy ? t("Signing in…") : t("Sign in")}
         </button>
       </form>
     </AuthLayout>

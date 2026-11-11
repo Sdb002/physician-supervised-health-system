@@ -23,6 +23,7 @@ import { Card, EmptyState, ErrorNote, Note, PageHeader, Skeleton } from "@/compo
 import { TREND_COLOR_PRIMARY, TREND_COLOR_SECONDARY, TrendPoint } from "@/components/trend-chart";
 import { TrendChartCard } from "@/components/trend-chart-card";
 import { StethoscopeArt } from "@/components/stethoscope-art";
+import { TodayCard } from "@/components/today-card";
 
 const L = {
   en: {
@@ -42,6 +43,7 @@ const L = {
     aerobic: (min: number, days: number) => `Brisk activity: ${min} min, ${days} days a week`,
     strength: (days: number) => `Strength exercises: ${days} days a week`,
     stretch: (days: number) => `Stretching: ${days} days a week`,
+    balance: (days: number) => `Balance exercises: ${days} days a week`,
     seeExercise: "See exercise plan",
     doctorNote: "Note from your doctor",
     results: "Your check-up results",
@@ -91,6 +93,7 @@ const L = {
       `দ্রুত হাঁটা বা সমজাতীয়: ${min.toLocaleString("bn-BD")} মিনিট, সপ্তাহে ${days.toLocaleString("bn-BD")} দিন`,
     strength: (days: number) => `শক্তির ব্যায়াম: সপ্তাহে ${days.toLocaleString("bn-BD")} দিন`,
     stretch: (days: number) => `স্ট্রেচিং: সপ্তাহে ${days.toLocaleString("bn-BD")} দিন`,
+    balance: (days: number) => `ভারসাম্যের ব্যায়াম: সপ্তাহে ${days.toLocaleString("bn-BD")} দিন`,
     seeExercise: "ব্যায়ামের পরিকল্পনা দেখুন",
     doctorNote: "আপনার চিকিৎসকের মন্তব্য",
     results: "আপনার চেক-আপের ফলাফল",
@@ -222,6 +225,7 @@ export default function PatientHome() {
                   </span>
                 </Note>
               )}
+              <TodayCard lang={lang} />
               <PlanSlip report={report} lang={lang} />
               {report.result.risk_flags.length > 0 && (
                 <Card
@@ -426,6 +430,9 @@ function PlanSlip({ report, lang }: { report: Report; lang: "en" | "bn" }) {
               )}
               {plan.frequency.flexibility_days > 0 && (
                 <li className="text-sm">{t.stretch(plan.frequency.flexibility_days)}</li>
+              )}
+              {(plan.frequency.balance_days ?? 0) > 0 && (
+                <li className="text-sm">{t.balance(plan.frequency.balance_days!)}</li>
               )}
             </ul>
           ) : (

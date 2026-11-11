@@ -132,10 +132,38 @@ def test_kidney_disease_stops_the_potassium_emphasis():
     assert alone["emphasize"] == [] and alone["rationales"] == {}
 
 
+def test_the_findings_are_reported_whatever_becomes_of_the_emphasis():
+    # the scorers are told the findings, so they must not depend on what a
+    # condition rules out: hypertension stays a finding in kidney disease
+    flags = score_biomarkers({"hemoglobin": 9.0}, "female")
+    nutrition = nutrient_targets("female", False, flags,
+                                 conditions=["hypertension", "chronic_kidney_disease"])
+    assert nutrition["findings"] == ["anemia", "hypertension"]
+    assert "potassium_mg" not in nutrition["emphasize"]
+    assert nutrient_targets("male", False, [])["findings"] == []
+
+
+def test_high_cholesterol_emphasizes_fibre_and_tells_the_physician_what_is_not_counted():
+    # there is no cholesterol lab band: the physician records the condition
+    nutrition = nutrient_targets("male", False, [], conditions=["high_cholesterol"])
+    assert nutrition["findings"] == ["high_cholesterol"]
+    assert nutrition["emphasize"] == ["fiber_g"]
+    assert "soluble" in nutrition["rationales"]["high_cholesterol"]
+    # the food table has no saturated fat or cholesterol column, and the
+    # reviewing physician is told so rather than left to assume it was counted
+    assert len(nutrition["cautions"]) == 1
+    assert "no saturated fat" in nutrition["cautions"][0]
+    assert nutrient_targets("male", False, [])["cautions"] == []
+    # beside hypertension the fibre is emphasized once, and both cautions show
+    both = nutrient_targets("male", False, [], conditions=["hypertension", "high_cholesterol"])
+    assert both["emphasize"] == ["potassium_mg", "fiber_g"]
+    assert len(both["cautions"]) == 2
+
+
 def test_every_finding_explains_itself_to_the_patient_in_both_languages():
-    nutrition = nutrient_targets("female", False, [],
-                                 conditions=["anemia", "hypertension", "diabetes"])
-    assert set(nutrition["patient_rationales"]) == {"anemia", "hypertension", "diabetes"}
+    findings = ["anemia", "hypertension", "diabetes", "high_cholesterol"]
+    nutrition = nutrient_targets("female", False, [], conditions=findings)
+    assert set(nutrition["patient_rationales"]) == set(findings)
     for text in nutrition["patient_rationales"].values():
         assert text["en"] and text["bn"] and text["en"] != text["bn"]
         # the physician's wording stays out of the patient's

@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from src.api.deps import get_current_user, get_db
 from src.api.schemas import LoginIn, LoginOut, RegisterIn, UserOut
+from src.api.services import excluded_food_entries
 from src.core import audit
 from src.core.rate_limit import login_allowed, record_login_failure, record_login_success
 from src.core.security import create_token, hash_password, verify_password
@@ -39,6 +40,10 @@ def register(payload: RegisterIn, db: Session = Depends(get_db)):
     else:
         if payload.profile is None:
             raise HTTPException(422, "patient registration requires a health profile")
+        try:
+            does_not_eat = excluded_food_entries(payload.profile.excluded_foods)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc))
         patient = Patient(
             name=payload.name.strip(),
             sex=payload.profile.sex,
@@ -48,6 +53,7 @@ def register(payload: RegisterIn, db: Session = Depends(get_db)):
             pregnancy_trimester=payload.profile.pregnancy_trimester,
             conditions=payload.profile.conditions,
             dietary_restrictions=payload.profile.dietary_restrictions,
+            excluded_foods=does_not_eat,
             fitness_level=payload.profile.fitness_level,
             activity_level=payload.profile.activity_level,
             notes="self-registered account",

@@ -6,6 +6,7 @@ import { planDays } from "@/lib/clinical-terms";
 import { IconUtensils } from "@/components/icons";
 import { ApprovedLine } from "@/components/approved-line";
 import { RecommendedFoodsList } from "@/components/recommendations";
+import { ConditionFoodsGuide } from "@/components/condition-foods";
 import { WeekPlan } from "@/components/week-plan";
 import { Card, EmptyState, ErrorNote, InfoNote, MetricRow, PageHeader, Skeleton } from "@/components/ui";
 
@@ -24,6 +25,8 @@ const LABELS = {
     emptyHint: "Your doctor's recommended meals appear here once a visit is approved.",
     dayPlan: "Your day of meals",
     weekPlan: "Your week of meals",
+    conditionFoods: "What to eat and avoid for your conditions",
+    conditionFoodsHint: "Your doctor's plan already follows this. Use it when you shop, cook or eat out.",
     recommendedFoods: "Other foods that suit your plan",
     recommendedHint: "Good choices to swap in, best match first.",
   },
@@ -41,6 +44,8 @@ const LABELS = {
     emptyHint: "একটি ভিজিট অনুমোদনের পর আপনার চিকিৎসকের সুপারিশকৃত খাবার এখানে দেখা যাবে।",
     dayPlan: "সারাদিনের খাবার",
     weekPlan: "সপ্তাহের খাবার",
+    conditionFoods: "আপনার সমস্যা অনুযায়ী কী খাবেন, কী এড়িয়ে চলবেন",
+    conditionFoodsHint: "আপনার চিকিৎসকের পরিকল্পনা এটি মেনেই তৈরি। বাজার, রান্না বা বাইরে খাওয়ার সময় এটি কাজে লাগাবেন।",
     recommendedFoods: "আপনার পরিকল্পনার উপযোগী আরও খাবার",
     recommendedHint: "বদলে খাওয়ার মতো ভালো বিকল্প, সবচেয়ে উপযোগীটি আগে।",
   },
@@ -115,6 +120,16 @@ export default function PatientFoodsPage() {
         </h2>
         <WeekPlan days={days} lang={lang} />
       </section>
+
+      {(report.result?.nutrition?.condition_foods ?? []).length > 0 && (
+        <Card title={t.conditionFoods} description={t.conditionFoodsHint}>
+          <ConditionFoodsGuide
+            guide={report.result.nutrition.condition_foods ?? []}
+            rationales={report.result.nutrition.patient_rationales}
+            lang={lang}
+          />
+        </Card>
+      )}
 
       {(report.result?.nutrition?.top_foods ?? []).length > 0 && (
         <Card title={t.recommendedFoods} description={t.recommendedHint}>

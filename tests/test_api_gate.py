@@ -151,7 +151,9 @@ def test_physician_edit_is_what_gets_reported(client):
 
 
 def test_ocr_endpoint_degrades_without_api_key(client, monkeypatch):
+    # Claude chosen as the reader, and no key: a clear 503, never a crash
     monkeypatch.setattr("src.core.config.settings.anthropic_api_key", "")
+    monkeypatch.setattr("src.core.config.settings.ocr_engine", "claude")
     response = client.post(
         "/intake/ocr",
         files={"file": ("report.png", b"\x89PNG fake", "image/png")},

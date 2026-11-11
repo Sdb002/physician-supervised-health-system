@@ -226,6 +226,13 @@ export const IconPrinter = (p: IconProps) => (
   </Svg>
 );
 
+export const IconYoutube = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+    <path d="m10 15 5-3-5-3z" />
+  </Svg>
+);
+
 export const IconAlert = (p: IconProps) => (
   <Svg {...p}>
     <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
@@ -237,5 +244,18 @@ export const IconHome = (p: IconProps) => (
   <Svg {...p}>
     <path d="M3 10.5 12 3l9 7.5" />
     <path d="M5 9v11a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9" />
+  </Svg>
+);
+
+export const IconListChecks = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m3 7 2 2 4-4M3 17l2 2 4-4" />
+    <path d="M13 6h8M13 12h8M13 18h8" />
+  </Svg>
+);
+
+export const IconFlame = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
   </Svg>
 );

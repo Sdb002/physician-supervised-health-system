@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/lib/use-t";
 
 export interface TrendSeriesDef {
   key: string;
@@ -66,6 +67,7 @@ export function TrendChart({
   large?: boolean;
 }) {
   const [hoverGroup, setHoverGroup] = useState<number | null>(null);
+  const { t } = useT();
 
   const HEIGHT = large ? 340 : 220;
   const PAD = large
@@ -129,7 +131,7 @@ export function TrendChart({
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
           style={{ width: "100%", height: "auto", display: "block" }}
           role="img"
-          aria-label={`${title} across ${points.length} visits`}
+          aria-label={t("{title} across {count} visits", { title, count: points.length })}
         >
           <line x1={PAD.left} x2={WIDTH - PAD.right} y1={baselineY} y2={baselineY} stroke="var(--color-line-strong)" strokeWidth={1} />
 

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "physician-supervised-health-system"
 version = "0.1.0"
-description = "Physician-supervised diet & lifestyle recommendation system. Deterministic clinical core; LLM for OCR and phrasing only."
+description = "Physician-supervised diet & lifestyle recommendation system. Deterministic clinical core; local OCR for lab slips; LLM for phrasing only."
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
@@ -20,6 +20,11 @@ dependencies = [
     "scikit-learn==1.9.0",
     "numpy>=2,<3",
     "joblib>=1.4,<2",
+    # local lab-slip reading (src/ocr): PaddleOCR's models on ONNX Runtime
+    "rapidocr>=3.10,<4",
+    "onnxruntime>=1.20",
+    # lab reports sent as PDF: their own text, or a scanned page rendered for OCR
+    "pypdfium2>=4.30",
 ]
 
 [project.optional-dependencies]

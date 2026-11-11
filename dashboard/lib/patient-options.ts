@@ -15,6 +15,7 @@ export interface Option {
 export const CONDITION_OPTIONS: Option[] = [
   { key: "hypertension", label: "Hypertension" },
   { key: "diabetes", label: "Diabetes" },
+  { key: "high_cholesterol", label: "High cholesterol" },
   { key: "anemia", label: "Anaemia" },
   { key: "chronic_kidney_disease", label: "Chronic kidney disease" },
   { key: "knee_osteoarthritis", label: "Knee osteoarthritis" },
@@ -24,6 +25,7 @@ export const CONDITION_OPTIONS: Option[] = [
 export const CONDITION_OPTIONS_PLAIN: Option[] = [
   { key: "hypertension", label: "High blood pressure" },
   { key: "diabetes", label: "Diabetes" },
+  { key: "high_cholesterol", label: "High cholesterol" },
   { key: "anemia", label: "Anaemia" },
   { key: "chronic_kidney_disease", label: "Kidney disease" },
   { key: "knee_osteoarthritis", label: "Knee osteoarthritis" },

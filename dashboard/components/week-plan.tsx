@@ -17,7 +17,7 @@ import {
 
 const L = {
   en: {
-    today: "Today", days: "Days of the week", everyDay: "Every day", kcal: "kcal", day: "Day",
+    today: "Today", days: "Days of the week", everyDay: "Every day", kcal: "kcal", kcalShort: "kcal", day: "Day",
     carbs: (grams: string) => `${grams} g carbohydrate`,
     salt: "Cooking salt",
     saltDay: (grams: string) => `${grams} g for the day`,
@@ -29,7 +29,7 @@ const L = {
       "Salt is the most cooking salt your portions should carry that day, which can be less than the recipes list. Add no salt at the table.",
   },
   bn: {
-    today: "আজ", days: "সপ্তাহের দিন", everyDay: "প্রতিদিন", kcal: "কিলোক্যালরি", day: "দিন",
+    today: "আজ", days: "সপ্তাহের দিন", everyDay: "প্রতিদিন", kcal: "কিলোক্যালরি", kcalShort: "কিলোক্যালরি", day: "দিন",
     carbs: (grams: string) => `শর্করা ${grams} গ্রাম`,
     salt: "রান্নার লবণ",
     saltDay: (grams: string) => `সারা দিনে ${grams} গ্রাম`,
@@ -45,6 +45,9 @@ const L = {
 /** Salt in grams to one decimal place, as the engine states it. */
 const saltGrams = (grams: number, lang: Lang) =>
   grams.toLocaleString(lang === "bn" ? "bn-BD" : "en", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+/** A line's energy as staff screens show it beside the portion. */
+const itemKcal = (kcal: number, lang: Lang) => (lang === "bn" ? kcal.toLocaleString("bn-BD") : String(kcal));
 
 /** Saturday-to-Friday tabs. Arrow keys move between days (the ARIA tabs
  * pattern), today carries a dot and says so to screen readers. */
@@ -164,7 +167,7 @@ export function DayMeals({
                   <span className="text-ink-strong">{localName(item, lang)}</span>
                   <span className="shrink-0 text-right text-sm text-ink-muted">
                     {portionText(item, lang)}
-                    {showItemKcal && `, ${item.kcal} kcal`}
+                    {showItemKcal && `, ${itemKcal(item.kcal, lang)} ${t.kcalShort}`}
                   </span>
                 </li>
               ))}
@@ -264,7 +267,11 @@ function WeekTable({
                         <span className="block font-medium text-ink">{localName(item, lang)}</span>
                         <span className="flex flex-wrap justify-between gap-x-2 text-ink-muted">
                           <span className="whitespace-nowrap">{portionText(item, lang)}</span>
-                          {showItemKcal && <span className="ml-auto whitespace-nowrap">{item.kcal} kcal</span>}
+                          {showItemKcal && (
+                            <span className="ml-auto whitespace-nowrap">
+                              {itemKcal(item.kcal, lang)} {t.kcalShort}
+                            </span>
+                          )}
                         </span>
                       </li>
                     ))}

@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode } from "react";
 import { conditionName } from "@/lib/clinical-terms";
+import { useT } from "@/lib/use-t";
 import { IconChevronLeft, IconSearch } from "@/components/icons";
 
 /** Keyboard-only focus indicator. `focus-visible` rather than `focus` so a
@@ -270,12 +273,13 @@ export function PatientBanner({
   conditions: string[];
   action?: ReactNode;
 }) {
+  const { t, lang } = useT();
   const facts: [string, ReactNode][] = [
-    ["Sex", <span key="s" className="capitalize">{sex}</span>],
-    ["Age", `${age} y`],
+    [t("Sex"), t(sex === "male" ? "Male" : "Female")],
+    [t("Age"), t("{age} y", { age })],
   ];
-  if (heightCm) facts.push(["Height", `${heightCm} cm`]);
-  if (weightKg) facts.push(["Weight", `${weightKg} kg`]);
+  if (heightCm) facts.push([t("Height"), t("{value} cm", { value: heightCm })]);
+  if (weightKg) facts.push([t("Weight"), t("{value} kg", { value: weightKg })]);
   return (
     <div className="overflow-hidden rounded-xl border border-line bg-surface">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4">
@@ -298,11 +302,11 @@ export function PatientBanner({
       </div>
       {(pregnant || conditions.length > 0) && (
         <div className="flex flex-wrap items-center gap-2 border-t border-line bg-surface-soft px-5 py-2.5">
-          <span className="text-xs text-ink-muted">Known conditions</span>
-          {pregnant && <Badge kind="flag">Pregnant</Badge>}
+          <span className="text-xs text-ink-muted">{t("Known conditions")}</span>
+          {pregnant && <Badge kind="flag">{t("Pregnant")}</Badge>}
           {conditions.map((c) => (
             <Badge key={c} kind="condition">
-              {conditionName(c)}
+              {conditionName(c, lang)}
             </Badge>
           ))}
         </div>
@@ -325,15 +329,16 @@ export function SearchInput({
    * readers skip, and which disappears as soon as the user types. */
   label?: string;
 }) {
+  const { t } = useT();
   return (
     <label className="relative block w-full sm:max-w-xs">
-      <span className="sr-only">{label ?? placeholder ?? "Search"}</span>
+      <span className="sr-only">{label ?? placeholder ?? t("Search")}</span>
       <IconSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
       <input
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder ?? "Search…"}
+        placeholder={placeholder ?? t("Search…")}
         className="w-full rounded-lg border border-field bg-surface py-2 pl-9 pr-3 text-base placeholder:text-ink-muted focus:border-clinical focus:outline-none focus:ring-2 focus:ring-clinical/20 sm:text-sm"
       />
     </label>
@@ -385,13 +390,16 @@ export function EmptyState({
   );
 }
 
+/** A message from the API is shown in the reader's language when the
+ * interface has it (the sign-in errors); otherwise as the server wrote it. */
 export function ErrorNote({ message }: { message: string }) {
+  const { t } = useT();
   return (
     <div
       role="alert"
       className="rounded-lg border border-crit-line bg-crit-tint px-4 py-3 text-sm text-crit-ink"
     >
-      {message}
+      {t(message)}
     </div>
   );
 }

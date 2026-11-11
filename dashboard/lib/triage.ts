@@ -12,5 +12,14 @@ export function byTriage(a: QueueItem, b: QueueItem) {
   return new Date(a.visit.created_at).getTime() - new Date(b.visit.created_at).getTime();
 }
 
-export const riskLabel = (risk: string) =>
-  risk === "none" ? "No risk flags" : `${risk.charAt(0).toUpperCase()}${risk.slice(1)} risk`;
+const RISK_LABELS: Record<string, string> = {
+  none: "No risk flags",
+  low: "Low risk",
+  moderate: "Moderate risk",
+  high: "High risk",
+  critical: "Critical risk",
+};
+
+/** The engine's overall risk as a badge says it; `t` puts it in the reader's language. */
+export const riskLabel = (risk: string, t: (en: string) => string = (en) => en) =>
+  t(RISK_LABELS[risk] ?? `${risk.charAt(0).toUpperCase()}${risk.slice(1)} risk`);

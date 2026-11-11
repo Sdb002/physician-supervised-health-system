@@ -1,0 +1,42 @@
+# When a food counts as a "source" of a nutrient — consumed by
+# src/diet/condition_foods.py, which lists, for each of a patient's
+# conditions, only foods that are a real source of a nutrient that condition
+# emphasizes. Without it, ranking by how often a food is eaten puts foods
+# with a trace of the nutrient (milk for anaemia, fish for fibre) ahead of
+# the foods that supply it.
+#
+# The thresholds are the EU's for a "source of" nutrition claim, per 100 g of
+# food as sold or prepared, which the recipe workbook's Parameters sheet
+# already cites for fibre:
+#
+# - vitamins and minerals: a "significant amount", 15% of the nutrient
+#   reference value (NRV) per 100 g. Regulation (EC) No 1924/2006 on
+#   nutrition and health claims made on foods, Annex ("SOURCE OF [NAME OF
+#   VITAMIN/S] AND/OR [NAME OF MINERAL/S]"); Regulation (EU) No 1169/2011 on
+#   the provision of food information to consumers, Annex XIII Part A,
+#   points 1 (the NRVs) and 2 (15% per 100 g for products other than
+#   beverages).
+# - fibre: at least 3 g per 100 g or 1.5 g per 100 kcal. Regulation (EC)
+#   No 1924/2006, Annex ("SOURCE OF FIBRE").
+# - protein: at least 12% of the food's energy from protein. Regulation (EC)
+#   No 1924/2006, Annex ("SOURCE OF PROTEIN").
+
+significant_share_of_nrv: 0.15
+
+# Regulation (EU) No 1169/2011, Annex XIII Part A, point 1, for the
+# vitamins and minerals the food table records.
+nrv:
+  iron_mg: 14
+  calcium_mg: 800
+  zinc_mg: 10
+  folate_ug: 200
+  vit_a_ug: 800
+  vit_c_mg: 80
+  potassium_mg: 2000
+
+fiber:
+  min_g_per_100g: 3
+  min_g_per_100kcal: 1.5
+
+protein:
+  min_energy_share: 0.12

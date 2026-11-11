@@ -186,6 +186,33 @@ def test_untracked_nutrient_is_reported_instead_of_zero_coverage():
     assert plan["untracked"] == ["folate_ug"]
 
 
+def test_an_untracked_nutrient_never_leaves_the_recipe_id_to_pick_the_dish():
+    # reported: an anaemic man has his iron by dinner, which left folate - a
+    # nutrient no food has a value for - as the only thing emphasized. Every
+    # dish scored 0 on it, so the first recipe id won the course and the
+    # week's snacks came out in alphabetical order.
+    kitchen = [
+        _dish("rice", "Rice & Grain", 275, grain=1.0, serving_g=243, frequency=10),
+        _dish("ruti", "Bread & Pitha", 267, meals=("breakfast",), grain=0.99, serving_g=108),
+        _dish("omelette", "Egg", 188, meals=("breakfast",), protein_g=12),
+        _dish("dal", "Dal", 169, meals=("lunch",), protein_g=9),
+        _dish("beef", "Meat", 300, meals=("lunch",), iron_mg=40, protein_g=24),
+        _dish("shak", "Leafy Green", 94, meals=("lunch",), iron_mg=3),
+        _dish("a_thin_fish_broth", "Fish", 260, meals=("dinner",), protein_g=4),
+        _dish("b_fish_curry", "Fish", 260, meals=("dinner",), protein_g=26),
+        _dish("bhaji", "Vegetable", 120, meals=("dinner",), fiber_g=2),
+    ]
+    fruits = [_fruit("apple", 60, fiber_g=1), _fruit("guava", 68, fiber_g=5)]
+    plan = build_meal_plan(kitchen, fruits, 1800, targets={"iron_mg": 8, "folate_ug": 400},
+                           emphasize=["iron_mg", "folate_ug"],
+                           untracked=frozenset({"folate_ug"}))
+    # lunch's beef alone is over the iron the day needs...
+    assert plan["days"][0]["totals"]["iron_mg"] >= 1.5 * 8
+    # ...so dinner and the snack go to the nutrient-dense choice, not the first id
+    assert _courses(plan, "dinner")["main"]["recipe_id"] == "b_fish_curry"
+    assert _day(plan)["snack"][0]["food_id"] == "guava"
+
+
 def test_the_plan_covers_a_week_starting_saturday():
     plan = _plan()
     assert [day["weekday"] for day in plan["days"]] == list(WEEKDAYS)

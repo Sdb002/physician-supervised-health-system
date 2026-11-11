@@ -14,7 +14,7 @@ from src.lifestyle.exercise_db import load_exercises
 def test_hypertension_exclusions():
     ex = excluded_tags(["hypertension"])
     assert "high_sodium" in ex.food_tags
-    assert "high_exertion" in ex.exercise_tags
+    assert "avoid_hypertension" in ex.exercise_tags
     assert ex.applied_conditions == ("hypertension",)
 
 
@@ -26,7 +26,8 @@ def test_unknown_condition_is_ignored():
 def test_exclusions_are_a_union():
     ex = excluded_tags(["hypertension", "diabetes", "knee_osteoarthritis"])
     assert {"high_sodium", "high_sugar"} <= set(ex.food_tags)
-    assert {"high_exertion", "high_impact", "knee_stress"} <= set(ex.exercise_tags)
+    assert {"avoid_hypertension", "avoid_diabetes",
+            "avoid_knee_osteoarthritis"} == set(ex.exercise_tags)
 
 
 def test_gate_removes_high_sodium_foods():
@@ -44,20 +45,48 @@ def test_gate_removes_contraindicated_exercises():
     ex = excluded_tags(["knee_osteoarthritis"])
     allowed = filter_items(exercises, ex.exercise_tags)
     ids = {e.exercise_id for e in allowed}
-    assert "E008" not in ids  # stair climbing: high_impact + knee_stress
-    assert "E005" not in ids  # squats: knee_stress
-    assert "E001" in ids  # brisk walking survives
+    assert "EX050" not in ids  # jogging: high impact
+    assert "EX062" not in ids  # lunge: deep loaded knee bend
+    assert "EX049" in ids  # brisk walking survives
+    assert "EX002" in ids  # a chair-supported mini-squat is "modify", not "avoid"
 
 
 def test_no_conditions_excludes_nothing():
     ex = excluded_tags([])
     assert not ex.food_tags and not ex.exercise_tags
     assert is_allowed(["high_sodium"], ex.food_tags)
+    assert ex.applied_populations == ()
 
 
 def test_every_condition_has_rules():
-    assert {"hypertension", "diabetes", "anemia", "pregnancy",
+    assert {"hypertension", "diabetes", "high_cholesterol", "anemia", "pregnancy",
             "knee_osteoarthritis"} <= set(known_conditions())
+
+
+def test_high_cholesterol_excludes_the_solid_cooking_fats_and_what_is_cooked_in_them():
+    ex = excluded_tags(["high_cholesterol"])
+    assert ex.food_tags == {"solid_fat"} and not ex.exercise_tags
+    foods = load_foods()
+    removed = {f.name_en for f in foods} - {f.name_en for f in filter_items(foods, ex.food_tags)}
+    # animal fats, tropical oils and hydrogenated fats: nothing else
+    assert removed == {"Butter, salted", "Ghee, cow", "Ghee, vegetable", "Vanaspati",
+                       "Margarine", "Coconut oil", "Palm oil"}
+    # the liquid oils households cook in stay, and so do the foods that are
+    # high in fat of the kind the guidance asks for: nuts, oilseeds, oily fish
+    kept = {f.name_en for f in filter_items(foods, ex.food_tags)}
+    assert {"Mustard oil", "Soybean oil", "Almond", "Walnut", "Hilsa",
+            "Sesame seeds, whole, dried"} <= kept
+
+    dishes = _recipes()
+    cooked_in_one = [r for r in dishes if "solid_fat" in r.tags]
+    # a spoon of ghee is enough: the tag does not wait for a quarter of the weight
+    assert {"Ghee Rice", "Chicken Korma", "Dry Spiced Khichuri"} <= {r.name_en for r in cooked_in_one}
+    assert all(any(line["name_en"] == "Ghee, cow" for line in r.ingredient_lines)
+               for r in cooked_in_one)
+    assert not filter_items(cooked_in_one, ex.food_tags)
+    allowed = filter_items(dishes, ex.food_tags)
+    assert len(allowed) == len(dishes) - len(cooked_in_one)
+    assert {"Plain Boiled Rice", "Thin Red Lentil Soup"} <= {r.name_en for r in allowed}
 
 
 def _recipes():

@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from src.diet.excluded_foods import MAX_EXCLUDED
+
 
 class BiomarkersIn(BaseModel):
     fasting_glucose: float | None = Field(None, ge=10, le=1000, description="mg/dL")
@@ -14,6 +16,15 @@ _ACTIVITY_PATTERN = "^(sedentary|light|moderate|active)$"
 _FITNESS_PATTERN = "^(beginner|intermediate|advanced)$"
 
 
+class ExcludedFoodPick(BaseModel):
+    """A food or dish as a form sends it: its id from GET /foods/catalogue,
+    with the name the form showed it under. The name tells an entry sent
+    back unchanged from a fresh pick of whatever carries that id today."""
+
+    id: str = Field(min_length=1, max_length=50)
+    name_en: str = Field("", max_length=200)
+
+
 class PatientProfile(BaseModel):
     """What the engine reads off a patient, apart from their name."""
 
@@ -24,6 +35,8 @@ class PatientProfile(BaseModel):
     pregnancy_trimester: int | None = Field(None, ge=1, le=3)
     conditions: list[str] = []
     dietary_restrictions: list[str] = []
+    # the foods and dishes the patient does not eat: bare ids are accepted too
+    excluded_foods: list[str | ExcludedFoodPick] = Field(default=[], max_length=MAX_EXCLUDED)
     fitness_level: str = Field("beginner", pattern=_FITNESS_PATTERN)
     # None = not recorded: the energy target then assumes a level and says so
     activity_level: str | None = Field(None, pattern=_ACTIVITY_PATTERN)
@@ -49,15 +62,28 @@ class PatientUpdate(BaseModel):
     pregnancy_trimester: int | None = Field(None, ge=1, le=3)
     conditions: list[str] | None = None
     dietary_restrictions: list[str] | None = None
+    # the whole list as it should be afterwards
+    excluded_foods: list[str | ExcludedFoodPick] | None = Field(None, max_length=MAX_EXCLUDED)
     fitness_level: str | None = Field(None, pattern=_FITNESS_PATTERN)
     activity_level: str | None = Field(None, pattern=_ACTIVITY_PATTERN)
     notes: str | None = None
+
+
+class ExcludedFood(BaseModel):
+    """A food or dish a patient does not eat, as recorded on the patient:
+    sent in by id, kept and returned with the name it had when chosen."""
+
+    id: str
+    kind: str  # "food" | "recipe"
+    name_en: str
+    name_bn: str = ""
 
 
 class PatientOut(PatientCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
     created_at: datetime
+    excluded_foods: list[ExcludedFood] = []
 
 
 class VisitCreate(BaseModel):
@@ -113,6 +139,8 @@ class ExercisePlanEdit(BaseModel):
     aerobic_days: int = Field(ge=1, le=7)
     strength_days: int = Field(ge=0, le=7)
     flexibility_days: int = Field(ge=0, le=7)
+    # planned for patients 65 and over (engine 0.12.0); absent keeps the plan's
+    balance_days: int | None = Field(None, ge=0, le=7)
     aerobic_min_per_session: int = Field(ge=5, le=180)
     # category -> exercise_ids the physician kept (validated against the
     # contraindication-filtered exercise list server-side)
@@ -187,6 +215,10 @@ class ReportOut(BaseModel):
 class OcrResult(BaseModel):
     biomarkers: BiomarkersIn
     notes: str = ""
+    # which reader produced it ("RapidOCR" on this server, or "Claude"), and
+    # the text lines the local reader saw - kept with the visit for audit
+    engine: str = ""
+    text: list[str] = []
 
 
 # --- auth / accounts ---------------------------------------------------------

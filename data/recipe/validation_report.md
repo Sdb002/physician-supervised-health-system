@@ -1,6 +1,6 @@
 # Validation report — recipes
 
-- Date: 2026-10-08
+- Date: 2026-10-23
 - Rows: 250
 - Status: **PASS** (0 errors, 0 warnings)
 

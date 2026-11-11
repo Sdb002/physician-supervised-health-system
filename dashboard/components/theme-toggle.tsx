@@ -2,6 +2,7 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 import { IconMoon, IconSun } from "@/components/icons";
+import { useT } from "@/lib/use-t";
 
 const EVENT = "themechange";
 
@@ -35,6 +36,7 @@ const getServerSnapshot = () => false;
 
 export function ThemeToggle() {
   const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const { t } = useT();
 
   const toggle = useCallback(() => {
     const next = !getSnapshot();
@@ -57,7 +59,7 @@ export function ThemeToggle() {
     >
       <span className="flex items-center gap-2.5">
         {dark ? <IconMoon className="h-4.5 w-4.5" /> : <IconSun className="h-4.5 w-4.5" />}
-        {dark ? "Dark screen" : "Light screen"}
+        {dark ? t("Dark screen") : t("Light screen")}
       </span>
 
       {/* Track */}
@@ -73,7 +75,7 @@ export function ThemeToggle() {
           }`}
         />
       </span>
-      <span className="sr-only">Toggle dark mode</span>
+      <span className="sr-only">{t("Toggle dark mode")}</span>
     </button>
   );
 }

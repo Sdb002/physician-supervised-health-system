@@ -120,6 +120,13 @@ hand-curated. Three have specific consumers:
 foods carrying an excluded tag for the patient's conditions. Add new tags
 freely, but register exclusion tags in that YAML.
 
+No rule excludes on `high_fat`: it is total fat, which also marks nuts,
+oilseeds and oily fish. High cholesterol excludes `solid_fat` instead —
+butter, ghee, vanaspati, margarine, coconut oil and palm oil. That tag, like
+`liver` and the `contains_*` tags of the dietary restrictions, is not stored
+in the CSV: it is read off each food's name and group when the table is loaded
+(`src/diet/restriction_tags.py`).
+
 ## Validation rules (enforced by `scripts/validate_datasets.py`)
 
 - `food_id` unique, matches `F\d+`.

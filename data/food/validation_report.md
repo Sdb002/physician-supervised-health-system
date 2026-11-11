@@ -1,6 +1,6 @@
 # Validation report — bd_food.csv
 
-- Date: 2026-10-08
+- Date: 2026-10-23
 - Rows: 672
 - Status: **PASS** (0 errors, 0 warnings)
 

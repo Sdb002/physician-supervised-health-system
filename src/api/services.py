@@ -15,8 +15,11 @@ from src.clinical.risk_scoring import (
     score_biomarkers,
 )
 from src.db.models import Patient, Visit
+from src.diet import excluded_foods
 from src.diet.food_db import (
+    FOOD_CSV,
     NUTRIENT_COLUMNS,
+    Food,
     display_name,
     eaten_in_portions,
     food_index,
@@ -24,17 +27,21 @@ from src.diet.food_db import (
     recommendable_foods,
     untracked_nutrients,
 )
+from src.diet.condition_foods import condition_food_guide
 from src.diet.habits import (
     familiarity_map,
     food_habits,
     habitual_foods,
+    meals_per_week_map,
     median_familiarity,
+    median_meals_per_week,
     portion_map,
     typical_portion_g,
 )
 from src.diet.matcher import active_backend, active_recipe_backend, rank_foods, rank_recipes
 from src.diet.meal_plan import (
     MAX_VIT_A_UG_PER_SERVING,
+    MEAL_SPLIT,
     WEEKDAYS,
     build_meal_plan,
     coverage,
@@ -43,10 +50,12 @@ from src.diet.meal_plan import (
     ration_salt,
     serving_grams,
     summarize_week,
+    unfilled_courses,
 )
-from src.diet.recipe import Recipe, load_recipes
-from src.lifestyle.exercise_db import load_exercises
-from src.lifestyle.fitt_vp import build_fitt_plan
+from src.diet.recipe import INGREDIENTS_CSV, RECIPES_CSV, Recipe, load_recipes
+from src.lifestyle.exercise_db import PLAN_GROUPS, load_exercises
+from src.lifestyle.fitt_vp import build_fitt_plan, exercise_entry
+from src.lifestyle.ranking import context_for
 
 # 0.2.0: 672-food / 250-recipe datasets; recipes ranked as their own section
 # 0.3.0: meal plan composed from household dishes; foods ranked by habit too
@@ -59,7 +68,35 @@ from src.lifestyle.fitt_vp import build_fitt_plan
 #        food exclusions; reference intakes by age band; recorded conditions
 #        drive the nutrient emphasis; dietary restrictions; the recorded
 #        activity level; cautions for the reviewing physician
-ENGINE_VERSION = "0.7.0"
+# 0.8.0: the trained recommenders are told the patient's findings and the
+#        sodium limit, and score nutritional fit only, with household
+#        familiarity applied to it as to the formula's; the assessment
+#        records the findings. Plans made without the models are unchanged.
+# 0.9.0: a nutrient no food has a value for (folate) no longer steers the
+#        planner; when it was the only one still emphasized every dish
+#        scored 0 and the recipe id chose the course
+# 0.10.0: high cholesterol as a recorded condition: dishes cooked in solid
+#         fats (ghee, butter, vanaspati, coconut and palm oil) are excluded,
+#         fibre is emphasized, the reviewing physician is told what the food
+#         table cannot count, and the recommenders learn it as a finding
+# 0.11.0: the foods and dishes one patient does not eat, picked from the
+#         food table and the recipe list: each food is left out in every
+#         form, with every dish that uses it
+# 0.12.0: the exercise prescription from the 408-exercise safety dataset:
+#         the gate excludes what the dataset rates "avoid" for the patient's
+#         conditions and what is not for their age or sex; each group is
+#         ranked (trained exercise model or formula) and picked for variety;
+#         balance training from 65; every exercise carries its dose, method,
+#         easier version, the notes for the patient's conditions and a video
+# 0.13.0: "top foods" weighted by how many of a week's main meals households
+#         eat each food at (from every dish using it, with the recipe
+#         workbook's meals-per-week midpoints), in proportion, instead of by
+#         the highest 1-10 score among its dishes; onion is a seasoning, not
+#         a top food. Dishes and the meal plan are unchanged.
+#         nutrition.condition_foods: per condition, the foods to eat for it
+#         and the foods and dishes its rule leaves out
+#         (src.diet.condition_foods).
+ENGINE_VERSION = "0.13.0"
 
 # "Foods that suit your plan" spans the food groups rather than listing ten
 # leafy greens: at most this many from any one group.
@@ -89,6 +126,29 @@ def _cautions(patient: Patient, age: int, nutrition_cautions: list[str]) -> list
     return cautions + nutrition_cautions
 
 
+_COURSE_NAMES = {"main": "main dish", "side": "side dish"}
+
+
+def _short_plan_cautions(plan: dict, dishes: int, excluded: int, own_excluded: int) -> list[str]:
+    """Said when the dishes left for a patient could not fill the week: the
+    planner never fails, it leaves the course out, and a lunch of rice alone
+    looks like any other plan line. `excluded` of the `dishes` in the recipe
+    list are gated out for this patient, `own_excluded` of them by the foods
+    recorded as not eaten - one seasoning there takes most dishes with it."""
+    unfilled = unfilled_courses(plan)
+    if not unfilled:
+        return []
+    meals = len({(weekday, meal) for weekday, meal, _ in unfilled})
+    courses = list(dict.fromkeys(_COURSE_NAMES.get(course, course) for _, _, course in unfilled))
+    own = (f", {own_excluded} of them by the foods recorded as not eaten" if own_excluded else "")
+    return [
+        f"Too few dishes are left for this patient to fill the plan: {meals} of the week's "
+        f"{len(plan['days']) * len(MEAL_SPLIT)} meals are missing a course ({', '.join(courses)}). "
+        f"{excluded} of the {dishes} dishes are excluded{own}. Check that each exclusion is "
+        "meant in any amount, and complete the plan before approving."
+    ]
+
+
 def build_assessment(patient: Patient, visit: Visit) -> dict:
     age = age_from_birth_year(patient.birth_year)
     energy = daily_energy_target(
@@ -110,15 +170,25 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
     if patient.pregnant and "pregnancy" not in conditions:
         conditions.append("pregnancy")
 
-    exclusions = excluded_tags(conditions, patient.dietary_restrictions or [])
+    exclusions = excluded_tags(conditions, patient.dietary_restrictions or [],
+                               age=age, sex=patient.sex)
     nutrition = nutrient_targets(patient.sex, patient.pregnant, flags,
                                  conditions=conditions, age=age)
     cautions = _cautions(patient, age, nutrition.pop("cautions"))
 
     foods = load_foods()
-    allowed_foods = filter_items(foods, exclusions.food_tags)
     recipes = load_recipes(food_index(foods))
-    allowed_recipes = filter_items(recipes, exclusions.food_tags)
+    # the foods and dishes this patient does not eat go through the gate
+    # with the conditions' and restrictions' tags
+    own = excluded_foods.resolve(patient.excluded_foods, foods, recipes)
+    cautions += [
+        f"'{name}' is recorded as something this patient does not eat, but it is no "
+        "longer in the food database, so the plan could not leave it out. Check the "
+        "plan for it, and record the food again on the patient."
+        for name in own.missing
+    ]
+    allowed_foods = [f for f in filter_items(foods, exclusions.food_tags) if own.allows(f)]
+    allowed_recipes = [r for r in filter_items(recipes, exclusions.food_tags) if own.allows(r)]
     # habits come from every dish, gated or not: whether households eat a
     # food doesn't depend on this patient's exclusions
     habits = food_habits(recipes)
@@ -129,13 +199,30 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
         <= MAX_VIT_A_UG_PER_SERVING
     ]
     familiarity = familiarity_map(candidate_foods, habits, unknown=median_familiarity(recipes))
+    candidate_meals = meals_per_week_map(candidate_foods, habits,
+                                         unknown=median_meals_per_week(habits))
+    candidate_portions = portion_map(candidate_foods, habits)
     suggested_recipes = [r for r in allowed_recipes if plannable(r)]
 
     targets = nutrition["targets"]
     emphasize = nutrition["emphasize"]
+    findings = nutrition["findings"]
+    limits = nutrition["limits"]
 
     exercises = load_exercises()
     allowed_exercises = filter_items(exercises, exclusions.exercise_tags)
+
+    meal_plan = build_meal_plan(
+        suggested_recipes,
+        [f for f in candidate_foods if f.food_group == "fruit"],
+        energy["target_kcal"], targets, emphasize,
+        familiarity=familiarity, untracked=untracked_nutrients(foods),
+        foods_by_id=food_index(foods),
+        sodium_limit_mg=limits.get("sodium_mg"), findings=findings,
+    )
+    cautions += _short_plan_cautions(
+        meal_plan, dishes=len(recipes), excluded=len(recipes) - len(allowed_recipes),
+        own_excluded=len(own.recipe_ids))
 
     return {
         "engine_version": ENGINE_VERSION,
@@ -146,28 +233,42 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
         "overall_risk": overall_risk(flags),
         "conditions": conditions,
         "dietary_restrictions": list(exclusions.applied_restrictions),
+        # with the row name each was chosen under, so the plan editor can find
+        # them again after a dataset replacement (see _own_exclusions)
+        "excluded_foods": [
+            {key: entry.get(key, "")
+             for key in ("id", "kind", "name_en", "name_bn", "source_name")}
+            for entry in own.items
+        ],
         "cautions": cautions,
         "exclusions": {
             "food_tags": sorted(exclusions.food_tags),
             "exercise_tags": sorted(exclusions.exercise_tags),
+            # what the patient's own excluded foods take out, id by id: every
+            # form of each food, and every dish that uses one
+            "food_ids": sorted(own.food_ids),
+            "recipe_ids": sorted(own.recipe_ids),
         },
         "nutrition": {
             **nutrition,
             "scoring_backend": active_backend(),
             "recipe_scoring_backend": active_recipe_backend(),
             "top_foods": rank_foods(candidate_foods, emphasize, targets,
-                                    familiarity=familiarity, per_group=TOP_FOODS_PER_GROUP,
-                                    portion_g=portion_map(candidate_foods, habits)),
+                                    meals_per_week=candidate_meals,
+                                    per_group=TOP_FOODS_PER_GROUP,
+                                    portion_g=candidate_portions,
+                                    findings=findings, limits=limits),
+            # the same evidence split by condition: what to eat for each,
+            # and what its rule leaves out
+            "condition_foods": condition_food_guide(
+                conditions, foods=foods, recipes=recipes, allowed_foods=candidate_foods,
+                habits=habits, meals_per_week=candidate_meals,
+                portion_g=candidate_portions, targets=targets,
+                untracked=untracked_nutrients(foods), findings=findings, limits=limits),
             "top_recipes": rank_recipes(suggested_recipes, emphasize, targets,
-                                        per_category=TOP_RECIPES_PER_CATEGORY),
-            "meal_plan": build_meal_plan(
-                suggested_recipes,
-                [f for f in candidate_foods if f.food_group == "fruit"],
-                energy["target_kcal"], targets, emphasize,
-                familiarity=familiarity, untracked=untracked_nutrients(foods),
-                foods_by_id=food_index(foods),
-                sodium_limit_mg=nutrition["limits"].get("sodium_mg"),
-            ),
+                                        per_category=TOP_RECIPES_PER_CATEGORY,
+                                        findings=findings, limits=limits),
+            "meal_plan": meal_plan,
         },
         "exercise_plan": build_fitt_plan(
             age=age,
@@ -177,12 +278,60 @@ def build_assessment(patient: Patient, visit: Visit) -> dict:
             fitness_level=patient.fitness_level,
             overall_risk=overall_risk(flags),
             exercises=allowed_exercises,
+            conditions=conditions,
         ),
     }
 
 
 _VALID_MEALS = ("breakfast", "lunch", "dinner", "snack")
-_EXERCISE_GROUPS = ("aerobic", "strength", "flexibility")
+_EXERCISE_GROUPS = PLAN_GROUPS
+
+
+_CATALOGUE: tuple[tuple, list[dict]] | None = None
+
+
+def excludable_foods() -> list[dict]:
+    """Every dish and everyday food a patient record can exclude: what the
+    forms' picker lists (see src.diet.excluded_foods.catalogue). Every
+    patient form asks for it and anyone may, so it is worked out once for
+    the data files as they are and again only when one of them changes."""
+    global _CATALOGUE
+    files = tuple(path.stat().st_mtime_ns if path.exists() else None
+                  for path in (FOOD_CSV, RECIPES_CSV, INGREDIENTS_CSV))
+    if _CATALOGUE is None or _CATALOGUE[0] != files:
+        foods = load_foods()
+        _CATALOGUE = (files, excluded_foods.catalogue(foods, load_recipes(food_index(foods))))
+    return _CATALOGUE[1]
+
+
+def excluded_food_entries(chosen: list, kept: list[dict] | None = None) -> list[dict]:
+    """The entries to store on a patient for the foods and dishes a form
+    sent, each an id or an id with the name the form showed (anything with
+    `id` and `name_en`); `kept` is what the patient has now. Raises
+    ValueError for an id that is in neither table, or no longer under that
+    name."""
+    if not chosen:
+        return []  # most records: nothing to look up, so the tables stay unread
+    picks = [item if isinstance(item, str) else (item.id, item.name_en or None)
+             for item in chosen]
+    foods = load_foods()
+    return excluded_foods.record(picks, foods, load_recipes(food_index(foods)), kept)
+
+
+def _own_exclusions(result: dict, foods: list[Food],
+                    recipes: list[Recipe]) -> excluded_foods.OwnExclusions:
+    """What this assessment's patient does not eat, in the tables as they
+    are now. The entries are looked up again by the row name each was chosen
+    under, as the patient's own are: the ids the assessment listed are row
+    numbers, and after a dataset replacement they can be other foods. An
+    assessment whose entries carry no row name is held to the ids it listed
+    (none before engine 0.11.0)."""
+    entries = result.get("excluded_foods") or []
+    if entries and all(entry.get("source_name") for entry in entries):
+        return excluded_foods.resolve(entries, foods, recipes)
+    listed = result["exclusions"]
+    return excluded_foods.OwnExclusions(
+        (), frozenset(listed.get("food_ids") or ()), frozenset(listed.get("recipe_ids") or ()), ())
 
 
 def allowed_foods_for(result: dict) -> list[dict]:
@@ -197,8 +346,10 @@ def allowed_foods_for(result: dict) -> list[dict]:
     """
     food_tags = set(result["exclusions"]["food_tags"])
     all_foods = load_foods()
-    foods = filter_items(all_foods, food_tags)
-    recipes = filter_items(load_recipes(food_index(all_foods)), food_tags)
+    all_recipes = load_recipes(food_index(all_foods))
+    own = _own_exclusions(result, all_foods, all_recipes)
+    foods = [f for f in filter_items(all_foods, food_tags) if own.allows(f)]
+    recipes = [r for r in filter_items(all_recipes, food_tags) if own.allows(r)]
     dishes = [
         {"kind": "recipe", "recipe_id": r.recipe_id, "name_en": r.name_en, "name_bn": r.name_bn,
          "food_group": r.category or "Dish",
@@ -214,8 +365,18 @@ def allowed_foods_for(result: dict) -> list[dict]:
     ]
 
 
-def _edited_dish(item, meal: str, all_recipes: dict, allowed_recipes: dict,
-                 food_tags: set) -> tuple[dict, dict, Recipe, float]:
+def _why_excluded(item: Food | Recipe, food_tags: set,
+                  own: excluded_foods.OwnExclusions) -> str:
+    """What keeps a food or dish out of this patient's plan: the excluded
+    tags it carries, and whether the patient does not eat it."""
+    reasons = sorted(set(item.tags) & food_tags)
+    if not own.allows(item):
+        reasons.append("the patient does not eat it")
+    return ", ".join(reasons)
+
+
+def _edited_dish(item, meal: str, all_recipes: dict, allowed_recipes: dict, food_tags: set,
+                 own: excluded_foods.OwnExclusions) -> tuple[dict, dict, Recipe, float]:
     """A physician's dish line, re-validated and recomputed from the recipe
     data: grams -> servings -> per-serving nutrients. Also returns the recipe
     and the servings, which the day's salt is worked out from."""
@@ -229,8 +390,8 @@ def _edited_dish(item, meal: str, all_recipes: dict, allowed_recipes: dict,
                 f"'{label}' ({meal}) is no longer in the recipe database — "
                 "remove it and choose a replacement from the list"
             )
-        blocked = ", ".join(sorted(set(stale.tags) & food_tags)) or "contraindicated"
-        raise ValueError(f"'{stale.name_en}' ({meal}) is excluded for this patient — {blocked}")
+        raise ValueError(f"'{stale.name_en}' ({meal}) is excluded for this patient — "
+                         f"{_why_excluded(stale, food_tags, own)}")
     if claimed and recipe.name_en != claimed:
         raise ValueError(
             f"'{claimed}' ({meal}) comes from an older version of the recipe "
@@ -249,8 +410,8 @@ def _edited_dish(item, meal: str, all_recipes: dict, allowed_recipes: dict,
     return row, nutrients, recipe, servings
 
 
-def _edited_food(item, meal: str, all_foods: dict, allowed_foods: dict,
-                 food_tags: set) -> tuple[dict, dict]:
+def _edited_food(item, meal: str, all_foods: dict, allowed_foods: dict, food_tags: set,
+                 own: excluded_foods.OwnExclusions) -> tuple[dict, dict]:
     """A physician's single-food line, re-validated and recomputed from the
     food table."""
     claimed = item.name_en.strip()
@@ -273,8 +434,8 @@ def _edited_food(item, meal: str, all_foods: dict, allowed_foods: dict,
                 f"'{label}' ({meal}) is no longer in the food database — "
                 "remove it and choose a replacement from the list"
             )
-        blocked = ", ".join(sorted(set(stale.tags) & food_tags)) or "contraindicated"
-        raise ValueError(f"'{stale.name_en}' ({meal}) is excluded for this patient — {blocked}")
+        raise ValueError(f"'{stale.name_en}' ({meal}) is excluded for this patient — "
+                         f"{_why_excluded(stale, food_tags, own)}")
     qty_g = round(item.qty_g)
     nutrients = {c: food.nutrients[c] * qty_g / 100.0 for c in NUTRIENT_COLUMNS}
     row = {
@@ -306,12 +467,12 @@ def recompute_edited_result(result: dict, weight_kg: float, edit) -> dict:
 
     food_list = load_foods()
     all_foods = food_index(food_list)
-    allowed_foods = {
-        f.food_id: f for f in filter_items(list(all_foods.values()), food_tags)
-    }
     recipe_list = load_recipes(all_foods)
     all_recipes = {r.recipe_id: r for r in recipe_list}
-    allowed_recipes = {r.recipe_id: r for r in filter_items(recipe_list, food_tags)}
+    own = _own_exclusions(result, food_list, recipe_list)
+    allowed_foods = {f.food_id: f for f in filter_items(food_list, food_tags) if own.allows(f)}
+    allowed_recipes = {r.recipe_id: r for r in filter_items(recipe_list, food_tags)
+                       if own.allows(r)}
     untracked = untracked_nutrients(food_list)
 
     def edited_day(day_meals: dict) -> tuple[dict, dict, dict]:
@@ -325,10 +486,11 @@ def recompute_edited_result(result: dict, weight_kg: float, edit) -> dict:
             for item in items:
                 if item.recipe_id is not None:
                     row, nutrients, recipe, servings = _edited_dish(
-                        item, meal, all_recipes, allowed_recipes, food_tags)
+                        item, meal, all_recipes, allowed_recipes, food_tags, own)
                     dishes.append((row, recipe, servings))
                 else:
-                    row, nutrients = _edited_food(item, meal, all_foods, allowed_foods, food_tags)
+                    row, nutrients = _edited_food(
+                        item, meal, all_foods, allowed_foods, food_tags, own)
                 for c in NUTRIENT_COLUMNS:
                     totals[c] += nutrients[c]
                 rows.append(row)
@@ -371,11 +533,17 @@ def recompute_edited_result(result: dict, weight_kg: float, edit) -> dict:
             e.exercise_id: e
             for e in filter_items(list(all_exercises.values()), exercise_tags)
         }
+        # each kept exercise is listed as the engine lists it, with the notes
+        # for this patient's conditions
+        ctx = context_for(result.get("age", 0), "", result.get("conditions") or [],
+                          "beginner", result.get("overall_risk", "low"),
+                          (result.get("anthropometrics") or {}).get("bmi_category", ""))
         new_type: dict[str, list[dict]] = {}
         for group in _EXERCISE_GROUPS:
             ids = ex.type.get(group)
             if ids is None:
-                new_type[group] = plan["type"].get(group, [])
+                if group in plan["type"]:
+                    new_type[group] = plan["type"][group]
                 continue
             rows = []
             for exercise_id in ids:
@@ -390,26 +558,23 @@ def recompute_edited_result(result: dict, weight_kg: float, edit) -> dict:
                     raise ValueError(
                         f"exercise '{exercise_id}' is {exercise.category}, not {group}"
                     )
-                rows.append({
-                    "exercise_id": exercise.exercise_id,
-                    "name_en": exercise.name_en, "name_bn": exercise.name_bn,
-                    "met_value": exercise.met_value, "equipment": exercise.equipment,
-                    "intensity_level": exercise.intensity_level,
-                })
+                rows.append(exercise_entry(exercise, ctx))
             new_type[group] = rows
 
         weekly_min = ex.aerobic_min_per_session * ex.aerobic_days
         aerobic_rows = new_type.get("aerobic") or []
-        met_avg = (
-            sum(r["met_value"] for r in aerobic_rows) / len(aerobic_rows)
-            if aerobic_rows else 0.0
-        )
+        aerobic_mets = [r["met_value"] for r in aerobic_rows if r.get("met_value")]
+        met_avg = sum(aerobic_mets) / len(aerobic_mets) if aerobic_mets else 0.0
         met_min = met_avg * weekly_min
         plan["frequency"] = {
             "aerobic_days": ex.aerobic_days,
             "strength_days": ex.strength_days,
             "flexibility_days": ex.flexibility_days,
         }
+        balance_days = (ex.balance_days if ex.balance_days is not None
+                        else result["exercise_plan"]["frequency"].get("balance_days"))
+        if balance_days is not None and "balance" in new_type:
+            plan["frequency"]["balance_days"] = balance_days
         plan["time"] = {
             "aerobic_min_per_session": ex.aerobic_min_per_session,
             "aerobic_min_per_week": weekly_min,

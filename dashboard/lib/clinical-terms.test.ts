@@ -5,16 +5,52 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  avoidReasonName,
   bmiCategoryName,
   conditionName,
+  engineAtLeast,
+  equipmentName,
+  exerciseTagName,
   foodDisplayName,
+  groupDays,
   mealItemKey,
+  needsEquipment,
   planDays,
+  planGroups,
   portionText,
   saltCutPercent,
   todayIndex,
   weekdayName,
 } from "./clinical-terms.ts";
+
+test("a plan lists balance training only when it has balance days", () => {
+  const younger = { aerobic_days: 5, strength_days: 2, flexibility_days: 3 };
+  const older = { ...younger, balance_days: 3 };
+  assert.deepEqual(planGroups(younger), ["aerobic", "strength", "flexibility"]);
+  assert.deepEqual(planGroups(older), ["aerobic", "strength", "flexibility", "balance"]);
+  assert.equal(groupDays(older, "balance"), 3);
+  assert.equal(groupDays(younger, "strength"), 2);
+});
+
+test("bodyweight exercises need no equipment, in old and new plans alike", () => {
+  assert.equal(needsEquipment("none"), false);
+  assert.equal(needsEquipment("none (bodyweight)"), false);
+  assert.equal(needsEquipment("chair"), true);
+  assert.equal(needsEquipment("household item (towel)"), true);
+  assert.equal(equipmentName("household item (water bottle)"), "water bottle");
+  assert.equal(equipmentName("resistance band"), "resistance band");
+  assert.equal(equipmentName("household item (water bottle)", "bn"), "পানির বোতল");
+  assert.equal(equipmentName("chair", "bn"), "চেয়ার");
+  // no Bangla for it yet: the English name, not a blank
+  assert.equal(equipmentName("kettlebell", "bn"), "kettlebell");
+});
+
+test("exercise exclusion tags read as words", () => {
+  assert.equal(exerciseTagName("avoid_knee_osteoarthritis"), "rated avoid with knee osteoarthritis");
+  assert.equal(exerciseTagName("not_for_older_adults"), "not for 65 and over");
+  // a tag from a plan made before the exercise dataset
+  assert.equal(exerciseTagName("high_exertion"), "high exertion");
+});
 import { byTriage, riskLabel } from "./triage.ts";
 
 const line = (over: object = {}) => ({ name_en: "Dal", name_bn: "ডাল", qty_g: 216, kcal: 169, ...over });
@@ -75,8 +111,20 @@ test("food-table names are shown the way people say them", () => {
   assert.equal(foodDisplayName("raw"), "raw");
 });
 
+test("engine versions are compared as numbers, not as text", () => {
+  assert.equal(engineAtLeast("0.3.0", "0.3.0"), true);
+  assert.equal(engineAtLeast("0.2.0", "0.3.0"), false);
+  // as text "0.10.0" sorts before "0.3.0", which hid the 0.3.0 wording at 0.10.0
+  assert.equal(engineAtLeast("0.10.0", "0.3.0"), true);
+  assert.equal(engineAtLeast("1.0.0", "0.10.0"), true);
+  assert.equal(engineAtLeast("0.9.1", "0.10.0"), false);
+  assert.equal(engineAtLeast(undefined, "0.3.0"), false);
+});
+
 test("engine keys read as words in both languages", () => {
   assert.equal(conditionName("chronic_kidney_disease"), "Kidney disease");
+  assert.equal(conditionName("high_cholesterol"), "High cholesterol");
+  assert.equal(conditionName("high_cholesterol", "bn"), "উচ্চ কোলেস্টেরল");
   assert.equal(conditionName("hypertension", "bn"), "উচ্চ রক্তচাপ");
   assert.equal(bmiCategoryName("obese", "bn"), "স্থূলতা");
   assert.equal(weekdayName("saturday", "en", true), "Sat");
@@ -105,4 +153,12 @@ test("the review queue puts the highest risk first, then the longest wait", () =
   );
   assert.equal(riskLabel("none"), "No risk flags");
   assert.equal(riskLabel("moderate"), "Moderate risk");
+});
+
+test("why a condition leaves a food out reads in the patient's words", () => {
+  assert.equal(avoidReasonName("high_sodium"), "high in salt");
+  assert.equal(avoidReasonName("high_sugar", "bn"), "বেশি চিনি");
+  assert.equal(avoidReasonName("solid_fat"), "solid cooking fat");
+  // an unknown tag falls back to its words rather than vanishing
+  assert.equal(avoidReasonName("new_tag"), "new tag");
 });

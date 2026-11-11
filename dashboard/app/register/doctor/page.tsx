@@ -6,11 +6,13 @@ import { api } from "@/lib/api";
 import { AuthLayout } from "@/components/auth-layout";
 import { IconCheck } from "@/components/icons";
 import { ErrorNote, Field, buttonPrimary, inputClass } from "@/components/ui";
+import { useT } from "@/lib/use-t";
 
 export default function DoctorRegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useT();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -42,13 +44,13 @@ export default function DoctorRegisterPage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ok-tint text-ok-ink">
               <IconCheck className="h-5 w-5" />
             </span>
-            Application sent
+            {t("Application sent")}
           </span>
         }
-        subtitle="An admin will check your registration. You can sign in as soon as it is approved."
+        subtitle={t("An admin will check your registration. You can sign in as soon as it is approved.")}
       >
         <Link href="/login/doctor" className={`${buttonPrimary} w-full`}>
-          Go to doctor sign in
+          {t("Go to doctor sign in")}
         </Link>
       </AuthLayout>
     );
@@ -57,30 +59,30 @@ export default function DoctorRegisterPage() {
   return (
     <AuthLayout
       wide
-      title="Apply for a doctor account"
-      subtitle="An admin checks every application before the account can sign in."
+      title={t("Apply for a doctor account")}
+      subtitle={t("An admin checks every application before the account can sign in.")}
       footer={
         <>
-          Already approved?{" "}
+          {t("Already approved?")}{" "}
           <Link href="/login/doctor" className="font-semibold text-clinical hover:underline">
-            Sign in
+            {t("Sign in")}
           </Link>
         </>
       }
     >
       <form onSubmit={submit} className="space-y-4">
         {error && <ErrorNote message={error} />}
-        <Field label="Full name">
+        <Field label={t("Full name")}>
           <input
             className={inputClass}
             required
             autoComplete="name"
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
-            placeholder="Dr. …"
+            placeholder={t("Dr. …")}
           />
         </Field>
-        <Field label="Email">
+        <Field label={t("Email")}>
           <input
             className={inputClass}
             type="email"
@@ -90,7 +92,7 @@ export default function DoctorRegisterPage() {
             onChange={(e) => set("email", e.target.value)}
           />
         </Field>
-        <Field label="Password" hint="At least 8 characters.">
+        <Field label={t("Password")} hint={t("At least 8 characters.")}>
           <input
             className={inputClass}
             type="password"
@@ -102,25 +104,25 @@ export default function DoctorRegisterPage() {
           />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Specialty">
+          <Field label={t("Specialty")}>
             <input
               className={inputClass}
               value={form.specialty}
               onChange={(e) => set("specialty", e.target.value)}
-              placeholder="e.g. Endocrinology"
+              placeholder={t("e.g. Endocrinology")}
             />
           </Field>
-          <Field label="BMDC registration no.">
+          <Field label={t("BMDC registration no.")}>
             <input
               className={inputClass}
               value={form.license_no}
               onChange={(e) => set("license_no", e.target.value)}
-              placeholder="e.g. A-12345"
+              placeholder={t("e.g. A-12345")}
             />
           </Field>
         </div>
         <button type="submit" disabled={busy} className={`${buttonPrimary} w-full`}>
-          {busy ? "Sending…" : "Send application"}
+          {busy ? t("Sending…") : t("Send application")}
         </button>
       </form>
     </AuthLayout>

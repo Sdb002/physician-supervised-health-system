@@ -99,13 +99,22 @@ class _StubModel:
 
 
 def test_ranking_uses_trained_recipe_model_when_present(monkeypatch):
+    iron_rich = _recipe("iron_rich", 9, kcal=200, iron_mg=6)
+    iron_poor = _recipe("iron_poor", 9, kcal=200, iron_mg=1)
+    # a stub that prefers the dish with LESS iron — the opposite of the
+    # deterministic formula — proves the model path is really used
+    iron_index = recommender.RECIPE_FEATURE_NAMES.index("iron_mg_ratio")
+    monkeypatch.setattr(recommender, "load_recipe_model",
+                        lambda: _StubModel(lambda row: 2.0 - row[iron_index]))
+    ranked = rank_recipes([iron_rich, iron_poor], ["iron_mg"], {"iron_mg": 18})
+    assert ranked[0]["recipe_id"] == "iron_poor"
+    assert matcher.active_recipe_backend() == "ml"
+
+
+def test_familiarity_still_orders_recipes_a_trained_model_scores_alike(monkeypatch):
     common = _recipe("common", 9, kcal=200, iron_mg=4)
     festive = _recipe("festive", 2, kcal=200, iron_mg=4)
-    # a stub that prefers the LESS common dish — the opposite of the
-    # deterministic formula — proves the model path is really used
-    freq_index = recommender.RECIPE_FEATURE_NAMES.index("household_frequency")
-    monkeypatch.setattr(recommender, "load_recipe_model",
-                        lambda: _StubModel(lambda row: 2.0 - row[freq_index]))
-    ranked = rank_recipes([common, festive], ["iron_mg"], {"iron_mg": 18})
-    assert ranked[0]["recipe_id"] == "festive"
-    assert matcher.active_recipe_backend() == "ml"
+    monkeypatch.setattr(recommender, "load_recipe_model", lambda: _StubModel(lambda row: 1.0))
+    ranked = rank_recipes([festive, common], ["iron_mg"], {"iron_mg": 18})
+    assert [r["recipe_id"] for r in ranked] == ["common", "festive"]
+    assert ranked[1]["score"] == pytest.approx(frequency_multiplier(2), abs=1e-3)

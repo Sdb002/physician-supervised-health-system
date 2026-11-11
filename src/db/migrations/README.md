@@ -18,7 +18,7 @@ are missing, then the later ones run as usual.
    ```
 
    and fill in `upgrade()` / `downgrade()` in the new file under `versions/`.
-   Number it after the last one (`0003_...`) and use `op.batch_alter_table`
+   Number it after the last one (`0004_...`) and use `op.batch_alter_table`
    for changes to existing tables: SQLite cannot alter a column in place.
    A column added to a table that already holds rows must be nullable or
    carry a `server_default`.

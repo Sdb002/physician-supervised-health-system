@@ -16,7 +16,16 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.core.config import DATA_DIR, REFERENCE_DIR, load_yaml  # noqa: E402
 from src.diet.food_db import FOOD_GROUPS  # noqa: E402
+from src.diet.restriction_tags import RESTRICTION_TAGS  # noqa: E402
+from src.lifestyle.exercise_db import (  # noqa: E402
+    CATEGORIES as EXERCISE_CATEGORIES,
+    CONTRA_TAGS,
+    FITNESS_LEVELS,
+    RATED_CONDITIONS,
+    TRAITS as EXERCISE_TRAITS,
+)
 
+# the tags a row of bd_food.csv may carry in its tags column
 FOOD_TAGS = {"staple", "high_protein", "lean", "high_fiber", "iron_rich",
              "calcium_rich", "potassium_rich", "leafy_green", "fruit", "dairy",
              "probiotic", "omega3", "oil", "high_fat", "high_sugar",
@@ -33,9 +42,9 @@ FREQUENCY_TIERS = {
     6: "Frequent", 5: "Weekly", 4: "Regular", 3: "Occasional",
     2: "Festive/seasonal", 1: "Rare/special",
 }
-EXERCISE_CATEGORIES = {"aerobic", "strength", "flexibility"}
-CONTRA_TAGS = {"high_impact", "high_exertion", "knee_stress", "wrist_stress",
-               "abdominal_pressure", "supine_position", "balance_required"}
+EXERCISE_SETTINGS = {"home", "gym", "home or gym"}
+EXERCISE_SEXES = {"both", "female", "male"}
+OLDER_ADULT = {"yes", "modify", "no"}
 
 
 def read_csv(path: Path) -> list[dict]:
@@ -169,40 +178,69 @@ def validate_exercises() -> tuple[list[str], list[str], int]:
     seen_ids = set()
     for i, row in enumerate(rows, start=2):
         eid = row.get("exercise_id", "")
-        if not re.fullmatch(r"E\d+", eid):
+        if not re.fullmatch(r"EX\d{3}", eid):
             errors.append(f"row {i}: bad exercise_id {eid!r}")
         if eid in seen_ids:
             errors.append(f"row {i}: duplicate exercise_id {eid}")
         seen_ids.add(eid)
-        if row.get("category") not in EXERCISE_CATEGORIES:
-            errors.append(f"row {i} ({eid}): unknown category {row.get('category')!r}")
-        try:
-            met = float(row["met_value"])
-            if not 0 < met <= 20:
-                errors.append(f"row {i} ({eid}): met_value {met} outside (0, 20]")
-            level = row.get("intensity_level")
-            expected = "light" if met < 3 else "moderate" if met < 6 else "vigorous"
-            if level != expected:
-                errors.append(
-                    f"row {i} ({eid}): intensity_level {level!r} inconsistent with "
-                    f"MET {met} (expected {expected!r})"
-                )
-        except (ValueError, KeyError):
-            errors.append(f"row {i} ({eid}): met_value not numeric")
+        if not row.get("name_en"):
+            errors.append(f"row {i} ({eid}): no name")
+        for column, allowed in (("category", EXERCISE_CATEGORIES),
+                                ("fitness_level", FITNESS_LEVELS),
+                                ("setting", EXERCISE_SETTINGS), ("sex", EXERCISE_SEXES),
+                                ("older_adult", OLDER_ADULT),
+                                ("needs_equipment", ("yes", "no"))):
+            if row.get(column) not in allowed:
+                errors.append(f"row {i} ({eid}): unknown {column} {row.get(column)!r}")
+        met_cell = (row.get("met_value") or "").strip()
+        level = row.get("intensity_level") or ""
+        if met_cell:
+            try:
+                met = float(met_cell)
+            except ValueError:
+                errors.append(f"row {i} ({eid}): met_value {met_cell!r} not numeric")
+            else:
+                if not 0 < met <= 20:
+                    errors.append(f"row {i} ({eid}): met_value {met} outside (0, 20]")
+                expected = "light" if met < 3 else "moderate" if met < 6 else "vigorous"
+                if level != expected:
+                    errors.append(
+                        f"row {i} ({eid}): intensity_level {level!r} inconsistent with "
+                        f"MET {met} (expected {expected!r})"
+                    )
+        elif level:
+            errors.append(f"row {i} ({eid}): intensity_level {level!r} with no MET")
         for tag in filter(None, (row.get("contra_tags") or "").split("|")):
             if tag not in CONTRA_TAGS:
-                warnings.append(f"row {i} ({eid}): unregistered contra_tag {tag!r}")
+                errors.append(f"row {i} ({eid}): unknown contra_tag {tag!r}")
+        for trait in filter(None, (row.get("traits") or "").split("|")):
+            if trait not in EXERCISE_TRAITS:
+                errors.append(f"row {i} ({eid}): unknown trait {trait!r}")
+        for condition in filter(None, (row.get("modify_for") or "").split("|")):
+            if condition not in RATED_CONDITIONS:
+                errors.append(f"row {i} ({eid}): unknown condition {condition!r} in modify_for")
+            elif not row.get(f"note_{condition}"):
+                errors.append(f"row {i} ({eid}): rated 'modify' for {condition} with no note")
+        if not row.get("how_to"):
+            warnings.append(f"row {i} ({eid}): no instructions")
     return errors, warnings, len(rows)
 
 
 def cross_check_contraindications() -> list[str]:
     """Every exclusion tag referenced by a condition rule should exist in the
-    corresponding vocabulary, or the rule can never fire."""
+    corresponding vocabulary, or the rule can never fire. A food carries the
+    tags in its table row and the restriction tags read off its group and
+    name when it is loaded (liver, alcohol, solid_fat...)."""
     warnings = []
-    rules = load_yaml(REFERENCE_DIR / "contraindications.yaml")["conditions"]
+    reference = load_yaml(REFERENCE_DIR / "contraindications.yaml")
+    rules = reference["conditions"]
+    for population, rule in (reference.get("populations") or {}).items():
+        for tag in rule.get("exclude_exercise_tags") or []:
+            if tag not in CONTRA_TAGS:
+                warnings.append(f"population {population}: exercise tag {tag!r} not in contra vocabulary")
     for condition, rule in rules.items():
         for tag in rule.get("exclude_food_tags") or []:
-            if tag not in FOOD_TAGS:
+            if tag not in FOOD_TAGS | RESTRICTION_TAGS:
                 warnings.append(f"{condition}: food tag {tag!r} not in food vocabulary")
         for tag in rule.get("exclude_exercise_tags") or []:
             if tag not in CONTRA_TAGS:

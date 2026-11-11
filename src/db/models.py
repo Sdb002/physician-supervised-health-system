@@ -5,9 +5,9 @@ DELETE issued through the ORM, so the audit trail cannot be rewritten by
 application code.
 """
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
-from sqlalchemy import JSON, DateTime, ForeignKey, String, event
+from sqlalchemy import JSON, Date, DateTime, ForeignKey, String, UniqueConstraint, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -54,6 +54,10 @@ class Patient(Base):
     conditions: Mapped[list] = mapped_column(JSON, default=list)
     # keys of data/reference/dietary_restrictions.yaml, e.g. ["no_beef"]
     dietary_restrictions: Mapped[list] = mapped_column(JSON, default=list, server_default="[]")
+    # the foods and dishes this patient does not eat, beyond the restrictions:
+    # [{"id": "F301", "kind": "food", "name_en": ..., "name_bn": ...}], see
+    # src/diet/excluded_foods.py for why each keeps its name
+    excluded_foods: Mapped[list] = mapped_column(JSON, default=list, server_default="[]")
     fitness_level: Mapped[str] = mapped_column(String(20), default="beginner")
     # sedentary | light | moderate | active; None = not recorded, and the
     # energy target says the level was assumed
@@ -128,6 +132,27 @@ class DoctorNote(Base):
     updated_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     visit: Mapped[Visit] = relationship(back_populates="doctor_notes")
+
+
+class DailyTaskLog(Base):
+    """One patient's day in the daily task list: which of that day's tasks
+    (its meals, its exercise groups) they ticked off. Kept as the day was -
+    the task count with it - so a later plan change never rewrites a past
+    day or the streak built on it. A patient's own record, not a clinical
+    decision: nothing in the engine reads it."""
+
+    __tablename__ = "daily_task_logs"
+    __table_args__ = (UniqueConstraint("patient_id", "day"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.id"), index=True)
+    day: Mapped[date] = mapped_column(Date)  # the clinic's calendar day
+    # the visit whose approved plan the day's tasks came from
+    visit_id: Mapped[int] = mapped_column(ForeignKey("visits.id"))
+    done: Mapped[list] = mapped_column(JSON, default=list)  # task keys, e.g. "meal:lunch"
+    total: Mapped[int] = mapped_column(default=0)
+    complete: Mapped[bool] = mapped_column(default=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class AuditLog(Base):

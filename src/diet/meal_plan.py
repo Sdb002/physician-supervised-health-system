@@ -59,6 +59,11 @@ MEAL_COURSES: dict[str, tuple[tuple[str, tuple[str, ...]], ...]] = {
 _MAIN_CATEGORIES = ("Fish", "Meat", "Egg")
 _MEATLESS_MAIN_CATEGORIES = ("Egg", "Dal")
 
+# Lunch is a rice meal, but a patient who eats no rice still eats lunch: when
+# the gate leaves a meal none of its own staples, it takes any plain staple
+# (ruti with the dal and the curry) rather than going without one.
+_STAPLE_CATEGORIES = ("Rice & Grain", "Bread & Pitha")
+
 # The plan covers a week, Saturday to Friday: the Bangladeshi week starts on
 # Saturday, so that is the day patients count from.
 WEEKDAYS = ("saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday")
@@ -171,6 +176,10 @@ def key_ingredients(recipe: Recipe, foods_by_id: dict[str, Food]) -> frozenset[s
 def _course_categories(course: str, categories: tuple[str, ...],
                        recipes: list[Recipe]) -> tuple[str, ...]:
     """The dish categories a course draws on for this patient's gated dishes."""
+    if course == "staple":
+        has_its_staple = any(r.category in categories and plannable(r) and is_plain_staple(r)
+                             for r in recipes)
+        return categories if has_its_staple else _STAPLE_CATEGORIES
     if course != "main":
         return categories
     has_fish_or_meat = any(r.category in ("Fish", "Meat") and plannable(r) for r in recipes)
@@ -182,8 +191,26 @@ def _active_emphasis(emphasize: list[str], totals: dict, targets: dict) -> list[
             if totals.get(n, 0.0) < targets.get(n, 0.0) * _EMPHASIS_SATURATION]
 
 
+def _scorer(score, items: list, key):
+    """emphasize -> {item id: score} for every item, worked out once per
+    emphasis. A week picks some sixty courses, but the emphasis only changes
+    when a nutrient reaches its fill, so the same few score tables serve
+    them all; with a trained model that is a handful of predict calls a plan
+    instead of one for every dish considered."""
+    tables: dict[tuple, dict[str, float]] = {}
+
+    def scores(emphasize: list[str]) -> dict[str, float]:
+        table = tables.get(tuple(emphasize))
+        if table is None:
+            table = dict(zip(map(key, items), score(items, emphasize)))
+            tables[tuple(emphasize)] = table
+        return table
+
+    return scores
+
+
 def _pick_dish(recipes: list[Recipe], meal: str, course: str, categories: tuple[str, ...],
-               emphasize: list[str], targets: dict, used_ids: set[str],
+               scores: dict[str, float], used_ids: set[str],
                used_kinds: set[str], used_keys: set[str],
                foods_by_id: dict[str, Food], week: "_Week") -> Recipe | None:
     pool = [r for r in recipes if r.category in categories and plannable(r)]
@@ -202,7 +229,7 @@ def _pick_dish(recipes: list[Recipe], meal: str, course: str, categories: tuple[
                 if not key_ingredients(r, foods_by_id) & used_keys] or pool
     if not pool:
         return None
-    return min(pool, key=lambda r: (-matcher._score_recipe(r, emphasize, targets), r.recipe_id))
+    return min(pool, key=lambda r: (-scores[r.recipe_id], r.recipe_id))
 
 
 def _scalable(recipe: Recipe) -> bool:
@@ -300,18 +327,13 @@ def _dish_item(recipe: Recipe, course: str, servings: float) -> tuple[dict, dict
     return item, nutrients
 
 
-def _pick_fruit(fruits: list[Food], emphasize: list[str], targets: dict,
+def _pick_fruit(fruits: list[Food], scores: dict[str, float],
                 familiarity: dict[str, int | None], week: "_Week") -> Food | None:
     pool = week.varied([f for f in fruits if f.nutrients["kcal"] > 0], lambda f: f.food_id)
     if not pool:
         return None
-
-    def score(f: Food) -> tuple:
-        s = matcher._score_one(f.nutrients, f.food_group, f.tags, emphasize, targets,
-                               empty_emphasize_fallback=matcher._density_score(f.nutrients))
-        return (-matcher.familiar_score(s, familiarity.get(f.food_id)), f.food_id)
-
-    return min(pool, key=score)
+    return min(pool, key=lambda f: (
+        -matcher.familiar_score(scores[f.food_id], familiarity.get(f.food_id)), f.food_id))
 
 
 class _Week:
@@ -352,9 +374,11 @@ class _Week:
 
 def _build_day(recipes: list[Recipe], fruits: list[Food], target_kcal: float, targets: dict,
                emphasize: list[str], familiarity: dict[str, int | None],
-               foods_by_id: dict[str, Food], week: _Week,
+               foods_by_id: dict[str, Food], week: _Week, dish_scores, fruit_scores,
                sodium_limit_mg: float | None = None) -> tuple[dict, dict, dict]:
-    """One day's meals, nutrient totals and cooking salt."""
+    """One day's meals, nutrient totals and cooking salt. `dish_scores` and
+    `fruit_scores` give every dish's and fruit's score under an emphasis
+    (see _scorer)."""
     meals: dict[str, list[dict]] = {}
     totals = {col: 0.0 for col in NUTRIENT_COLUMNS}
     dishes: list[tuple[dict, Recipe, float]] = []
@@ -372,8 +396,8 @@ def _build_day(recipes: list[Recipe], fruits: list[Food], target_kcal: float, ta
         items: list[dict] = []
 
         if meal == "snack":
-            fruit = _pick_fruit(fruits, _active_emphasis(emphasize, totals, targets),
-                                targets, familiarity, week)
+            fruit = _pick_fruit(fruits, fruit_scores(_active_emphasis(emphasize, totals, targets)),
+                                familiarity, week)
             if fruit is not None:
                 week.serve(fruit.food_id)
                 qty_g = meal_kcal / fruit.nutrients["kcal"] * 100.0
@@ -389,7 +413,7 @@ def _build_day(recipes: list[Recipe], fruits: list[Food], target_kcal: float, ta
         for course, categories in MEAL_COURSES[meal]:
             categories = _course_categories(course, categories, recipes)
             dish = _pick_dish(recipes, meal, course, categories,
-                              _active_emphasis(emphasize, totals, targets), targets,
+                              dish_scores(_active_emphasis(emphasize, totals, targets)),
                               used_ids, used_kinds, used_keys, foods_by_id, week)
             if dish is None:
                 continue
@@ -421,14 +445,18 @@ def build_meal_plan(recipes: list[Recipe], fruits: list[Food], target_kcal: floa
                     familiarity: dict[str, int | None] | None = None,
                     untracked: frozenset[str] | set[str] = frozenset(),
                     foods_by_id: dict[str, Food] | None = None,
-                    sodium_limit_mg: float | None = None) -> dict:
+                    sodium_limit_mg: float | None = None,
+                    findings=()) -> dict:
     """A week of meals, Saturday to Friday, each day sized to the daily
     energy target. `recipes` and `fruits` must already be gated.
     `sodium_limit_mg` is the daily sodium limit each day's cooking salt is
     fitted to (see ration_salt); without one, dishes keep their recipes' salt.
+    It and `findings`, the patient's finding keys, also go to the scorers
+    (see src.diet.matcher.score_recipes).
     `untracked` lists the nutrients the food table records for no food at
     all (folate in the current dataset): coverage cannot be computed for
-    them, so they are reported as untracked instead of as a misleading 0%.
+    them, so they are reported as untracked instead of as a misleading 0%,
+    and they are left out of the emphasis the dishes are picked on.
     `foods_by_id` (the whole food table) lets each day avoid repeating a
     dish's key ingredients."""
     if not recipes:
@@ -437,11 +465,25 @@ def build_meal_plan(recipes: list[Recipe], fruits: list[Food], target_kcal: floa
 
     familiarity = familiarity or {}
     foods_by_id = foods_by_id or {}
+    # A nutrient no food has a value for tells no two dishes apart, and its
+    # total never rises, so it would stay emphasized all week. Once the
+    # others had their fill it was the only one left: every dish scored 0
+    # and the recipe id picked the course. Without it, a day whose tracked
+    # nutrients are covered falls back to the nutrient-dense default.
+    emphasize = [n for n in emphasize if n not in untracked]
+    limits = {"sodium_mg": sodium_limit_mg} if sodium_limit_mg is not None else None
+    dish_scores = _scorer(
+        lambda dishes, emphasis: matcher.score_recipes(dishes, emphasis, targets, findings, limits),
+        recipes, lambda r: r.recipe_id)
+    fruit_scores = _scorer(
+        lambda foods, emphasis: matcher.score_foods(foods, emphasis, targets, findings, limits),
+        fruits, lambda f: f.food_id)
     week = _Week()
     days = []
     for weekday in WEEKDAYS:
         meals, totals, salt = _build_day(recipes, fruits, target_kcal, targets, emphasize,
-                                         familiarity, foods_by_id, week, sodium_limit_mg)
+                                         familiarity, foods_by_id, week, dish_scores,
+                                         fruit_scores, sodium_limit_mg)
         days.append((weekday, meals, totals, salt))
         week.next_day()
     return summarize_week(days, target_kcal, targets, untracked)
@@ -471,6 +513,22 @@ def summarize_week(days: list[tuple[str, dict, dict, dict]], target_kcal: float,
     if tracked_out:
         plan["untracked"] = tracked_out
     return plan
+
+
+def unfilled_courses(plan: dict) -> list[tuple[str, str, str]]:
+    """(weekday, meal, course) for every course of a week plan that has
+    nothing in it. The planner fills a course whenever the gate leaves it a
+    dish of the right kind, so an empty one means the patient's exclusions
+    took them all: a lunch that is rice alone, a day without a staple."""
+    courses = {**{meal: [course for course, _ in served] for meal, served in MEAL_COURSES.items()},
+               "snack": ["fruit"]}
+    unfilled = []
+    for day in plan.get("days") or []:
+        for meal, expected in courses.items():
+            served = {item.get("course") for item in day["meals"].get(meal, [])}
+            unfilled += [(day["weekday"], meal, course) for course in expected
+                         if course not in served]
+    return unfilled
 
 
 def coverage(totals: dict, targets: dict, untracked=frozenset()) -> dict:

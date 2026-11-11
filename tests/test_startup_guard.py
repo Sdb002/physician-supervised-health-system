@@ -27,6 +27,13 @@ def test_defaults_only_warn_on_a_developers_machine(caplog):
     assert "SECRET_KEY and ADMIN_PASSWORD still at the published default" in caplog.text
 
 
+@pytest.mark.parametrize("origin", [
+    "http://localhost:3000", "http://127.0.0.1:3000", "http://[::1]:3000",
+])
+def test_every_way_of_writing_this_machine_is_local(origin):
+    assert _settings(cors_origins=origin).is_local
+
+
 @pytest.mark.parametrize("deployment", [
     {"environment": "production"},
     {"database_url": "postgresql+psycopg://health:health@db:5432/health"},
