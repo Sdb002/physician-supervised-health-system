@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-      - run: pip install -e ".[dev]"
+      - run: pip install -e ".[dev,ocr]"
       # The trained recommenders are committed (data/models), so the
       # trained-model tests run here as well as the deterministic ones.
       - run: pytest

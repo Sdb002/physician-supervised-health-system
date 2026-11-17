@@ -52,7 +52,7 @@ def pdf_available() -> bool:
 def _engine():
     if not local_available():
         raise OcrEngineUnavailableError(
-            "The local lab-slip reader is not installed: pip install rapidocr onnxruntime")
+            "The local lab-slip reader is not installed: pip install -e .[ocr]")
     from rapidocr import RapidOCR
 
     return RapidOCR()

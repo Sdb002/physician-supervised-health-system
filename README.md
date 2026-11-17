@@ -45,7 +45,7 @@ deterministic Bangla/English template.
 ```powershell
 # one-time setup (from the project root) — requires 64-bit Python 3.13+
 py -3.13 -m venv .venv
-.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.venv\Scripts\python.exe -m pip install -e ".[dev,ocr]"   # ocr: the local lab-slip reader
 
 # create + seed the database with 4 synthetic demo patients
 .venv\Scripts\python.exe scripts\seed_db.py
@@ -136,7 +136,8 @@ A photo of a lab report prefills the intake form; the physician still
 confirms every value before anything is scored. By default the photo is read
 **on this server** by [RapidOCR](https://github.com/RapidAI/RapidOCR)
 (PaddleOCR's PP-OCRv6 models on ONNX Runtime, Apache-2.0, installed with the
-backend, models inside the wheel, about 1.5 s a photo on a CPU), so it never
+backend's `ocr` extra, models inside the wheel, about 1.5 s a photo on a CPU;
+the Vercel deployment leaves it out, see below), so it never
 leaves the clinic and needs no key. `src/ocr/lab_report.py` then picks out
 fasting glucose, haemoglobin and blood pressure by rule: it straightens a
 tilted photo, rebuilds the table's rows, skips look-alikes (2-hour and random
@@ -198,9 +199,13 @@ A URL as hosts hand it out (`postgres://...`) works as it is.
 two [Services](https://vercel.com/docs/services): the Next.js dashboard at
 `/` and the FastAPI backend at `/api` on the same domain (so no CORS setup;
 `dashboard/.env.production` points the dashboard at `/api`). The backend
-runs as a Vercel Function on Python 3.14 (`.python-version`), lab-slip OCR
-included (its libraries make the function a "large function", which new
-projects allow). Vercel's disk does not keep files, so the data lives in
+runs as a Vercel Function on Python 3.14 (`.python-version`) without the
+local lab-slip reader: Vercel installs only the base dependencies, and the
+reader (the `ocr` extra, about 270 MB of OpenCV and ONNX Runtime) would take
+the function past its 500 MB limit (549 MB was measured). On the live site
+a lab-report photo is read by Claude when `ANTHROPIC_API_KEY` is set, a
+lab's text PDF is still read on the server, and otherwise the physician
+types the values in. Vercel's disk does not keep files, so the data lives in
 Postgres; the API refuses to start there without one.
 
 1. **Import the repository** at vercel.com → Add New → Project → the GitHub
@@ -215,8 +220,7 @@ Postgres; the API refuses to start there without one.
    | `ADMIN_PASSWORD` | the admin login's password (`ADMIN_EMAIL` defaults to `admin@health.local`) |
    | `ENVIRONMENT` | `production` |
    | `SEED_DEMO_DATA` | `1` to start with the synthetic demo patients and the demo logins above (anyone with the address can use those); leave unset for an empty site |
-   | `VERCEL_SUPPORT_LARGE_FUNCTIONS` | `1`: the API's libraries take about 560 MB on Linux (OpenCV, SciPy, ONNX Runtime for the lab-slip reader and the models), over the standard 500 MB function limit; new projects allow it by default, this makes it certain |
-   | `ANTHROPIC_API_KEY` | optional: AI wording for reports |
+   | `ANTHROPIC_API_KEY` | optional: AI wording for reports, and reading lab-report photos |
 
 4. **Redeploy** (Deployments → the latest → Redeploy) so the variables and
    the database apply. Every push to `main` deploys again from then on.

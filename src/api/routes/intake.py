@@ -95,11 +95,11 @@ def _ocr_reader() -> str:
         return reader
     if choice == "local":
         raise HTTPException(503, "The local lab-slip reader is not installed on this server "
-                                 "(pip install rapidocr onnxruntime).")
+                                 "(pip install -e .[ocr]).")
     if choice == "claude":
         raise HTTPException(503, "OCR_ENGINE is claude but ANTHROPIC_API_KEY is not set.")
     raise HTTPException(503, "No lab-slip reader is set up on this server: install the local "
-                             "reader (pip install rapidocr onnxruntime) or set ANTHROPIC_API_KEY.")
+                             "reader (pip install -e .[ocr]) or set ANTHROPIC_API_KEY.")
 
 
 def _read_locally(data: bytes, content_type: str) -> OcrResult:

@@ -20,13 +20,6 @@ dependencies = [
     "scikit-learn==1.9.0",
     "numpy>=2,<3",
     "joblib>=1.4,<2",
-    # local lab-slip reading (src/ocr): PaddleOCR's models on ONNX Runtime
-    "rapidocr>=3.10,<4",
-    "onnxruntime>=1.20",
-    # rapidocr's image library. 5.1.0.95 shipped Windows wheels only, so a
-    # Linux build (Vercel) cannot install it: stay on 5.0, which this app was
-    # tested with. Lift the cap once a 5.1 release has manylinux wheels.
-    "opencv-python-headless>=5.0,<5.1",
     # lab reports sent as PDF: their own text, or a scanned page rendered for OCR
     "pypdfium2>=4.30",
     # Postgres, for a deployment (the default database is a SQLite file)
@@ -37,6 +30,20 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "httpx>=0.27",
+]
+# Local lab-slip reading (src/ocr): PaddleOCR's models on ONNX Runtime, about
+# 270 MB installed. Optional so a deployment can leave it out: Vercel installs
+# only the dependencies above, which keeps the API function under its 500 MB
+# limit (with this, it was 549 MB). Without it, photos are read by Claude when
+# ANTHROPIC_API_KEY is set, a lab's text PDF is still read, and the form is
+# filled in by hand otherwise. Install with: pip install -e ".[dev,ocr]"
+ocr = [
+    "rapidocr>=3.10,<4",
+    "onnxruntime>=1.20",
+    # rapidocr's image library. 5.1.0.95 shipped Windows wheels only, so a
+    # Linux install cannot get it: stay on 5.0, which this app was tested
+    # with. Lift the cap once a 5.1 release has manylinux wheels.
+    "opencv-python-headless>=5.0,<5.1",
 ]
 
 [tool.setuptools.packages.find]
