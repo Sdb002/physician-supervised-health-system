@@ -52,3 +52,20 @@ def test_startup_leaves_the_seeding_to_the_instance_that_won(monkeypatch):
 
     monkeypatch.setattr(demo, "seed_demo", lost_the_race)
     main.seed_demo_data()  # no exception: the other instance seeded it
+
+
+def test_a_failed_start_on_vercel_is_answered_with_its_reason(client, monkeypatch):
+    """On Vercel a start-up that fails keeps the instance up and answers
+    every request with why, instead of an opaque FUNCTION_INVOCATION_FAILED."""
+    refusal = RuntimeError("refusing to start: DATABASE_URL is not set, and ...")
+    assert main.startup_failure(refusal) == str(refusal)
+    leak = Exception('connection to "postgresql+psycopg://neondb_owner:s3cret@ep-x.neon.tech/neondb" '
+                     "failed\nsecond line")
+    reason = main.startup_failure(leak)
+    assert "s3cret" not in reason and "neondb_owner:***@" in reason and "second line" not in reason
+
+    monkeypatch.setattr(main, "STARTUP_ERROR", str(refusal))
+    for path in ("/health", "/auth/login"):
+        response = client.get(path)
+        assert response.status_code == 503
+        assert response.json()["detail"] == f"The API could not start: {refusal}"

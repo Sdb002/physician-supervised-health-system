@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 import logging
 import os
+import re
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from src.api.deps import require_staff
 from src.api.routes import admin, auth, foods, intake, me, notes, patients, report, review
@@ -96,13 +98,41 @@ def seed_demo_data() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
-    check_hosted_database()
-    check_published_defaults()
-    init_db()
-    ensure_default_admin()
-    if settings.seed_demo_data:
-        seed_demo_data()
+    try:
+        check_hosted_database()
+        check_published_defaults()
+        init_db()
+        ensure_default_admin()
+        if settings.seed_demo_data:
+            seed_demo_data()
+    except Exception as exc:
+        if not os.environ.get("VERCEL"):
+            raise  # a local run stops right there, with the traceback
+        # On Vercel a failed start-up only showed as FUNCTION_INVOCATION_FAILED
+        # on every request, the reason buried in the runtime log: keep the
+        # instance up and answer every request with the reason instead.
+        logging.getLogger(__name__).exception("start-up failed")
+        global STARTUP_ERROR
+        STARTUP_ERROR = startup_failure(exc)
     yield
+
+
+# why this instance could not start, when it could not (on Vercel only)
+STARTUP_ERROR: str | None = None
+
+_CREDENTIALS_IN_URL = re.compile(r"(://[^:/@\s]+):[^@\s]+@")
+
+
+def startup_failure(exc: Exception) -> str:
+    """What a failed start-up is answered with. The refusals above are
+    written by this app and name settings, never their values; anything else
+    is reported by its type and first line, with any password in a database
+    URL taken out."""
+    if isinstance(exc, RuntimeError) and str(exc).startswith("refusing to start"):
+        return str(exc)
+    first_line = (str(exc).strip().splitlines() or [""])[0][:300]
+    redacted = _CREDENTIALS_IN_URL.sub(r"\1:***@", first_line)
+    return f"{type(exc).__name__}: {redacted}"
 
 
 app = FastAPI(
@@ -130,7 +160,11 @@ app.add_middleware(
 
 @app.middleware("http")
 async def security_headers(request, call_next):
-    response = await call_next(request)
+    if STARTUP_ERROR is not None:
+        response = JSONResponse(
+            {"detail": f"The API could not start: {STARTUP_ERROR}"}, status_code=503)
+    else:
+        response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
