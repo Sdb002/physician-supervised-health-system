@@ -23,6 +23,10 @@ dependencies = [
     # local lab-slip reading (src/ocr): PaddleOCR's models on ONNX Runtime
     "rapidocr>=3.10,<4",
     "onnxruntime>=1.20",
+    # rapidocr's image library. 5.1.0.95 shipped Windows wheels only, so a
+    # Linux build (Vercel) cannot install it: stay on 5.0, which this app was
+    # tested with. Lift the cap once a 5.1 release has manylinux wheels.
+    "opencv-python-headless>=5.0,<5.1",
     # lab reports sent as PDF: their own text, or a scanned page rendered for OCR
     "pypdfium2>=4.30",
     # Postgres, for a deployment (the default database is a SQLite file)

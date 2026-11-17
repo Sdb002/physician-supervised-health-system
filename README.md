@@ -215,6 +215,7 @@ Postgres; the API refuses to start there without one.
    | `ADMIN_PASSWORD` | the admin login's password (`ADMIN_EMAIL` defaults to `admin@health.local`) |
    | `ENVIRONMENT` | `production` |
    | `SEED_DEMO_DATA` | `1` to start with the synthetic demo patients and the demo logins above (anyone with the address can use those); leave unset for an empty site |
+   | `VERCEL_SUPPORT_LARGE_FUNCTIONS` | `1`: the API's libraries take about 560 MB on Linux (OpenCV, SciPy, ONNX Runtime for the lab-slip reader and the models), over the standard 500 MB function limit; new projects allow it by default, this makes it certain |
    | `ANTHROPIC_API_KEY` | optional: AI wording for reports |
 
 4. **Redeploy** (Deployments → the latest → Redeploy) so the variables and
