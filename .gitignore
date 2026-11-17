@@ -31,3 +31,7 @@ Thumbs.db
 
 # Vercel CLI (project link and local dev state)
 .vercel/
+
+# Secrets kept next to the code by hand: never commit them
+*secret*.txt
+*secret*.key
