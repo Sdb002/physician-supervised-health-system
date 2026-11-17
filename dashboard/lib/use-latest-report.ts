@@ -30,7 +30,7 @@ export function useLatestReport(lang: "en" | "bn"): LatestReportState {
           settle({ status: "empty" });
           return;
         }
-        return api.report(latestReady.visit.id, lang, false).then((report) => {
+        return api.report(latestReady.visit.id, lang).then((report) => {
           settle({ status: "ready", report });
         });
       })

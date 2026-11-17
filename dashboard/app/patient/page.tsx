@@ -153,7 +153,7 @@ export default function PatientHome() {
     if (latestReadyId === undefined) return;
     let cancelled = false;
     api
-      .report(latestReadyId, lang, false)
+      .report(latestReadyId, lang)
       .then((r) => !cancelled && setFetchedReport(r))
       .catch((e) => !cancelled && setError(e.message));
     return () => {

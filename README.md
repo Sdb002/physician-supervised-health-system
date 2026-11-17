@@ -4,7 +4,8 @@ A physician-supervised diet & lifestyle recommendation web app (Bangladesh
 context). All medical decisions come from a **deterministic, cited rule
 engine**; lab-report photos are read on the server by an open-source OCR
 engine (RapidOCR), optionally by Claude, and an LLM otherwise only phrases
-reports; and **no patient ever sees a report their physician hasn't approved**.
+reports, before approval, for the physician to read; and **no patient ever
+sees a report, or a sentence of one, that their physician hasn't approved**.
 
 ## Architecture
 
@@ -15,8 +16,10 @@ flowchart LR
         B[Lab report image] -->|local OCR or Claude - prefill only| A
     end
     C[Deterministic clinical engine\nsrc/clinical + diet + lifestyle] --> D[Assessment: pending]
-    D --> E{Physician review\napprove / edit / reject}
-    E -->|approved| F[Report\nLLM phrasing or template]
+    D --> E{Physician review\nedit / preview the report's wording\napprove / reject}
+    E -.->|plan as edited| W[Report wording\nLLM or template, en + bn]
+    W -.->|read before approving| E
+    E -->|approved: plan + that wording| F[Report\nthe approved wording, stored]
     E -->|rejected| G[No report - 403]
     H[(Audit log\nappend-only)] -.records.- D & E & F
 ```
@@ -27,12 +30,12 @@ Three hard guarantees, each enforced by a test:
 |---|---|
 | Clinical logic never depends on an LLM | `tests/test_llm_isolation.py` — AST scan: `src/clinical`, `src/diet`, `src/lifestyle` never import `src.llm` |
 | Contraindicated items never reach recommendations | `src/clinical/contraindication.py` gate runs before ranking; `tests/test_contraindication.py` |
-| No report without physician approval | `GET /report/{visit_id}` returns 403 until an `Approval` row exists; `tests/test_api_gate.py` |
+| No report without physician approval | `GET /report/{visit_id}` returns 403 until an `Approval` row exists; `tests/test_api_gate.py`. The report's text is the wording the physician read and approved, stored with the approval; the report route writes none and imports no LLM code (`tests/test_report_wording.py`) |
 
 Every threshold is cited in `data/reference/*.yaml` (ADA 2024 glucose, ACC/AHA
 2017 blood pressure, WHO 2011 hemoglobin, NIH/IOM RDAs, ACSM exercise
 prescription). The app runs fully without an Anthropic API key — lab slips are
-read on the server (see "Lab-slip reading" below) and reports fall back to a
+read on the server (see "Lab-slip reading" below) and reports are worded by a
 deterministic Bangla/English template.
 
 ## Quickstart
@@ -98,7 +101,20 @@ The app has three role-based dashboards, each with its own sign-in page
 
 All workflow API routes require a signed-in doctor or admin; patients can
 only read their own dashboard and their own **approved** reports (the 403
-report gate is unchanged). Sessions are HMAC-signed tokens (stdlib-only, no
+report gate is unchanged).
+
+**A patient belongs to one doctor** (`patients.doctor_id`, rule in
+`src/api/access.py`, tests in `tests/test_patient_access.py`). A doctor's
+patient list, review queue, visits, notes and reports hold their own patients
+only; another doctor's record answers 404, the same as one that does not
+exist. A patient a doctor registers is theirs. A patient who registers
+themselves has no doctor: doctors see them by name, sex and year of birth
+under **Patients → Not yet with a doctor** and take them on there
+(audited as `patient.claim`). After that only an admin can move the patient
+(**Admin → Patients**, audited as `patient.assign`). Admins reach every
+record. Migration 0005 links existing patients to the doctor who first
+decided one of their assessments or edited their record, read from the audit
+log; the rest start unassigned. Sessions are HMAC-signed tokens (stdlib-only, no
 extra dependencies).
 
 **Deploying.** Set your own `SECRET_KEY` and `ADMIN_PASSWORD` in `.env`. The
@@ -164,6 +180,11 @@ the image is sent to Anthropic).
 Copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY`. This enables
 **LLM-phrased reports** in plain Bangla/English (otherwise a deterministic
 template is used) and Claude as a lab-slip reader (`OCR_ENGINE=claude`).
+The LLM words a report once, when the reviewing physician asks to preview it,
+and that wording is what they approve and what the patient reads (see
+"Workflow" below): it is never asked for anything when a report is opened.
+If it declines, fails or is cut off, the standard wording stands in and the
+review screen says why.
 
 ### Optional: PostgreSQL
 
@@ -277,7 +298,8 @@ tables). A plan's dishes are scored in a handful of batched calls: an
 assessment takes about 0.15 s with the models, 0.08 s on the formula.
 
 To train all three (the exercise model is below):
-`.venv\Scripts\python.exe scripts\train_recommenders.py` (about 35 minutes;
+`.venv\Scripts\python.exe scripts\train_recommenders.py` (about 110 minutes on
+16 cores since the search is nested: food 64, recipes 26, exercises 19;
 `--only food`, `--only recipe` or `--only exercise` for one). Each model
 is trained on a synthetic patient-archetype set built from the app's own cited
 reference data (no real preference data exists yet): every reference-intake
@@ -287,7 +309,13 @@ shorter lists the meal planner moves through as a day fills up. A
 `RandomForestRegressor` and a `HistGradientBoostingRegressor` are tuned
 (randomized search, grouped by archetype) alongside an untuned
 `GradientBoostingRegressor` and a `LinearRegression` baseline, and compared
-against the deterministic formula on patient archetypes held out of training.
+against the deterministic formula on patient archetypes held out of training,
+by **nested cross-validation**: each of five outer folds holds a fifth of the
+archetypes out and runs the search again on the rest (three grouped inner
+folds, eight candidates per model), so the archetypes a tuned model is judged
+on took no part in choosing its hyperparameters, or in choosing which tuned
+model to keep (Varma & Simon 2006, BMC Bioinformatics 7:91). The shipped model
+comes out of the same search run once more on every archetype.
 The models are judged as they are used — one patient, one list — over the
 items the app actually ranks: the Spearman correlation with the noise-free
 label and, in brackets, how much of a model's top ten the label also ranks in
@@ -295,11 +323,24 @@ its own top ten.
 
 | Model (held out by patient type) | Food | Recipe |
 |---|---|---|
-| `HistGradientBoostingRegressor` (shipped) | **0.998** (0.97) | **0.998** (0.95) |
-| `RandomForestRegressor` | 0.972 (0.94) | 0.974 (0.86) |
-| `GradientBoostingRegressor` (untuned) | 0.970 (0.93) | 0.985 (0.88) |
-| deterministic formula | 0.787 (0.74) | 0.794 (0.70) |
-| `LinearRegression` | 0.426 (0.43) | 0.471 (0.29) |
+| `HistGradientBoostingRegressor` (shipped) | **0.999** (0.98) | **0.998** (0.95) |
+| `RandomForestRegressor` | 0.979 (0.96) | 0.974 (0.86) |
+| `GradientBoostingRegressor` (untuned) | 0.969 (0.94) | 0.985 (0.88) |
+| deterministic formula | 0.844 (0.75) | 0.794 (0.70) |
+| `LinearRegression` | 0.442 (0.58) | 0.471 (0.29) |
+
+Before 2026-11-17 one search ran over every archetype and the evaluation then
+held out archetypes that search had already scored its candidates on. The
+script still works out that figure beside the nested one
+(`nested_cv.tuned_on_all_archetypes` in the metrics file), so the size of the
+optimism is on record: none that shows at this precision. Food 0.9987 nested
+and 0.9987 the earlier way, recipes 0.9981 and 0.9981, exercises 0.9865 and
+0.9836 (the fold searches' choices ranked slightly better there than the one
+search's). In every fold of all three the search kept
+`HistGradientBoostingRegressor`. The shipped models did not change: the
+search over every archetype chose what it chose before, and the artifacts are
+byte for byte the ones trained earlier. What each fold's search chose and how
+it scored are in `thesis/results/<kind>_recommender_nested_cv.csv`.
 
 These figures are not comparable with the 0.957 / 0.914 this table showed
 before engine 0.8.0. Those were one correlation pooled over every row of every
@@ -309,7 +350,8 @@ from another's, and spices from everything else.
 Writes `data/models/{food,recipe}_recommender.joblib` (gitignored —
 regenerable build artifacts), `..._metrics.json` (tuned hyperparameters and
 permutation feature importance, for the thesis record) and
-`thesis/results/{food,recipe}_recommender_comparison.csv`. A model that does
+`thesis/results/{food,recipe}_recommender_comparison.csv` with
+`..._nested_cv.csv` beside it. A model that does
 not rank held-out patients better than the formula is not saved, and the
 model from an earlier run is removed, so the app scores with the formula. Every
 assessment records which backend produced each section:
@@ -348,11 +390,11 @@ the app's own gate, and judged within each group of a held-out patient type
 
 | Model (held out by patient type) | Exercise |
 |---|---|
-| `HistGradientBoostingRegressor` (shipped) | **0.984** (0.99) |
+| `HistGradientBoostingRegressor` (shipped) | **0.986** (0.99) |
 | `GradientBoostingRegressor` (untuned) | 0.932 (0.93) |
-| `RandomForestRegressor` | 0.894 (0.87) |
+| `RandomForestRegressor` | 0.891 (0.87) |
 | `LinearRegression` | 0.857 (0.83) |
-| deterministic formula | 0.768 (0.55) |
+| deterministic formula | 0.768 (0.54) |
 
 The same limitation holds: the label is a hand-written function of cited
 guidance, so the table says how faithfully the model recovers it, not how
@@ -393,7 +435,14 @@ constraints say.
    notes for the patient's conditions and a demonstration video. Stored as a
    **pending** assessment.
 3. **Review** — the physician sees the queue, inspects the full assessment,
-   and approves / edits / rejects. Where the engine worked from an
+   and approves / edits / rejects. Before approving, the physician previews
+   the patient's report (`POST /review/{id}/wording`): it is written from
+   the plan as they have it, edits and comment included, in English and
+   Bangla, by the LLM when one is configured and otherwise by the template,
+   and shown to them to read. An approval names that wording and releases
+   exactly it; change the plan, the comment or the patient's name afterwards
+   and the report must be previewed again (the API answers 409 otherwise).
+   Where the engine worked from an
    assumption, emphasized something that is not safe for everyone or could
    not count what matters (no trimester recorded, a patient under 19,
    potassium for hypertension, saturated fat for high cholesterol, exclusions
@@ -401,7 +450,9 @@ constraints say.
    first. Every decision is written to the
    append-only audit log.
 4. **Report** — only after approval, `GET /report/{visit_id}?lang=bn|en`
-   returns the patient report (LLM-phrased if configured, template otherwise).
+   returns the patient report: the wording approved with the plan, the same
+   on every request. Reports approved before migration 0006 kept no wording
+   and show the standard wording of the approved plan.
 5. **Today** — the patient portal's daily task list (`/patient/today`, built
    for phones first): today's meals from the approved week plan and the
    exercise groups due today, each ticked off when done, with a streak of
@@ -420,6 +471,9 @@ constraints say.
 cd dashboard; npm test                   # dashboard display helpers
 ```
 
+`tests/test_report_wording.py` holds the report to the wording the physician
+approved, and `tests/test_nested_cv.py` holds the model comparison to its
+nesting (no outer fold's archetypes reach that fold's search).
 `tests/test_risk_scoring.py` is the threshold validation table (doubles as the
 thesis validation table — exported to CSV by `notebooks/03_results_figures.ipynb`).
 The Python suite runs against a throwaway database, never your `health.db`,
@@ -439,7 +493,7 @@ src/clinical   deterministic rules: BMI, risk scoring, deficiency → targets, c
 src/diet       food DB, recipe nutrition (computed from ingredients), matcher, meal plan, recommender (ML backend)
 src/lifestyle  exercise DB, ranking (formula + optional trained model), ACSM FITT-VP prescription, intensity scaling
 src/ocr        local lab-slip reading: RapidOCR + rule-based biomarker parser (prefill only)
-src/llm        Claude OCR (optional) + report phrasing (env-gated; app fully works without it)
+src/llm        Claude OCR (optional) + report phrasing before approval (env-gated; app fully works without it)
 src/api        FastAPI: intake, review, report (403-gated), patients
 src/db         SQLAlchemy models: Patient, Visit, Assessment, Approval, AuditLog; Alembic migrations
 src/core       config, logging, append-only audit helpers

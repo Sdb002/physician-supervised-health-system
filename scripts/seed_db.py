@@ -81,6 +81,11 @@ def main() -> None:
             db.add(User(password_hash=hash_password(password), **demo))
             print(f"seeded user {demo['email']} / {password} "
                   f"({demo['role']}, {demo['status']})")
+        db.flush()
+        # a doctor sees only their own patients: the demo ones are the demo doctor's
+        demo_doctor = db.scalars(select(User).where(User.email == "doctor@health.local")).one()
+        for patient in db.scalars(select(Patient)):
+            patient.doctor_id = demo_doctor.id
         db.commit()
     print(f"done — {len(fixtures)} patients with pending assessments")
 

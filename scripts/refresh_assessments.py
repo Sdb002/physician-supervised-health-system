@@ -75,6 +75,8 @@ def main() -> int:
             result = build_assessment(a.visit.patient, a.visit)
             a.result = result
             a.engine_version = ENGINE_VERSION
+            # a report worded for the old plan cannot be approved with the new one
+            a.report_draft = None
             audit.record(db, actor="refresh_assessments", action="assessment.regenerated",
                          entity="assessment", entity_id=a.id,
                          detail={"from_engine": old_engine, "to_engine": ENGINE_VERSION})

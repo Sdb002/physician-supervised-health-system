@@ -302,6 +302,19 @@ export const BN: Record<string, string> = {
 
   // ---- doctor: patients
   "{count} registered": "{count} জন নিবন্ধিত",
+  "{count} of your patients": "আপনার {count} জন রোগী",
+  "Not yet with a doctor": "এখনও কোনো চিকিৎসকের অধীনে নেই",
+  "Patients no doctor has taken on, such as people who created their own account. A record opens to you once you take the patient on; after that only an admin can move them to another doctor.":
+    "যে রোগীদের দায়িত্ব এখনও কোনো চিকিৎসক নেননি, যেমন যাঁরা নিজে অ্যাকাউন্ট খুলেছেন। আপনি দায়িত্ব নিলে রোগীর নথি আপনি দেখতে পাবেন; এরপর শুধু অ্যাডমিন তাঁকে অন্য চিকিৎসকের কাছে সরাতে পারেন।",
+  "registered {date}": "নিবন্ধন {date}",
+  "Adding…": "যোগ হচ্ছে…",
+  "Add to my patients": "আমার রোগীদের মধ্যে নিন",
+  "patient not found": "রোগী পাওয়া যায়নি",
+  "Doctor for {name}": "{name}-এর চিকিৎসক",
+  "No doctor yet": "এখনও কোনো চিকিৎসক নেই",
+  "Doctor no longer active": "চিকিৎসক আর সক্রিয় নন",
+  "Patient claim": "চিকিৎসক রোগীর দায়িত্ব নিয়েছেন",
+  "Patient assign": "রোগীকে চিকিৎসকের অধীনে দেওয়া হয়েছে",
   "Search by name, PID or condition": "নাম, PID বা রোগ দিয়ে খুঁজুন",
   "No patients match your search": "আপনার খোঁজার সঙ্গে কোনো রোগী মেলেনি",
   "No patients yet": "এখনও কোনো রোগী নেই",
@@ -521,6 +534,44 @@ export const BN: Record<string, string> = {
   "Comment for the patient (optional), e.g. re-check haemoglobin in 4 weeks":
     "রোগীর জন্য মন্তব্য (ঐচ্ছিক), যেমন: ৪ সপ্তাহ পর আবার হিমোগ্লোবিন পরীক্ষা করুন",
   "Approve and release": "অনুমোদন করে রোগীকে দিন",
+  "The patient's report": "রোগীর রিপোর্ট",
+  "What {name} will read once you approve, in English or Bangla. You read it first: the patient is shown exactly this text.":
+    "আপনি অনুমোদন করলে {name} ইংরেজি বা বাংলায় যা পড়বেন। আগে আপনি পড়ে নিন: রোগীকে হুবহু এই লেখাটিই দেখানো হবে।",
+  "Report language": "রিপোর্টের ভাষা",
+  "Not written yet. When the plan and your comment are as you want them, preview the report: it is written from them and shown here for you to read.":
+    "এখনও লেখা হয়নি। পরিকল্পনা ও আপনার মন্তব্য ঠিক হয়ে গেলে রিপোর্টটি দেখে নিন: সেগুলো থেকেই রিপোর্ট লেখা হবে এবং আপনার পড়ার জন্য এখানে দেখানো হবে।",
+  "It will be worded by AI.": "এটি AI দিয়ে লেখা হবে।",
+  "It will be in the standard wording (no AI).": "এটি প্রমিত ভাষায় লেখা হবে (AI ছাড়া)।",
+  "Use the standard wording instead": "এর বদলে প্রমিত ভাষা নিন",
+  "Use AI wording instead": "এর বদলে AI-এর লেখা নিন",
+  "Try the AI wording again": "AI দিয়ে আবার লেখার চেষ্টা করুন",
+  "Writing the report in English and Bangla…": "ইংরেজি ও বাংলায় রিপোর্ট লেখা হচ্ছে…",
+  "With AI wording this can take a minute or two.": "AI দিয়ে লিখতে এক-দুই মিনিট লাগতে পারে।",
+  "The plan or your comment changed after this was written. Preview the report again before approving.":
+    "এটি লেখার পর পরিকল্পনা বা আপনার মন্তব্য বদলেছে। অনুমোদনের আগে রিপোর্টটি আবার দেখে নিন।",
+  "The AI declined to word this report, so this is the standard wording.":
+    "AI এই রিপোর্টটি লিখতে রাজি হয়নি, তাই এটি প্রমিত ভাষায় লেখা।",
+  "The AI's wording was cut off before its end, so this is the standard wording.":
+    "AI-এর লেখা শেষ হওয়ার আগেই কেটে গেছে, তাই এটি প্রমিত ভাষায় লেখা।",
+  "The AI service could not be reached, so this is the standard wording.":
+    "AI সেবার সঙ্গে যোগাযোগ করা যায়নি, তাই এটি প্রমিত ভাষায় লেখা।",
+  "The {language} report is in the standard wording: its AI wording could not be written. Read it as well.":
+    "{language} রিপোর্টটি প্রমিত ভাষায় লেখা: AI দিয়ে সেটি লেখা যায়নি। সেটিও পড়ে নিন।",
+  "Worded by AI from this plan. Check it against the plan: your approval covers this wording.":
+    "এই পরিকল্পনা থেকে AI লিখেছে। পরিকল্পনার সঙ্গে মিলিয়ে দেখুন: আপনার অনুমোদন এই লেখাটির জন্যও।",
+  "Standard wording, written from this plan by fixed rules (no AI).":
+    "প্রমিত ভাষা, নির্দিষ্ট নিয়মে এই পরিকল্পনা থেকে লেখা (AI ছাড়া)।",
+  "Preview the report": "রিপোর্ট দেখে নিন",
+  "Writing the report…": "রিপোর্ট লেখা হচ্ছে…",
+  "Preview the patient's report first: you approve what you have read.":
+    "আগে রোগীর রিপোর্টটি দেখে নিন: আপনি যা পড়েছেন, তা-ই অনুমোদন করবেন।",
+  // what the API answers when an approval does not match the report it would release
+  "Preview the report before approving: the patient reads the wording you were shown.":
+    "অনুমোদনের আগে রিপোর্টটি দেখে নিন: আপনাকে যে লেখা দেখানো হয়েছে, রোগী সেটিই পড়বেন।",
+  "The report was worded again after you read it. Preview the report again, then approve.":
+    "আপনি পড়ার পর রিপোর্টটি আবার লেখা হয়েছে। রিপোর্টটি আবার দেখে নিয়ে অনুমোদন করুন।",
+  "The plan, your comment or the patient's name changed after the report was worded. Preview the report again, then approve.":
+    "রিপোর্ট লেখার পর পরিকল্পনা, আপনার মন্তব্য বা রোগীর নাম বদলেছে। রিপোর্টটি আবার দেখে নিয়ে অনুমোদন করুন।",
   "Apply or cancel your plan edits before recording a decision.":
     "সিদ্ধান্ত দেওয়ার আগে পরিকল্পনার সম্পাদনা প্রয়োগ বা বাতিল করুন।",
 
@@ -549,6 +600,7 @@ export const BN: Record<string, string> = {
   "Assessment create": "মূল্যায়ন তৈরি",
   "Assessment approved": "মূল্যায়ন অনুমোদিত",
   "Assessment rejected": "মূল্যায়ন প্রত্যাখ্যাত",
+  "Assessment report worded": "রোগীর রিপোর্ট লেখা হয়েছে",
   "Doctor approved": "চিকিৎসক অনুমোদিত",
   "Doctor rejected": "চিকিৎসক প্রত্যাখ্যাত",
   "Note created": "নোট লেখা হয়েছে",

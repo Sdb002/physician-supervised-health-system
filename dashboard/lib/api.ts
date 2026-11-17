@@ -90,6 +90,8 @@ export interface Biomarkers {
 
 export interface Patient {
   id: number;
+  /** the doctor whose patient this is; null = not yet with a doctor */
+  doctor_id: number | null;
   name: string;
   sex: "male" | "female";
   birth_year: number;
@@ -106,6 +108,15 @@ export interface Patient {
   /** sedentary | light | moderate | active; null = not recorded */
   activity_level: string | null;
   notes: string;
+  created_at: string;
+}
+
+/** A patient with no doctor yet, as a doctor sees them before taking them on. */
+export interface UnassignedPatient {
+  id: number;
+  name: string;
+  sex: "male" | "female";
+  birth_year: number;
   created_at: string;
 }
 
@@ -138,7 +149,7 @@ export interface ExcludableFood extends ExcludedFood {
 export type ExcludedFoodPick = Pick<ExcludedFood, "id" | "name_en">;
 
 /** A patient as the forms send one: excluded foods go by id and name. */
-export type PatientIn = Omit<Patient, "id" | "created_at" | "excluded_foods"> & {
+export type PatientIn = Omit<Patient, "id" | "doctor_id" | "created_at" | "excluded_foods"> & {
   excluded_foods: ExcludedFoodPick[];
 };
 
@@ -460,10 +471,29 @@ export interface DoctorNote {
   updated_at: string | null;
 }
 
+/** One language's wording of a patient's report. */
+export interface ReportWordingText {
+  text: string;
+  source: "llm" | "template";
+  /** why the standard wording stands where the AI's was asked for */
+  fallback: "refused" | "incomplete" | "unavailable" | null;
+}
+
+/** A patient's report as they would read it, written for the physician to
+ * read first (POST /review/{id}/wording). An approval names the wording it
+ * releases by `fingerprint`, and the patient is shown exactly that text. */
+export interface ReportWording {
+  fingerprint: string;
+  texts: Record<"en" | "bn", ReportWordingText>;
+  /** this server has an LLM to word reports with */
+  ai_available: boolean;
+}
+
 export interface Report {
   visit_id: number;
   patient_name: string;
   lang: string;
+  /** who worded `text`, the wording approved with the plan */
   source: "llm" | "template";
   text: string;
   approved_by: string;
@@ -591,6 +621,12 @@ export const api = {
     }),
   adminPatients: () =>
     request<{ patient: Patient; account_email: string | null }[]>("/admin/patients"),
+  /** give a patient to a doctor, or to none (null) */
+  adminAssignDoctor: (patientId: number, doctorId: number | null) =>
+    request<Patient>(`/admin/patients/${patientId}/doctor`, {
+      method: "PATCH",
+      body: JSON.stringify({ doctor_id: doctorId }),
+    }),
   adminUsers: () => request<User[]>("/admin/users"),
   adminAudit: (limit = 25) => request<AuditEntry[]>(`/admin/audit?limit=${limit}`),
 
@@ -605,7 +641,12 @@ export const api = {
   health: () =>
     request<{ status: string; llm_configured: boolean; ocr_reader?: "RapidOCR" | "Claude" | null }>("/health"),
 
+  /** a doctor's own patients (every patient, for an admin) */
   listPatients: () => request<Patient[]>("/patients"),
+  /** patients no doctor has yet, by name, sex and year of birth only */
+  unassignedPatients: () => request<UnassignedPatient[]>("/patients/unassigned"),
+  /** take on a patient who has no doctor */
+  claimPatient: (id: number) => request<Patient>(`/patients/${id}/claim`, { method: "POST" }),
   getPatient: (id: number | string) => request<Patient>(`/patients/${id}`),
   createPatient: (data: PatientIn) =>
     request<Patient>("/patients", { method: "POST", body: JSON.stringify(data) }),
@@ -639,11 +680,25 @@ export const api = {
 
   reviewQueue: () => request<QueueItem[]>("/review/queue"),
   getAssessment: (id: number | string) => request<QueueItem>(`/review/${id}`),
-  decide: (assessmentId: number | string, data: { decision: "approved" | "rejected"; comment?: string; edited_result?: object | null }) =>
-    request(`/review/${assessmentId}/decision`, { method: "POST", body: JSON.stringify(data) }),
+  /** word the patient's report for the plan and comment as they stand; the
+   * same plan asked twice gets the same wording back */
+  wordReport: (
+    assessmentId: number | string,
+    data: { comment?: string; edited_result?: object | null; use_llm?: boolean }
+  ) =>
+    request<ReportWording>(`/review/${assessmentId}/wording`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  /** an approval carries `wording`: the fingerprint of the report it releases */
+  decide: (
+    assessmentId: number | string,
+    data: { decision: "approved" | "rejected"; comment?: string; edited_result?: object | null; wording?: string }
+  ) => request(`/review/${assessmentId}/decision`, { method: "POST", body: JSON.stringify(data) }),
 
-  report: (visitId: number | string, lang: "en" | "bn", useLlm: boolean) =>
-    request<Report>(`/report/${visitId}?lang=${lang}&use_llm=${useLlm}`),
+  /** the approved report: its text is the wording stored at approval */
+  report: (visitId: number | string, lang: "en" | "bn") =>
+    request<Report>(`/report/${visitId}?lang=${lang}`),
 
   listNotes: (visitId: number | string) => request<DoctorNote[]>(`/visits/${visitId}/notes`),
   addNote: (visitId: number | string, data: { note: string }) =>

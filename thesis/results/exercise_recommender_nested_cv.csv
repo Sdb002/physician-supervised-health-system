@@ -1,0 +1,11 @@
+fold,model,preferred_by_search,search_spearman,spearman,top3,ndcg3,spearman_tuned_on_all,n_train_archetypes,n_test_archetypes,params
+1,random_forest,0,0.8849912520241339,0.9027334109529921,0.8653061224489796,0.969171856038124,0.9027334109529921,896,224,"{""max_depth"": 10, ""min_samples_leaf"": 3, ""n_estimators"": 100}"
+1,hist_gradient_boosting,1,0.9872181942513706,0.9854040441884927,0.9850340136054422,0.9982668856182326,0.9780925438601284,896,224,"{""l2_regularization"": 0.0, ""learning_rate"": 0.1, ""max_iter"": 500, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}"
+2,random_forest,0,0.8822330951374248,0.8841038821228292,0.8630385487528344,0.9690217164312586,0.8834924179567136,896,224,"{""max_depth"": 12, ""min_samples_leaf"": 2, ""n_estimators"": 100}"
+2,hist_gradient_boosting,1,0.9866438645428254,0.9878067423436647,0.9918367346938776,0.9982329442007809,0.9881461600767214,896,224,"{""l2_regularization"": 0.1, ""learning_rate"": 0.2, ""max_iter"": 500, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}"
+3,random_forest,0,0.8873120500579713,0.9009316856998768,0.8727355072463767,0.9700253311363249,0.9009316856998768,896,224,"{""max_depth"": 10, ""min_samples_leaf"": 3, ""n_estimators"": 100}"
+3,hist_gradient_boosting,1,0.9854137077614183,0.9868051716665898,0.9895833333333334,0.99807248903167,0.9814055714762474,896,224,"{""l2_regularization"": 0.1, ""learning_rate"": 0.2, ""max_iter"": 500, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}"
+4,random_forest,0,0.8850195898963494,0.8835100537149196,0.8726287262872628,0.9700246515100035,0.8986114465508385,896,224,"{""max_depth"": 12, ""min_samples_leaf"": 2, ""n_estimators"": 100}"
+4,hist_gradient_boosting,1,0.9864336411192673,0.986044047424486,0.9887082204155376,0.9981362447598987,0.982826809720165,896,224,"{""l2_regularization"": 0.1, ""learning_rate"": 0.2, ""max_iter"": 500, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}"
+5,random_forest,0,0.8876357619183904,0.8819031856959185,0.8577898550724636,0.9699907554667464,0.8819031856959185,896,224,"{""max_depth"": 10, ""min_samples_leaf"": 3, ""n_estimators"": 100}"
+5,hist_gradient_boosting,1,0.9859183239409514,0.9864270579891578,0.9873188405797101,0.9981342554693701,0.9875238717129923,896,224,"{""l2_regularization"": 0.1, ""learning_rate"": 0.2, ""max_iter"": 500, ""max_leaf_nodes"": 31, ""min_samples_leaf"": 20}"

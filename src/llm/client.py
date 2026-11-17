@@ -24,6 +24,15 @@ class LLMRefusedError(RuntimeError):
     """Raised when the model (and its fallback chain) declined the request."""
 
 
+class LLMUnavailableError(RuntimeError):
+    """Raised when the API could not be reached or answered with an error,
+    after the SDK's own retries."""
+
+
+class LLMIncompleteError(RuntimeError):
+    """Raised when the reply was cut off before its end, or held no text."""
+
+
 def llm_available() -> bool:
     return bool(settings.anthropic_api_key)
 

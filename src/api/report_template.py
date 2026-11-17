@@ -1,9 +1,19 @@
-"""Deterministic patient-report text (English/Bangla) — the no-LLM fallback.
+"""Deterministic patient-report text (English/Bangla) — the standard wording.
 
-Renders the approved assessment into readable text with fixed templates, so
-the report endpoint works even without an API key. The LLM path in
-src/llm/report_writer.py produces friendlier prose from the same data.
+Renders the assessment into readable text with fixed templates, so a report
+can be worded with no API key, and whenever the LLM declines or fails. The
+LLM path in src/llm/report_writer.py produces friendlier prose from the same
+data. Either wording is written before approval and read by the physician
+(src/api/report_wording.py).
 """
+
+
+def for_patient(result: dict) -> dict:
+    """The assessment as the patient is given it. Cautions are the engine's
+    notes to the reviewing physician: they are not part of the patient's
+    report, in its text or in what the patient is sent."""
+    return {key: value for key, value in result.items() if key != "cautions"}
+
 
 _LABELS = {
     "en": {

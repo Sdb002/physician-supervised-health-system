@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { AllowedFood, api, AssessmentResult, MealItem, QueueItem } from "@/lib/api";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AllowedFood, api, AssessmentResult, MealItem, QueueItem, ReportWording } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import {
   avoidReasonName,
@@ -29,16 +29,19 @@ import { dietaryRestrictionLabel } from "@/lib/patient-options";
 import { pid } from "@/lib/format";
 import { riskLabel } from "@/lib/triage";
 import { useT } from "@/lib/use-t";
+import type { Lang } from "@/lib/use-lang";
 import { FoodCombobox } from "@/components/FoodCombobox";
 import { FindingsList } from "@/components/findings";
-import { IconAlert, IconCheck, IconRx, IconX } from "@/components/icons";
+import { IconAlert, IconCheck, IconFileText, IconRx, IconSparkles, IconX } from "@/components/icons";
 import { RecommendedFoodsList, RecommendedRecipesList } from "@/components/recommendations";
+import { ReportProse } from "@/components/report-prose";
 import { ConditionFoodsGuide } from "@/components/condition-foods";
 import {
   Badge,
   Card,
   ErrorNote,
   Field,
+  InfoNote,
   PageHeader,
   PatientBanner,
   Skeleton,
@@ -65,6 +68,12 @@ const FITNESS_LEVELS: Record<string, string> = {
 };
 /* The engine writes its notes to the physician in English only. */
 const ENGINE_TEXT_NOTE = "The engine writes these notes in English.";
+/* Why the standard wording stands where the AI's was asked for. */
+const WORDING_FALLBACKS: Record<string, string> = {
+  refused: "The AI declined to word this report, so this is the standard wording.",
+  incomplete: "The AI's wording was cut off before its end, so this is the standard wording.",
+  unavailable: "The AI service could not be reached, so this is the standard wording.",
+};
 
 interface DraftMealItem {
   /** exactly one of these: a household dish or a single food */
@@ -104,6 +113,16 @@ const removeButton =
   "shrink-0 cursor-pointer rounded-md p-1.5 text-ink-muted hover:bg-crit-tint hover:text-crit-ink " +
   "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-crit-mark";
 
+/** Scroll a panel to the top of the view, and move focus to it when asked. */
+function bringIntoView(panel: HTMLElement | null, focus: boolean) {
+  if (!panel) return;
+  if (focus) panel.focus({ preventScroll: true });
+  panel.scrollIntoView({
+    block: "start",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+  });
+}
+
 export default function ReviewDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -129,6 +148,21 @@ export default function ReviewDetailPage() {
   // the assessment — the dataset may have changed since it was generated)
   const [foods, setFoods] = useState<AllowedFood[] | null>(null);
 
+  // The patient's report, worded for the plan and comment it was asked for.
+  // The physician reads it here before approving: an approval names this
+  // wording, and the patient is shown exactly this text.
+  const [wording, setWording] = useState<{
+    report: ReportWording;
+    comment: string;
+    edited: AssessmentResult | null;
+  } | null>(null);
+  const [wordingBusy, setWordingBusy] = useState(false);
+  const [aiAvailable, setAiAvailable] = useState(false);
+  const [useAi, setUseAi] = useState(true);
+  // the language of the report on screen; the interface's until one is picked
+  const [wordingLang, setWordingLang] = useState<Lang | null>(null);
+  const wordingPanel = useRef<HTMLDivElement>(null);
+
   const foodIndex = useMemo(
     () => new Map((foods ?? []).map((f) => [mealItemKey(f), f])),
     [foods]
@@ -149,7 +183,39 @@ export default function ReviewDetailPage() {
 
   useEffect(() => {
     api.getAssessment(id).then(setItem).catch((e) => setError(e.message));
+    // whether this server can word reports with AI; without it the report
+    // is in the standard wording and nothing about AI is offered
+    api
+      .health()
+      .then((h) => setAiAvailable(h.llm_configured))
+      .catch(() => {});
   }, [id]);
+
+  // the report arrives a while after it was asked for: bring it into view,
+  // and put focus on it so a screen reader starts reading there
+  useEffect(() => {
+    if (wording) bringIntoView(wordingPanel.current, true);
+  }, [wording]);
+
+  const previewReport = async (withAi: boolean) => {
+    setWordingBusy(true);
+    setUseAi(withAi);
+    setError(null);
+    bringIntoView(wordingPanel.current, false);
+    try {
+      const report = await api.wordReport(id, {
+        comment,
+        edited_result: edited ?? null,
+        use_llm: withAi,
+      });
+      setAiAvailable(report.ai_available);
+      setWording({ report, comment, edited });
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWordingBusy(false);
+    }
+  };
 
   const decide = async (decision: "approved" | "rejected") => {
     setSubmitting(true);
@@ -159,6 +225,8 @@ export default function ReviewDetailPage() {
         decision,
         comment,
         edited_result: edited ?? null,
+        // an approval releases the wording that was read, and names it
+        ...(decision === "approved" ? { wording: wording?.report.fingerprint } : {}),
       });
       if (decision === "approved" && item) {
         router.push(`/doctor/reports/${item.visit.id}`);
@@ -284,6 +352,18 @@ export default function ReviewDetailPage() {
   const planIsWeek = (r.nutrition.meal_plan.days?.length ?? 0) > 0;
   const plan = r.exercise_plan;
   const canEdit = !decided && !editing;
+  const wordings = Object.values(wording?.report.texts ?? {});
+  // A wording is for one plan: edit the plan and the report has to be
+  // previewed again before it can be approved. The standard wording also
+  // quotes the comment, so it is for one comment too; the AI is never given
+  // the comment (the report shows it beside the text), so its wording stands.
+  const quotesComment = wordings.some((text) => text.source === "template");
+  const wordingCurrent =
+    wording !== null && wording.edited === edited && (wording.comment === comment || !quotesComment);
+  const shownLang = wordingLang ?? lang;
+  const shownText = wording?.report.texts[shownLang];
+  const otherText = wording?.report.texts[shownLang === "en" ? "bn" : "en"];
+  const aiFellBack = wordings.some((text) => text.fallback);
 
   const draftMeals = draftDays[editDay]?.meals ?? {};
   // edits apply to the day on screen
@@ -911,6 +991,127 @@ export default function ReviewDetailPage() {
         </div>
       </div>
 
+      {!decided && (
+        <div
+          ref={wordingPanel}
+          tabIndex={-1}
+          role="region"
+          aria-label={t("The patient's report")}
+          className="scroll-mt-4 rounded-xl focus:outline-none"
+        >
+          <Card
+            title={t("The patient's report")}
+            description={t(
+              "What {name} will read once you approve, in English or Bangla. You read it first: the patient is shown exactly this text.",
+              { name: item.patient.name }
+            )}
+            action={
+              wording && !wordingBusy ? (
+                <div
+                  role="radiogroup"
+                  aria-label={t("Report language")}
+                  className="inline-flex rounded-lg border border-line-strong bg-surface p-0.5"
+                >
+                  {(["en", "bn"] as const).map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      role="radio"
+                      aria-checked={shownLang === l}
+                      lang={l}
+                      onClick={() => setWordingLang(l)}
+                      className={`min-h-8 cursor-pointer rounded-md px-3 text-sm font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-clinical ${
+                        shownLang === l ? "bg-clinical text-on-clinical" : "text-ink-soft hover:bg-surface-soft"
+                      }`}
+                    >
+                      {l === "en" ? "English" : "বাংলা"}
+                    </button>
+                  ))}
+                </div>
+              ) : undefined
+            }
+          >
+            {wordingBusy ? (
+              <div role="status" className="space-y-3">
+                <p className="text-sm text-ink-soft">
+                  {t("Writing the report in English and Bangla…")}
+                  {useAi && aiAvailable && ` ${t("With AI wording this can take a minute or two.")}`}
+                </p>
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-4 w-11/12" />
+                <Skeleton className="h-4 w-4/5" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ) : !wording || !shownText ? (
+              <div className="space-y-2 text-sm text-ink-soft">
+                <p>
+                  {t("Not written yet. When the plan and your comment are as you want them, preview the report: it is written from them and shown here for you to read.")}
+                </p>
+                {aiAvailable && (
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span>{useAi ? t("It will be worded by AI.") : t("It will be in the standard wording (no AI).")}</span>
+                    <button type="button" className={linkButton} onClick={() => setUseAi(!useAi)}>
+                      {useAi ? t("Use the standard wording instead") : t("Use AI wording instead")}
+                    </button>
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* who worded it comes before the text: it is how to read it */}
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                  <p className="flex items-center gap-1.5 text-sm text-ink-soft">
+                    {shownText.source === "llm" && <IconSparkles className="h-4 w-4 shrink-0 text-clinical" />}
+                    {shownText.source === "llm"
+                      ? t("Worded by AI from this plan. Check it against the plan: your approval covers this wording.")
+                      : t("Standard wording, written from this plan by fixed rules (no AI).")}
+                  </p>
+                  {aiAvailable && (
+                    <button
+                      type="button"
+                      className={linkButton}
+                      disabled={editing}
+                      onClick={() => previewReport(!useAi || aiFellBack)}
+                    >
+                      {!useAi
+                        ? t("Use AI wording instead")
+                        : aiFellBack
+                          ? t("Try the AI wording again")
+                          : t("Use the standard wording instead")}
+                    </button>
+                  )}
+                </div>
+                {shownText.fallback && (
+                  <InfoNote>{t(WORDING_FALLBACKS[shownText.fallback] ?? WORDING_FALLBACKS.unavailable)}</InfoNote>
+                )}
+                {/* both languages are released: say so when the one not on
+                    screen is not in the wording this one is */}
+                {!shownText.fallback && otherText?.fallback && (
+                  <InfoNote>
+                    {t("The {language} report is in the standard wording: its AI wording could not be written. Read it as well.", {
+                      language: shownLang === "en" ? "বাংলা" : "English",
+                    })}
+                  </InfoNote>
+                )}
+                {!wordingCurrent && (
+                  <InfoNote>
+                    {t("The plan or your comment changed after this was written. Preview the report again before approving.")}
+                  </InfoNote>
+                )}
+                <div
+                  lang={shownLang}
+                  className={`rounded-md border border-line bg-surface-soft px-5 py-5 ${wordingCurrent ? "" : "opacity-60"}`}
+                >
+                  <article className="max-w-prose">
+                    <ReportProse text={shownText.text} />
+                  </article>
+                </div>
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
+
       {decided ? (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface px-5 py-4">
           <p className="flex items-center gap-2 text-ink-soft">
@@ -961,24 +1162,41 @@ export default function ReviewDetailPage() {
               <div className="flex gap-2">
                 <button
                   className={`${buttonDanger} shrink-0 px-3 sm:px-4`}
-                  disabled={submitting || editing}
+                  disabled={submitting || editing || wordingBusy}
                   onClick={() => decide("rejected")}
                 >
                   <IconX className="h-4 w-4" />
                   {t("Reject")}
                 </button>
-                <button
-                  className={`${buttonPrimary} flex-1 whitespace-nowrap lg:flex-none`}
-                  disabled={submitting || editing}
-                  onClick={() => decide("approved")}
-                >
-                  <IconCheck className="h-4 w-4" />
-                  {t("Approve and release")}
-                </button>
+                {wordingCurrent ? (
+                  <button
+                    className={`${buttonPrimary} flex-1 whitespace-nowrap lg:flex-none`}
+                    disabled={submitting || editing || wordingBusy}
+                    onClick={() => decide("approved")}
+                  >
+                    <IconCheck className="h-4 w-4" />
+                    {t("Approve and release")}
+                  </button>
+                ) : (
+                  <button
+                    className={`${buttonPrimary} flex-1 whitespace-nowrap lg:flex-none`}
+                    disabled={submitting || editing || wordingBusy}
+                    onClick={() => previewReport(useAi)}
+                  >
+                    <IconFileText className="h-4 w-4" />
+                    {wordingBusy ? t("Writing the report…") : t("Preview the report")}
+                  </button>
+                )}
               </div>
             </div>
-            {editing && (
+            {editing ? (
               <p className="mt-2 text-sm text-ink-muted">{t("Apply or cancel your plan edits before recording a decision.")}</p>
+            ) : (
+              !wordingCurrent && (
+                <p className="mt-2 text-sm text-ink-muted">
+                  {t("Preview the patient's report first: you approve what you have read.")}
+                </p>
+              )
             )}
           </div>
         </div>

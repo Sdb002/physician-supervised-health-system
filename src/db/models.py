@@ -36,13 +36,20 @@ class User(Base):
     patient_id: Mapped[int | None] = mapped_column(ForeignKey("patients.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
-    patient: Mapped["Patient | None"] = relationship()
+    patient: Mapped["Patient | None"] = relationship(foreign_keys=[patient_id])
 
 
 class Patient(Base):
     __tablename__ = "patients"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    # the doctor whose patient this is; only that doctor (and an admin) can
+    # open the record, see src/api/access.py. None = not yet with a doctor:
+    # a patient who registered themselves, until a doctor takes them on.
+    # use_alter: users.patient_id points back here, so the two tables cannot
+    # both be created with the other's key already in place.
+    doctor_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", use_alter=True, name="fk_patients_doctor_id"), nullable=True, index=True)
     name: Mapped[str] = mapped_column(String(200))
     sex: Mapped[str] = mapped_column(String(10))  # "male" | "female"
     birth_year: Mapped[int]
@@ -94,6 +101,9 @@ class Assessment(Base):
     # full deterministic engine output: bmi, risk_flags, conditions, targets, plans
     result: Mapped[dict] = mapped_column(JSON, default=dict)
     engine_version: Mapped[str] = mapped_column(String(20), default="0.1.0")
+    # the patient's report as last worded for the reviewing physician to read
+    # (src/api/report_wording.py); None until asked for, and again once decided
+    report_draft: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     visit: Mapped[Visit] = relationship(back_populates="assessment")
@@ -109,6 +119,11 @@ class Approval(Base):
     decision: Mapped[str] = mapped_column(String(20))  # approved | rejected
     # if the physician edited the engine output, the edited version they approved
     edited_result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    # the report's wording the physician was shown and approved, per language:
+    # {"en": {"text": ..., "source": "llm" | "template"}, "bn": {...}}. The
+    # report route serves this text and nothing else. None on a rejection, and
+    # on an approval made before the wording was kept (standard wording then).
+    report_text: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     comment: Mapped[str] = mapped_column(String(2000), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 

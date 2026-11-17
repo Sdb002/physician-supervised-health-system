@@ -93,5 +93,22 @@ def client():
         test_client.admin_headers = {
             "Authorization": f"Bearer {create_token(admin_id, 'admin')}"
         }
+
+        def approve(assessment_id, headers=None, use_llm=False, **decision):
+            """Approve as the review screen does: have the report worded for
+            the plan and comment being approved, then approve the wording
+            that came back. Returns the decision's response. The standard
+            wording unless a test asks otherwise, so a developer's own
+            ANTHROPIC_API_KEY is never spent by the suite."""
+            plan = {key: decision[key] for key in ("comment", "edited_result") if key in decision}
+            wording = test_client.post(f"/review/{assessment_id}/wording", headers=headers,
+                                       json={**plan, "use_llm": use_llm})
+            assert wording.status_code == 200, wording.text
+            return test_client.post(
+                f"/review/{assessment_id}/decision", headers=headers,
+                json={"decision": "approved", **decision,
+                      "wording": wording.json()["fingerprint"]})
+
+        test_client.approve = approve
         yield test_client
     app.dependency_overrides.clear()

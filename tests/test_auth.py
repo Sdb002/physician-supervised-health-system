@@ -98,14 +98,13 @@ def test_patient_sees_only_own_visits_and_reports(client):
                                               "birth_year": 1990, "height_cm": 160}).json()["id"]
     assessment = client.post(f"/patients/{other_id}/visits",
                              json={"weight_kg": 60, "biomarkers": {}}).json()
-    client.post(f"/review/{assessment['id']}/decision",
-                json={"decision": "approved", "physician_name": "Dr Test"})
+    client.approve(assessment["id"])
     other_visit = assessment["visit_id"]
 
     # the patient cannot read someone else's approved report; staff can
-    assert client.get(f"/report/{other_visit}?use_llm=false",
+    assert client.get(f"/report/{other_visit}",
                       headers=patient_headers).status_code == 403
-    assert client.get(f"/report/{other_visit}?use_llm=false").status_code == 200
+    assert client.get(f"/report/{other_visit}").status_code == 200
 
     # patients cannot reach staff routes
     assert client.get("/patients", headers=patient_headers).status_code == 403

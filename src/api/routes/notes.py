@@ -1,11 +1,13 @@
 """Doctor's notes/recommendations on a visit — free text a physician can add
 or edit at any time (including after approval), surfaced in the patient's
-report. Access is mixed like /report: staff manage freely, patients may only
-read their own, and only once the visit's assessment is approved."""
+report. Access is mixed like /report: a doctor manages the notes of their own
+patients (an admin, any patient's), and patients may only read their own, and
+only once the visit's assessment is approved."""
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.api.access import visit_for
 from src.api.deps import get_current_user, get_db, require_staff
 from src.api.schemas import DoctorNoteCreate, DoctorNoteOut, DoctorNoteUpdate
 from src.core import audit
@@ -15,6 +17,8 @@ router = APIRouter(prefix="/visits/{visit_id}/notes", tags=["notes"])
 
 
 def _visit_for_read(visit_id: int, user: User, db: Session) -> Visit:
+    if user.role != "patient":
+        return visit_for(user, visit_id, db)
     visit = db.get(Visit, visit_id)
     if visit is None:
         raise HTTPException(404, "visit not found")
@@ -40,8 +44,7 @@ def create_note(
     staff: User = Depends(require_staff),
     db: Session = Depends(get_db),
 ):
-    if db.get(Visit, visit_id) is None:
-        raise HTTPException(404, "visit not found")
+    visit_for(staff, visit_id, db)
     # attributed to the authenticated account, not client input — see review.py
     note = DoctorNote(visit_id=visit_id, physician_name=staff.name, note=payload.note)
     db.add(note)
@@ -60,6 +63,7 @@ def update_note(
     staff: User = Depends(require_staff),
     db: Session = Depends(get_db),
 ):
+    visit_for(staff, visit_id, db)
     note = db.get(DoctorNote, note_id)
     if note is None or note.visit_id != visit_id:
         raise HTTPException(404, "note not found")

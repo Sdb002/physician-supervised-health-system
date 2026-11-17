@@ -9,12 +9,13 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
-from src.api.deps import get_db
+from src.api.access import patient_for
+from src.api.deps import get_db, require_staff
 from src.api.schemas import AssessmentOut, BiomarkersIn, OcrResult, VisitCreate
 from src.api.services import ENGINE_VERSION, build_assessment
 from src.core import audit
 from src.core.config import settings
-from src.db.models import Assessment, Patient, Visit
+from src.db.models import Assessment, User, Visit
 from src.llm.client import LLMNotConfiguredError, LLMRefusedError, llm_available
 from src.ocr.engine import OcrEngineUnavailableError, UnreadableImageError, local_available
 
@@ -42,10 +43,13 @@ def _matches_declared_type(data: bytes, content_type: str) -> bool:
 
 
 @router.post("/patients/{patient_id}/visits", response_model=AssessmentOut, status_code=201)
-def create_visit(patient_id: int, payload: VisitCreate, db: Session = Depends(get_db)):
-    patient = db.get(Patient, patient_id)
-    if patient is None:
-        raise HTTPException(404, "patient not found")
+def create_visit(
+    patient_id: int,
+    payload: VisitCreate,
+    db: Session = Depends(get_db),
+    staff: User = Depends(require_staff),
+):
+    patient = patient_for(staff, patient_id, db)
 
     biomarkers = {k: v for k, v in payload.biomarkers.model_dump().items() if v is not None}
     visit = Visit(
@@ -62,7 +66,7 @@ def create_visit(patient_id: int, payload: VisitCreate, db: Session = Depends(ge
     db.add(assessment)
     db.flush()
 
-    audit.record(db, actor="intake", action="visit.create", entity="visit", entity_id=visit.id,
+    audit.record(db, actor=staff.email, action="visit.create", entity="visit", entity_id=visit.id,
                  detail={"biomarkers": biomarkers})
     audit.record(db, actor="engine", action="assessment.create", entity="assessment",
                  entity_id=assessment.id, detail={"engine_version": ENGINE_VERSION})

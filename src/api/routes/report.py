@@ -1,19 +1,22 @@
 """Patient report — HARD-GATED: 403 until a physician Approval row exists.
 
-The text is phrased by the LLM when configured (and requested), otherwise by
-the deterministic template. Either way the content comes exclusively from the
-approved assessment (the physician's edited version, if they edited it).
+The text is the wording the physician was shown and approved, stored with the
+approval (src/api/report_wording.py). This route writes none: it does not
+phrase, it does not call an LLM and it imports no LLM code, so every reader
+of a report gets the sentences the physician approved. The content comes
+exclusively from the approved assessment (the physician's edited version, if
+they edited it).
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from src.api.access import can_reach
 from src.api.deps import get_current_user, get_db
-from src.api.report_template import template_report
+from src.api.report_template import for_patient, template_report
 from src.api.schemas import ReportOut
 from src.api.services import ENGINE_VERSION
 from src.db.models import User, Visit
-from src.llm.client import LLMNotConfiguredError, LLMRefusedError, llm_available
 
 router = APIRouter(prefix="/report", tags=["report"])
 
@@ -22,7 +25,6 @@ router = APIRouter(prefix="/report", tags=["report"])
 def get_report(
     visit_id: int,
     lang: str = Query("en", pattern="^(en|bn)$"),
-    use_llm: bool = Query(True, description="Phrase with the LLM when configured"),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -30,9 +32,13 @@ def get_report(
     if visit is None:
         raise HTTPException(404, "visit not found")
 
-    # patients may only read reports for their own visits; staff see all
-    if user.role == "patient" and visit.patient_id != user.patient_id:
-        raise HTTPException(403, "you can only view your own reports")
+    # a patient reads the reports of their own visits; a doctor, those of
+    # their own patients; an admin, any (src/api/access.py)
+    if user.role == "patient":
+        if visit.patient_id != user.patient_id:
+            raise HTTPException(403, "you can only view your own reports")
+    elif not can_reach(user, visit.patient):
+        raise HTTPException(404, "visit not found")
 
     assessment = visit.assessment
     approval = assessment.approval if assessment else None
@@ -44,23 +50,17 @@ def get_report(
         )
 
     result = approval.edited_result or assessment.result
-    # cautions are the engine's notes to the reviewing physician: they are not
-    # part of the patient's report, in its text or in what the patient is sent
-    for_patient = {key: value for key, value in result.items() if key != "cautions"}
+    shown = for_patient(result)
     patient_name = visit.patient.name
 
-    source = "template"
-    text = None
-    if use_llm and llm_available():
-        from src.llm.report_writer import write_report
-
-        try:
-            text = write_report(patient_name, for_patient, lang)
-            source = "llm"
-        except (LLMNotConfiguredError, LLMRefusedError):
-            text = None
-    if text is None:
-        text = template_report(patient_name, for_patient, lang, comment=approval.comment)
+    wording = (approval.report_text or {}).get(lang)
+    if wording:
+        text, source = wording["text"], wording["source"]
+    else:
+        # approved before the wording was kept with the approval: the
+        # standard wording, which is worked out from the approved plan alone
+        text = template_report(patient_name, shown, lang, comment=approval.comment)
+        source = "template"
 
     return ReportOut(
         visit_id=visit.id,
@@ -74,6 +74,6 @@ def get_report(
         current_engine_version=ENGINE_VERSION,
         comment=approval.comment,
         visit_date=visit.created_at,
-        result=for_patient if user.role == "patient" else result,
+        result=shown if user.role == "patient" else result,
         notes=list(visit.doctor_notes),
     )

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { api, Patient } from "@/lib/api";
+import { api, Patient, User } from "@/lib/api";
 import { conditionName, formatDate } from "@/lib/clinical-terms";
 import { pid } from "@/lib/format";
 import { useT } from "@/lib/use-t";
@@ -27,9 +27,27 @@ export default function AdminPatientsPage() {
   const [query, setQuery] = useState("");
   const { t, n, lang } = useT();
 
+  const [doctors, setDoctors] = useState<User[]>([]);
+  const [assignError, setAssignError] = useState<string | null>(null);
+
   useEffect(() => {
-    api.adminPatients().then(setRows).catch((e) => setError(e.message));
+    Promise.all([api.adminPatients(), api.adminDoctors("active")])
+      .then(([patients, active]) => {
+        setRows(patients);
+        setDoctors(active);
+      })
+      .catch((e) => setError(e.message));
   }, []);
+
+  const assign = async (patientId: number, doctorId: number | null) => {
+    setAssignError(null);
+    try {
+      const patient = await api.adminAssignDoctor(patientId, doctorId);
+      setRows((list) => (list ?? []).map((row) => (row.patient.id === patientId ? { ...row, patient } : row)));
+    } catch (err) {
+      setAssignError((err as Error).message);
+    }
+  };
 
   const visible = useMemo(() => {
     if (rows === null) return null;
@@ -60,6 +78,8 @@ export default function AdminPatientsPage() {
         }
       />
 
+      {assignError && <ErrorNote message={assignError} />}
+
       {visible === null ? (
         <Skeleton className="h-48" />
       ) : visible.length === 0 ? (
@@ -76,6 +96,7 @@ export default function AdminPatientsPage() {
                 <th scope="col" className="px-5 py-3 font-semibold">{t("Patient")}</th>
                 <th scope="col" className="px-4 py-3 font-semibold">{t("Sex, age")}</th>
                 <th scope="col" className="px-4 py-3 font-semibold">{t("Conditions")}</th>
+                <th scope="col" className="px-4 py-3 font-semibold">{t("Doctor")}</th>
                 <th scope="col" className="px-4 py-3 font-semibold">{t("Login")}</th>
                 <th scope="col" className="px-4 py-3 font-semibold">{t("Registered")}</th>
               </tr>
@@ -108,6 +129,23 @@ export default function AdminPatientsPage() {
                         ))
                       )}
                     </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      aria-label={t("Doctor for {name}", { name: patient.name })}
+                      className="max-w-48 rounded-lg border border-field bg-surface px-2 py-1.5 text-sm text-ink focus:border-clinical focus:outline-none focus:ring-2 focus:ring-clinical/20"
+                      value={patient.doctor_id ?? ""}
+                      onChange={(e) => assign(patient.id, e.target.value ? Number(e.target.value) : null)}
+                    >
+                      <option value="">{t("No doctor yet")}</option>
+                      {doctors.map((d) => (
+                        <option key={d.id} value={d.id}>{d.name}</option>
+                      ))}
+                      {/* a doctor who is no longer active still shows as the current one */}
+                      {patient.doctor_id != null && !doctors.some((d) => d.id === patient.doctor_id) && (
+                        <option value={patient.doctor_id}>{t("Doctor no longer active")}</option>
+                      )}
+                    </select>
                   </td>
                   <td className="px-4 py-3 text-ink-soft">
                     {account_email ?? <span className="text-ink-muted">{t("No login")}</span>}

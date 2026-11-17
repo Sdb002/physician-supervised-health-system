@@ -82,8 +82,28 @@ class ExcludedFood(BaseModel):
 class PatientOut(PatientCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    # the doctor whose patient this is; None = not yet with a doctor
+    doctor_id: int | None = None
     created_at: datetime
     excluded_foods: list[ExcludedFood] = []
+
+
+class UnassignedPatientOut(BaseModel):
+    """A patient with no doctor yet, as a doctor sees them before taking them
+    on: enough to recognise the person in front of them, nothing clinical."""
+
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    name: str
+    sex: str
+    birth_year: int
+    created_at: datetime
+
+
+class PatientAssign(BaseModel):
+    """An admin's choice of doctor for a patient; None leaves them unassigned."""
+
+    doctor_id: int | None
 
 
 class VisitCreate(BaseModel):
@@ -158,10 +178,40 @@ class PlanEditIn(BaseModel):
     exercise: ExercisePlanEdit | None = None
 
 
+class WordingIn(BaseModel):
+    """The plan as the physician has it on screen - what an approval would
+    carry - to word the patient's report from."""
+
+    comment: str = ""
+    edited_result: dict | None = None
+    # False asks for the standard wording even where an LLM is configured
+    use_llm: bool = True
+
+
+class ReportWording(BaseModel):
+    text: str
+    source: str  # "llm" | "template"
+    # why the standard wording stands where the LLM's was asked for:
+    # "refused" | "incomplete" | "unavailable"
+    fallback: str | None = None
+
+
+class WordingOut(BaseModel):
+    """The report as the patient would read it, for the physician to read
+    first. An approval names this wording by its fingerprint."""
+
+    fingerprint: str
+    texts: dict[str, ReportWording]  # by language: "en", "bn"
+    ai_available: bool
+
+
 class ReviewDecision(BaseModel):
     decision: str = Field(pattern="^(approved|rejected)$")
     comment: str = ""
     edited_result: dict | None = None  # if the physician edited the engine output
+    # an approval: the fingerprint of the report wording the physician was
+    # shown (POST /review/{id}/wording), which is the wording it releases
+    wording: str | None = Field(None, max_length=64)
 
 
 class ApprovalOut(BaseModel):

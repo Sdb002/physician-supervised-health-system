@@ -58,8 +58,7 @@ def test_patient_sees_notes_only_for_own_approved_visit(client):
     visit_id = assessment["visit_id"]
     client.post(f"/visits/{visit_id}/notes",
                json={"physician_name": "Dr. Rahman", "note": "reduce salt intake"})
-    client.post(f"/review/{assessment['id']}/decision",
-               json={"decision": "approved", "physician_name": "Dr. Rahman"})
+    client.approve(assessment["id"])
 
     account = client.post(f"/patients/{assessment['patient_id']}/account",
                           json={"email": "ownernp@example.com", "password": "owner-pass-1"})
@@ -73,7 +72,7 @@ def test_patient_sees_notes_only_for_own_approved_visit(client):
     assert notes.status_code == 200
     assert notes.json()[0]["note"] == "reduce salt intake"
 
-    report = client.get(f"/report/{visit_id}?use_llm=false", headers=patient_headers)
+    report = client.get(f"/report/{visit_id}", headers=patient_headers)
     assert report.status_code == 200
     assert report.json()["notes"][0]["note"] == "reduce salt intake"
 

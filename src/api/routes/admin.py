@@ -5,7 +5,15 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from src.api.deps import get_db, require_admin
-from src.api.schemas import AdminPatientOut, AdminStats, AuditOut, DoctorDecision, UserOut
+from src.api.schemas import (
+    AdminPatientOut,
+    AdminStats,
+    AuditOut,
+    DoctorDecision,
+    PatientAssign,
+    PatientOut,
+    UserOut,
+)
 from src.core import audit
 from src.db.models import Assessment, AuditLog, Patient, User, Visit
 
@@ -78,6 +86,30 @@ def list_patients(admin: User = Depends(require_admin), db: Session = Depends(ge
         AdminPatientOut(patient=p, account_email=emails.get(p.id))
         for p in db.scalars(select(Patient).order_by(Patient.id.desc()))
     ]
+
+
+@router.patch("/patients/{patient_id}/doctor", response_model=PatientOut)
+def assign_doctor(
+    patient_id: int,
+    payload: PatientAssign,
+    admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """Give a patient to a doctor, move them to another, or leave them with
+    none. Only an admin can move a patient who already has a doctor."""
+    patient = db.get(Patient, patient_id)
+    if patient is None:
+        raise HTTPException(404, "patient not found")
+    if payload.doctor_id is not None:
+        doctor = db.get(User, payload.doctor_id)
+        if doctor is None or doctor.role != "doctor" or doctor.status != "active":
+            raise HTTPException(422, "that account is not an active doctor")
+    previous = patient.doctor_id
+    patient.doctor_id = payload.doctor_id
+    audit.record(db, actor=admin.email, action="patient.assign", entity="patient",
+                 entity_id=patient.id, detail={"from": previous, "to": payload.doctor_id})
+    db.commit()
+    return patient
 
 
 @router.get("/users", response_model=list[UserOut])

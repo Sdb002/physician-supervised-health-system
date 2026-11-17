@@ -120,10 +120,11 @@ def patient(client):
                                              "password": PATIENT["password"]},
                         headers=NO_AUTH).json()["token"]
     headers = {"Authorization": f"Bearer {token}"}
+    # a patient who registered themselves has no doctor until one takes them on
+    client.post(f"/patients/{reg['patient_id']}/claim")
     assessment = client.post(f"/patients/{reg['patient_id']}/visits", json={
         "weight_kg": 72, "biomarkers": {"fasting_glucose": 130, "hemoglobin": 13.5}}).json()
-    client.post(f"/review/{assessment['id']}/decision",
-                json={"decision": "approved", "physician_name": "Dr Test"})
+    client.approve(assessment["id"])
     return headers
 
 

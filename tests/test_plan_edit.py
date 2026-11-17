@@ -66,13 +66,9 @@ def test_recompute_rebuilds_numbers_deterministically(client):
     assert ex["edited_by_physician"] is True
 
     # approving with the edited result is what the patient's report shows
-    decision = client.post(
-        f"/review/{assessment['id']}/decision",
-        json={"decision": "approved", "physician_name": "Dr Edit",
-              "edited_result": edited},
-    )
+    decision = client.approve(assessment["id"], edited_result=edited)
     assert decision.status_code == 201
-    report = client.get(f"/report/{assessment['visit_id']}?use_llm=false")
+    report = client.get(f"/report/{assessment['visit_id']}")
     assert report.status_code == 200
     assert f"({200} g)" in report.json()["text"]
 
@@ -278,12 +274,11 @@ def test_high_cholesterol_is_planned_and_offered_nothing_cooked_in_solid_fat(cli
     assert "excluded for this patient" in response.json()["detail"]
 
     # the patient is told why, in their own language
-    client.post(f"/review/{assessment['id']}/decision",
-                json={"decision": "approved", "physician_name": "Dr Edit"})
-    report = client.get(f"/report/{assessment['visit_id']}?lang=bn&use_llm=false").json()
+    client.approve(assessment["id"])
+    report = client.get(f"/report/{assessment['visit_id']}?lang=bn").json()
     assert "উচ্চ কোলেস্টেরলের জন্য এই পরিকল্পনায়" in report["text"]
     # ...and the note to the reviewing physician stays out of their report
-    report_en = client.get(f"/report/{assessment['visit_id']}?lang=en&use_llm=false").json()
+    report_en = client.get(f"/report/{assessment['visit_id']}?lang=en").json()
     assert "For high cholesterol, this plan leaves out dishes cooked in solid fats" in report_en["text"]
     assert "saturated fat" not in report_en["text"]
 
@@ -310,10 +305,9 @@ def test_changing_the_patient_rebuilds_the_plan_awaiting_review(client):
 def test_an_approved_plan_is_not_rebuilt_when_the_patient_changes(client):
     assessment = _pending(client)
     patient_id = client.get(f"/review/{assessment['id']}").json()["patient"]["id"]
-    client.post(f"/review/{assessment['id']}/decision",
-                json={"decision": "approved", "physician_name": "Dr Edit"})
+    client.approve(assessment["id"])
     client.patch(f"/patients/{patient_id}", json={"dietary_restrictions": ["vegan"]})
-    report = client.get(f"/report/{assessment['visit_id']}?use_llm=false").json()
+    report = client.get(f"/report/{assessment['visit_id']}").json()
     assert report["result"]["nutrition"]["meal_plan"] == assessment["result"]["nutrition"]["meal_plan"]
 
 

@@ -50,14 +50,11 @@ def test_full_flow_gate_then_approve(client):
     assert queue[0]["patient"]["name"] == PATIENT["name"]
 
     # physician approves
-    decision = client.post(
-        f"/review/{assessment['id']}/decision",
-        json={"decision": "approved", "physician_name": "Dr. Rahman"},
-    )
+    decision = client.approve(assessment["id"], physician_name="Dr. Rahman")
     assert decision.status_code == 201
 
     # gate opens: template report in both languages
-    report = client.get(f"/report/{visit_id}?lang=en&use_llm=false")
+    report = client.get(f"/report/{visit_id}?lang=en")
     assert report.status_code == 200
     body = report.json()
     assert body["source"] == "template"
@@ -73,7 +70,7 @@ def test_full_flow_gate_then_approve(client):
     assert "contraindication gate" not in body["text"]
     assert "DASH" not in body["text"]
 
-    report_bn = client.get(f"/report/{visit_id}?lang=bn&use_llm=false")
+    report_bn = client.get(f"/report/{visit_id}?lang=bn")
     assert report_bn.status_code == 200
     assert "প্রিয়" in report_bn.json()["text"]
     assert "উচ্চ রক্তচাপের জন্য এই পরিকল্পনায়" in report_bn.json()["text"]
@@ -110,9 +107,8 @@ def test_foods_and_recipes_are_separate_gated_sections(client):
         assert 1 <= recipe["weekly_frequency_score"] <= 10
         assert recipe["ingredients"] and recipe["steps"]
 
-    client.post(f"/review/{assessment['id']}/decision",
-                json={"decision": "approved", "physician_name": "Dr. Rahman"})
-    text = client.get(f"/report/{assessment['visit_id']}?lang=en&use_llm=false").json()["text"]
+    client.approve(assessment["id"])
+    text = client.get(f"/report/{assessment['visit_id']}?lang=en").json()["text"]
     assert "## Foods that suit your plan" in text
     assert "## Recommended home recipes" in text
     assert recipes[0]["name_en"] in text
@@ -120,7 +116,7 @@ def test_foods_and_recipes_are_separate_gated_sections(client):
     saturday = nutrition["meal_plan"]["days"][0]
     assert f"Cooking salt for the day: {saturday['salt_g']} g in your portions" in text
     assert "add no salt at the table" in text
-    text_bn = client.get(f"/report/{assessment['visit_id']}?lang=bn&use_llm=false").json()["text"]
+    text_bn = client.get(f"/report/{assessment['visit_id']}?lang=bn").json()["text"]
     assert "## সুপারিশকৃত ঘরোয়া রান্না" in text_bn
     assert "সারা দিনের রান্নার লবণ" in text_bn
 
@@ -141,12 +137,8 @@ def test_physician_edit_is_what_gets_reported(client):
     visit_id = assessment["visit_id"]
     edited = dict(assessment["result"])
     edited["physician_note"] = "reduced exercise volume"
-    client.post(
-        f"/review/{assessment['id']}/decision",
-        json={"decision": "approved", "physician_name": "Dr. Rahman",
-              "edited_result": edited},
-    )
-    report = client.get(f"/report/{visit_id}?use_llm=false")
+    client.approve(assessment["id"], edited_result=edited)
+    report = client.get(f"/report/{visit_id}")
     assert report.status_code == 200
 
 

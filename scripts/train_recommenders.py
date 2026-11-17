@@ -26,6 +26,15 @@ RandomForest/HistGradientBoosting are tuned by a randomized search
 (GroupKFold(3), optimizing the held-out ranking metric below) rather than
 hand-picked constants — see tune() below.
 
+The comparison is a nested cross-validation (Varma & Simon 2006, BMC
+Bioinformatics 7:91, doi:10.1186/1471-2105-7-91): each of the five outer
+folds runs that search again on its own training archetypes, so the
+archetypes a tuned model is judged on took no part in choosing its
+hyperparameters, nor in choosing which of the two tuned models to keep — see
+evaluate() below. The model that is shipped comes out of the same search run
+once more on every archetype; what the outer folds measure is that whole
+procedure.
+
 The archetypes cover every patient the engine can describe: each reference
 intake group (sex, age band, pregnancy) x each combination of findings x each
 recorded condition that rules a nutrient out of the emphasis (potassium in
@@ -69,15 +78,19 @@ patient's prescription, judged by Spearman correlation and top-3 agreement.
 
 Outputs, per model (<kind> = food | recipe | exercise):
   data/models/<kind>_recommender.joblib          the trained model (gitignored)
-  data/models/<kind>_recommender_metrics.json    five-way comparison, tuned
+  data/models/<kind>_recommender_metrics.json    five-way comparison, every
+                                                 fold's search, the shipped
                                                  params, permutation importance
-  thesis/results/<kind>_recommender_comparison.csv
+  thesis/results/<kind>_recommender_comparison.csv   the five-way comparison
+  thesis/results/<kind>_recommender_nested_cv.csv    per outer fold: what each
+                                                 search chose and how it scored
 """
 
 import argparse
 import csv
 import json
 import sys
+import time
 from dataclasses import dataclass
 from itertools import combinations
 from pathlib import Path
@@ -140,7 +153,7 @@ RANDOM_STATE = 42
 NOISE_REPEATS = 1
 TARGET_JITTER_PCT = 0.10
 EMPHASIS_SUBSETS = 3           # random shorter emphasis lists per target variant
-N_FOLDS = 5
+N_FOLDS = 5                    # outer folds: the archetypes a model is judged on
 TOP_K = 10                     # the app lists ten foods and ten dishes
 
 # Mirrors src.diet.meal_plan._EMPHASIS_SATURATION: once a nutrient's ratio
@@ -197,12 +210,15 @@ HIST_GRADIENT_BOOSTING_SEARCH_SPACE = {
     "l2_regularization": [0.0, 0.1, 1.0],
     "min_samples_leaf": [5, 10, 20],
 }
-# Tuning search folds: intentionally coarser than the N_FOLDS=5 final
-# evaluation below — full nested cross-validation (re-tuning inside every
-# outer fold) would be the gold standard but multiplies runtime well beyond
-# what's worth spending here. Still grouped by archetype, same as everywhere
-# else, so tuning never picks hyperparameters that just memorize an
-# archetype it'll then be "evaluated" on.
+# The search's own folds, inside the evaluation's (nested cross-validation,
+# see evaluate()): every outer fold runs the search on its training
+# archetypes alone, split TUNING_CV_FOLDS ways and grouped by archetype like
+# everything else here. One search over every archetype, followed by an
+# evaluation that holds out archetypes the search has already scored its
+# candidates on, lets a tuned model's figure come out too high (Varma & Simon
+# 2006); evaluate() still works that figure out, to put a size on it. Coarser
+# than the N_FOLDS evaluation because the search runs N_FOLDS + 1 times per
+# model: once per outer fold, and once on every archetype for what is shipped.
 TUNING_CV_FOLDS = 3
 TUNING_ITER = 8
 # permutation importance of the shipped model, on a row sample
@@ -779,6 +795,16 @@ def _hist_gradient_boosting(params: dict, feature_names: tuple) -> HistGradientB
     )
 
 
+# The two models that are tuned, and so the two that compete to be shipped:
+# how each is built from a set of hyperparameters, and what its search covers.
+# GradientBoostingRegressor is untuned on purpose (a reference point, not a
+# shipping candidate).
+TUNED_MODELS = {
+    "random_forest": (_random_forest, RANDOM_FOREST_SEARCH_SPACE),
+    "hist_gradient_boosting": (_hist_gradient_boosting, HIST_GRADIENT_BOOSTING_SEARCH_SPACE),
+}
+
+
 def _spearman(label: np.ndarray, predicted: np.ndarray) -> float:
     # a scorer that gives every item the same score has ranked nothing
     if np.ptp(predicted) == 0 or np.ptp(label) == 0:
@@ -835,70 +861,161 @@ def ranking_metrics(frame: Frame, rows: np.ndarray, predicted: np.ndarray) -> di
     }
 
 
-def tune(make_estimator, search_space: dict, frame: Frame, feature_names: tuple) -> dict:
-    """Randomized search grouped by archetype, optimizing the held-out
-    within-patient Spearman correlation over the items the app ranks (the
-    metric this script reports as its primary evidence) rather than R^2/MAE.
-    Returns the best parameters found."""
-    folds = list(GroupKFold(n_splits=TUNING_CV_FOLDS).split(frame.X, groups=frame.groups))
-    best_params, best_score = None, -np.inf
+@dataclass(frozen=True)
+class Tuned:
+    """What one randomized search settled on."""
+    params: dict
+    score: float  # mean Spearman over the search's own validation folds
+
+
+def tune(make_estimator, search_space: dict, frame: Frame, feature_names: tuple,
+         rows: np.ndarray | None = None) -> Tuned:
+    """Randomized search over `rows` of the frame (all of it when None),
+    grouped by archetype, optimizing the held-out within-patient Spearman
+    correlation over the items the app ranks (the metric this script reports
+    as its primary evidence) rather than R^2/MAE. Every fit and every score
+    uses `rows` alone: a search given an outer fold's training rows knows
+    nothing of the archetypes that fold is judged on."""
+    rows = np.arange(len(frame.X)) if rows is None else np.asarray(rows)
+    folds = [(rows[fit], rows[validate]) for fit, validate
+             in GroupKFold(n_splits=TUNING_CV_FOLDS).split(rows, groups=frame.groups[rows])]
+    best = None
     for params in ParameterSampler(search_space, n_iter=TUNING_ITER, random_state=RANDOM_STATE):
         scores = []
-        for train_idx, test_idx in folds:
-            model = make_estimator(params, feature_names).fit(frame.X[train_idx], frame.y[train_idx])
-            scores.append(ranking_metrics(frame, test_idx, model.predict(frame.X[test_idx]))["spearman"])
-        if np.mean(scores) > best_score:
-            best_params, best_score = params, float(np.mean(scores))
-    return best_params
+        for fit_idx, validate_idx in folds:
+            model = make_estimator(params, feature_names).fit(frame.X[fit_idx], frame.y[fit_idx])
+            scores.append(ranking_metrics(
+                frame, validate_idx, model.predict(frame.X[validate_idx]))["spearman"])
+        if best is None or np.mean(scores) > best.score:
+            best = Tuned(params, float(np.mean(scores)))
+    return best
 
 
-def evaluate(frame: Frame, feature_names: tuple, rf_params: dict, histgb_params: dict) -> dict:
-    """GroupKFold split BY ARCHETYPE, not by item: real deployment always
-    scores against the same fixed catalog but always sees novel patient
-    target/emphasize combinations, so generalization must be measured across
-    unseen archetypes, not unseen items."""
+def tune_models(frame: Frame, feature_names: tuple, rows: np.ndarray | None = None) -> dict:
+    """Each tuned model's search, over the same rows."""
+    return {name: tune(make, space, frame, feature_names, rows)
+            for name, (make, space) in TUNED_MODELS.items()}
+
+
+def preferred(tuned: dict) -> str:
+    """Which tuned model to keep: the one its search's validation folds rank
+    higher. The choice is part of what the outer folds judge, so it is made
+    from the searches alone, never from an outer fold's scores."""
+    return max(tuned, key=lambda name: tuned[name].score)
+
+
+def _held_out_scores(frame: Frame, rows: np.ndarray, predicted: np.ndarray) -> dict:
+    label = frame.label[rows]
+    return {
+        **ranking_metrics(frame, rows, predicted),
+        "r2": float(r2_score(label, predicted)),
+        "mae": float(mean_absolute_error(label, predicted)),
+    }
+
+
+def _over_folds(per_fold: list[dict], top_k: int) -> dict:
+    return {
+        metric: {"mean": float(np.mean([fold[metric] for fold in per_fold])),
+                 "std": float(np.std([fold[metric] for fold in per_fold]))}
+        for metric in metric_names(top_k)
+    }
+
+
+def evaluate(frame: Frame, feature_names: tuple, shipped: dict) -> dict:
+    """Nested cross-validation, split BY ARCHETYPE at both levels, not by
+    item: real deployment always scores against the same fixed catalog but
+    always sees novel patient target/emphasize combinations, so
+    generalization must be measured across unseen archetypes, not unseen
+    items.
+
+    Each outer fold holds a fifth of the archetypes out, runs the search for
+    both tuned models on the rest (tune_models), fits every model on the rest
+    and scores it on the archetypes held out. Nothing about those archetypes
+    reaches the fold's search, so a tuned model's figure is not helped by
+    having had its hyperparameters picked on the patients it is then judged
+    on. Nor is the choice between the two tuned models: "selected_model"
+    follows, fold by fold, whichever one that fold's search preferred, which
+    makes it the figure for the whole procedure the shipped model comes out
+    of.
+
+    `shipped` is that procedure run on every archetype: the hyperparameters
+    that go into the shipped model. Each fold also scores the tuned models
+    fitted with those ("tuned_on_all_archetypes"), which is how this script
+    evaluated them before it nested the search, so that the size of the
+    optimism is on record beside the nested figure.
+
+    Returns the per-model summary ("metrics"), "selected_model",
+    "tuned_on_all_archetypes" and what each fold's search chose ("folds")."""
     n_splits = min(N_FOLDS, len(np.unique(frame.groups)))
     folds = list(GroupKFold(n_splits=n_splits).split(frame.X, groups=frame.groups))
-    per_fold = {name: [] for name in MODEL_NAMES}
+    scores = {name: [] for name in MODEL_NAMES}
+    selected, tuned_on_all = [], {name: [] for name in TUNED_MODELS}
+    record = []
 
     def boosted_fold(train_idx: np.ndarray, test_idx: np.ndarray) -> np.ndarray:
         model = GradientBoostingRegressor(**GRADIENT_BOOSTING_PARAMS)
         return model.fit(frame.X[train_idx], frame.y[train_idx]).predict(frame.X[test_idx])
 
     # GradientBoostingRegressor fits on one core and is by far the slowest
-    # model here, so its folds are fitted side by side; the others use every
-    # core by themselves
+    # single fit here, so its folds are fitted side by side; the others use
+    # every core by themselves
     boosted = Parallel(n_jobs=n_splits, prefer="threads")(
         delayed(boosted_fold)(*fold) for fold in folds)
 
-    for (train_idx, test_idx), boosted_prediction in zip(folds, boosted):
+    for number, ((train_idx, test_idx), boosted_prediction) in enumerate(zip(folds, boosted), 1):
+        started = time.perf_counter()
+        # this fold's own search, on its training archetypes alone
+        searched = tune_models(frame, feature_names, rows=train_idx)
         X_train, y_train, X_test = frame.X[train_idx], frame.y[train_idx], frame.X[test_idx]
-        predictions = {
-            "hand_tuned_baseline": frame.baseline[test_idx],
-            "linear_regression": LinearRegression().fit(X_train, y_train).predict(X_test),
-            "gradient_boosting": boosted_prediction,
-            "random_forest": _random_forest(rf_params, feature_names)
-            .fit(X_train, y_train).predict(X_test),
-            "hist_gradient_boosting": _hist_gradient_boosting(histgb_params, feature_names)
-            .fit(X_train, y_train).predict(X_test),
+
+        def held_out(name: str, params: dict) -> dict:
+            model = TUNED_MODELS[name][0](params, feature_names).fit(X_train, y_train)
+            return _held_out_scores(frame, test_idx, model.predict(X_test))
+
+        fold_scores = {
+            "hand_tuned_baseline": _held_out_scores(frame, test_idx, frame.baseline[test_idx]),
+            "linear_regression": _held_out_scores(
+                frame, test_idx, LinearRegression().fit(X_train, y_train).predict(X_test)),
+            "gradient_boosting": _held_out_scores(frame, test_idx, boosted_prediction),
+            **{name: held_out(name, searched[name].params) for name in TUNED_MODELS},
         }
-        label = frame.label[test_idx]
-        for name, predicted in predictions.items():
-            per_fold[name].append({
-                **ranking_metrics(frame, test_idx, predicted),
-                "r2": float(r2_score(label, predicted)),
-                "mae": float(mean_absolute_error(label, predicted)),
-            })
+        for name, fold_score in fold_scores.items():
+            scores[name].append(fold_score)
+        chosen = preferred(searched)
+        selected.append(fold_scores[chosen])
+
+        models = {}
+        for name in TUNED_MODELS:
+            # the same hyperparameters fit the same model: nothing to refit
+            earlier = (fold_scores[name] if searched[name].params == shipped[name].params
+                       else held_out(name, shipped[name].params))
+            tuned_on_all[name].append(earlier)
+            models[name] = {
+                "params": searched[name].params,
+                "search_spearman": searched[name].score,
+                **fold_scores[name],
+                "spearman_tuned_on_all": earlier["spearman"],
+            }
+        record.append({
+            "fold": number,
+            "n_train_archetypes": int(len(np.unique(frame.groups[train_idx]))),
+            "n_test_archetypes": int(len(np.unique(frame.groups[test_idx]))),
+            "preferred": chosen,
+            "models": models,
+        })
+        print(f"  fold {number} of {n_splits}: "
+              + ", ".join(f"{name} {models[name]['spearman']:.4f} "
+                          f"(its search {models[name]['search_spearman']:.4f})"
+                          for name in TUNED_MODELS)
+              + f"; the search prefers {chosen} [{time.perf_counter() - started:.0f} s]",
+              flush=True)
 
     return {
-        name: {
-            metric: {
-                "mean": float(np.mean([f[metric] for f in folds])),
-                "std": float(np.std([f[metric] for f in folds])),
-            }
-            for metric in metric_names(frame.top_k)
-        }
-        for name, folds in per_fold.items()
+        "metrics": {name: _over_folds(scores[name], frame.top_k) for name in MODEL_NAMES},
+        "selected_model": _over_folds(selected, frame.top_k),
+        "tuned_on_all_archetypes": {name: _over_folds(tuned_on_all[name], frame.top_k)
+                                    for name in TUNED_MODELS},
+        "folds": record,
     }
 
 
@@ -936,9 +1053,34 @@ def _write_comparison_csv(path: Path, summary: dict, top_k: int) -> None:
         writer.writerows(rows)
 
 
+def _write_nested_cv_csv(path: Path, folds: list[dict], top_k: int) -> None:
+    """One row per outer fold and tuned model: what that fold's search chose
+    from its training archetypes, how the model then ranked the archetypes
+    held out, and what the same fold gives with the hyperparameters tuned on
+    every archetype (the evaluation before the search was nested)."""
+    rows = [
+        {"fold": fold["fold"], "model": name,
+         "preferred_by_search": int(fold["preferred"] == name),
+         "search_spearman": model["search_spearman"],
+         "spearman": model["spearman"],
+         f"top{top_k}": model[f"top{top_k}"], f"ndcg{top_k}": model[f"ndcg{top_k}"],
+         "spearman_tuned_on_all": model["spearman_tuned_on_all"],
+         "n_train_archetypes": fold["n_train_archetypes"],
+         "n_test_archetypes": fold["n_test_archetypes"],
+         "params": json.dumps(model["params"], sort_keys=True)}
+        for fold in folds for name, model in fold["models"].items()
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def train(section: Section, rng: np.random.Generator) -> dict | None:
     """Train, compare and save one model. Returns its metrics, or None when
     no model was saved because none ranked better than the formula."""
+    started = time.perf_counter()
     print(f"\n=== {section.kind} model ===")
     print("building synthetic training frame from the dataset + cited reference targets...")
     frame = (section.build_frame or build_training_frame)(section, rng)
@@ -950,16 +1092,19 @@ def train(section: Section, rng: np.random.Generator) -> dict | None:
           f"{frame.X.shape[0]} rows, {frame.X.shape[1]} features, "
           f"{n_archetypes} archetypes, {n_queries} queries")
 
-    print(f"tuning RandomForest ({TUNING_ITER} candidates x {TUNING_CV_FOLDS}-fold GroupKFold)...")
-    rf_params = tune(_random_forest, RANDOM_FOREST_SEARCH_SPACE, frame, names)
-    print(f"  best params: {rf_params}")
+    print(f"tuning on every archetype, for the model that is shipped ({TUNING_ITER} candidates "
+          f"x {TUNING_CV_FOLDS}-fold GroupKFold for each tuned model)...", flush=True)
+    shipped = tune_models(frame, names)
+    for name, tuned in shipped.items():
+        print(f"  {name}: {tuned.params} (its search: Spearman {tuned.score:.4f})")
+    # the same rule every outer fold applies to its own searches
+    winner_name = preferred(shipped)
 
-    print(f"tuning HistGradientBoosting ({TUNING_ITER} candidates x {TUNING_CV_FOLDS}-fold GroupKFold)...")
-    histgb_params = tune(_hist_gradient_boosting, HIST_GRADIENT_BOOSTING_SEARCH_SPACE, frame, names)
-    print(f"  best params: {histgb_params}")
-
-    print(f"evaluating via {N_FOLDS}-fold GroupKFold (held out by archetype)...")
-    summary = evaluate(frame, names, rf_params, histgb_params)
+    n_folds = min(N_FOLDS, n_archetypes)
+    print(f"evaluating by nested cross-validation: {n_folds} outer folds held out by archetype, "
+          "the search run again inside each on its training archetypes...", flush=True)
+    evaluation = evaluate(frame, names, shipped)
+    summary, selected = evaluation["metrics"], evaluation["selected_model"]
 
     k = frame.top_k
     print(f"\nmodel                     spearman   top-{k:<2d}     ndcg@{k:<2d}   r2        mae")
@@ -968,36 +1113,43 @@ def train(section: Section, rng: np.random.Generator) -> dict | None:
               f"{metrics[f'ndcg{k}']['mean']:.3f}     {metrics['r2']['mean']:+.3f}    "
               f"{metrics['mae']['mean']:.3f}")
 
-    # GradientBoostingRegressor is untuned on purpose (a reference point, not
-    # a shipping candidate) — only the two tuned models compete to be shipped.
-    tuned_names = ("random_forest", "hist_gradient_boosting")
-    winner_name = max(tuned_names, key=lambda n: summary[n]["spearman"]["mean"])
-    print(f"\nwinner: {winner_name} (higher held-out Spearman correlation)")
+    picks = [fold["preferred"] for fold in evaluation["folds"]]
+    print("\nthe folds' searches preferred: "
+          + ", ".join(f"{name} in {picks.count(name)} of {len(picks)}" for name in dict.fromkeys(picks)))
+    print(f"selected model (the tuned model each fold's search preferred): "
+          f"Spearman {selected['spearman']['mean']:.4f} on held-out archetypes")
+    for name in TUNED_MODELS:
+        nested = summary[name]["spearman"]["mean"]
+        earlier = evaluation["tuned_on_all_archetypes"][name]["spearman"]["mean"]
+        print(f"  {name}: {nested:.4f} nested, {earlier:.4f} with the hyperparameters tuned on "
+              f"every archetype (optimism {earlier - nested:+.4f})")
+    print(f"\nshipping: {winner_name} (preferred by the search over every archetype)")
 
     # the comparison is the record of this run whether or not a model comes of it
     csv_path = RESULTS_DIR / f"{section.kind}_recommender_comparison.csv"
     _write_comparison_csv(csv_path, summary, frame.top_k)
     print(f"saved comparison table -> {csv_path.relative_to(PROJECT_ROOT)}")
+    nested_path = RESULTS_DIR / f"{section.kind}_recommender_nested_cv.csv"
+    _write_nested_cv_csv(nested_path, evaluation["folds"], frame.top_k)
+    print(f"saved the folds' searches -> {nested_path.relative_to(PROJECT_ROOT)}")
     metrics_path = section.model_path.with_name(f"{section.kind}_recommender_metrics.json")
 
     # a model that ranks no better than the formula it replaces is not an
     # improvement on having no model: leave the app on the formula. A model
     # from an earlier run would still load and go on scoring, so it goes too,
-    # with the metrics that describe it.
-    if (summary[winner_name]["spearman"]["mean"]
+    # with the metrics that describe it. Judged on the selected model: the
+    # nested figure for the procedure that would produce the shipped one.
+    if (selected["spearman"]["mean"]
             <= summary["hand_tuned_baseline"]["spearman"]["mean"]):
         for earlier in (section.model_path, metrics_path):
             if earlier.exists():
                 earlier.unlink()
                 print(f"removed {earlier.relative_to(PROJECT_ROOT)} (from an earlier run)")
-        print(f"{winner_name} does not rank held-out patients better than the "
+        print("the selected model does not rank held-out patients better than the "
               f"deterministic formula — no {section.kind} model saved")
         return None
 
-    if winner_name == "random_forest":
-        winner = _random_forest(rf_params, names)
-    else:
-        winner = _hist_gradient_boosting(histgb_params, names)
+    winner = TUNED_MODELS[winner_name][0](shipped[winner_name].params, names)
     winner.fit(frame.X, frame.y)  # refit on everything for the shipped artifact
 
     print("permutation feature importance of the shipped model...")
@@ -1023,15 +1175,28 @@ def train(section: Section, rng: np.random.Generator) -> dict | None:
         "n_served_items": n_served,
         "n_rows": int(frame.X.shape[0]), "n_features": int(frame.X.shape[1]),
         "n_archetypes": n_archetypes, "n_queries": n_queries,
-        "n_folds": min(N_FOLDS, n_archetypes),
-        "tuned_params": {"random_forest": rf_params, "hist_gradient_boosting": histgb_params},
+        "n_folds": n_folds,
+        # the searches over every archetype: what the shipped model is built with
+        "tuned_params": {name: tuned.params for name, tuned in shipped.items()},
+        "tuned_search_spearman": {name: tuned.score for name, tuned in shipped.items()},
         "monotonic_constraints": {name: sign for name, sign
                                   in zip(names, monotonic_constraints(names)) if sign},
+        # nested: every tuned model's figures come from hyperparameters chosen
+        # inside the outer fold, on its training archetypes
         "metrics": summary,
+        "nested_cv": {
+            "outer_folds": n_folds, "inner_folds": TUNING_CV_FOLDS,
+            "candidates_per_search": TUNING_ITER, "grouped_by": "archetype",
+            "selected_model": selected,
+            "preferred_per_fold": picks,
+            "tuned_on_all_archetypes": evaluation["tuned_on_all_archetypes"],
+            "folds": evaluation["folds"],
+        },
         "feature_importance": importance,
     }
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     print(f"saved metrics -> {metrics_path.relative_to(PROJECT_ROOT)}")
+    print(f"{section.kind} model: {(time.perf_counter() - started) / 60:.1f} min", flush=True)
     return metrics
 
 
