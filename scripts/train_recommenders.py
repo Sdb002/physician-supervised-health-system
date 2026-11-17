@@ -77,7 +77,7 @@ app's own safety gate and plannable rules; a query is one group of one
 patient's prescription, judged by Spearman correlation and top-3 agreement.
 
 Outputs, per model (<kind> = food | recipe | exercise):
-  data/models/<kind>_recommender.joblib          the trained model (gitignored)
+  data/models/<kind>_recommender.joblib          the trained model (committed)
   data/models/<kind>_recommender_metrics.json    five-way comparison, every
                                                  fold's search, the shipped
                                                  params, permutation importance

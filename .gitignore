@@ -5,8 +5,9 @@ __pycache__/
 .venv/
 .pytest_cache/
 
-# Trained models (regenerable build artifacts — run scripts/train_recommenders.py)
-data/models/
+# Trained models: regenerable (scripts/train_recommenders.py), but committed so
+# a deployment built from GitHub (Vercel) ranks with them. Retrain, then commit
+# data/models/ again.
 
 # Environment & secrets
 .env
@@ -27,3 +28,6 @@ dashboard/out/
 # OS
 Thumbs.db
 .DS_Store
+
+# Vercel CLI (project link and local dev state)
+.vercel/

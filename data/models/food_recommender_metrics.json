@@ -1,0 +1,764 @@
+{
+  "kind": "food",
+  "winner": "hist_gradient_boosting",
+  "n_items": 672,
+  "n_served_items": 157,
+  "n_rows": 479808,
+  "n_features": 64,
+  "n_archetypes": 168,
+  "n_queries": 714,
+  "n_folds": 5,
+  "tuned_params": {
+    "random_forest": {
+      "n_estimators": 150,
+      "min_samples_leaf": 5,
+      "max_depth": 18
+    },
+    "hist_gradient_boosting": {
+      "min_samples_leaf": 20,
+      "max_leaf_nodes": 63,
+      "max_iter": 500,
+      "learning_rate": 0.2,
+      "l2_regularization": 1.0
+    }
+  },
+  "tuned_search_spearman": {
+    "random_forest": 0.9785708842968474,
+    "hist_gradient_boosting": 0.9984935827978086
+  },
+  "monotonic_constraints": {
+    "protein_g_ratio": 1,
+    "protein_g_emphasized_ratio": 1,
+    "carb_g_ratio": 1,
+    "carb_g_emphasized_ratio": 1,
+    "fat_g_ratio": 1,
+    "fat_g_emphasized_ratio": 1,
+    "fiber_g_ratio": 1,
+    "fiber_g_emphasized_ratio": 1,
+    "iron_mg_ratio": 1,
+    "iron_mg_emphasized_ratio": 1,
+    "calcium_mg_ratio": 1,
+    "calcium_mg_emphasized_ratio": 1,
+    "zinc_mg_ratio": 1,
+    "zinc_mg_emphasized_ratio": 1,
+    "folate_ug_ratio": 1,
+    "folate_ug_emphasized_ratio": 1,
+    "vit_a_ug_ratio": 1,
+    "vit_a_ug_emphasized_ratio": 1,
+    "vit_c_mg_ratio": 1,
+    "vit_c_mg_emphasized_ratio": 1,
+    "sodium_mg_ratio": -1,
+    "sodium_mg_emphasized_ratio": -1,
+    "potassium_mg_ratio": 1,
+    "potassium_mg_emphasized_ratio": 1,
+    "baseline_emphasis_score": 1,
+    "baseline_density_score": 1
+  },
+  "metrics": {
+    "hand_tuned_baseline": {
+      "spearman": {
+        "mean": 0.8437512338202419,
+        "std": 0.004366342976562249
+      },
+      "top10": {
+        "mean": 0.7463616665025116,
+        "std": 0.0017046311358375828
+      },
+      "ndcg10": {
+        "mean": 0.8819848015220366,
+        "std": 0.004204875930683058
+      },
+      "r2": {
+        "mean": 0.9709075054607581,
+        "std": 0.00042976177508399657
+      },
+      "mae": {
+        "mean": 0.4784669707654399,
+        "std": 0.005515315092833062
+      }
+    },
+    "linear_regression": {
+      "spearman": {
+        "mean": 0.44171682183995087,
+        "std": 0.0038657948520324547
+      },
+      "top10": {
+        "mean": 0.5796877770117207,
+        "std": 0.0023382666429877454
+      },
+      "ndcg10": {
+        "mean": 0.629477722256428,
+        "std": 0.0020142960518979677
+      },
+      "r2": {
+        "mean": 0.7459519922404256,
+        "std": 0.0004834722008722111
+      },
+      "mae": {
+        "mean": 2.437955333931545,
+        "std": 0.00975867083982907
+      }
+    },
+    "gradient_boosting": {
+      "spearman": {
+        "mean": 0.9693506000907478,
+        "std": 0.0021668481860065256
+      },
+      "top10": {
+        "mean": 0.9359873928888014,
+        "std": 0.005164333483234424
+      },
+      "ndcg10": {
+        "mean": 0.9897083444677627,
+        "std": 0.0014659863346919634
+      },
+      "r2": {
+        "mean": 0.9994265490915477,
+        "std": 1.2719315458104637e-05
+      },
+      "mae": {
+        "mean": 0.10555304937469487,
+        "std": 0.0017639839128511857
+      }
+    },
+    "random_forest": {
+      "spearman": {
+        "mean": 0.978512679359129,
+        "std": 0.0009557060666411303
+      },
+      "top10": {
+        "mean": 0.9564394760169408,
+        "std": 0.00366757724757373
+      },
+      "ndcg10": {
+        "mean": 0.9933983453629918,
+        "std": 0.0006608836875449405
+      },
+      "r2": {
+        "mean": 0.9991006758852121,
+        "std": 1.2834761907726816e-05
+      },
+      "mae": {
+        "mean": 0.0775260156323337,
+        "std": 0.002256216862350049
+      }
+    },
+    "hist_gradient_boosting": {
+      "spearman": {
+        "mean": 0.9987142796362019,
+        "std": 0.00018112007404000452
+      },
+      "top10": {
+        "mean": 0.9791224268689056,
+        "std": 0.006793762016524191
+      },
+      "ndcg10": {
+        "mean": 0.9992125195851012,
+        "std": 0.0002838151688255248
+      },
+      "r2": {
+        "mean": 0.9999865957408373,
+        "std": 2.614861661178093e-06
+      },
+      "mae": {
+        "mean": 0.01628087094342017,
+        "std": 0.0013703943352403867
+      }
+    }
+  },
+  "nested_cv": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "candidates_per_search": 8,
+    "grouped_by": "archetype",
+    "selected_model": {
+      "spearman": {
+        "mean": 0.9987142796362019,
+        "std": 0.00018112007404000452
+      },
+      "top10": {
+        "mean": 0.9791224268689056,
+        "std": 0.006793762016524191
+      },
+      "ndcg10": {
+        "mean": 0.9992125195851012,
+        "std": 0.0002838151688255248
+      },
+      "r2": {
+        "mean": 0.9999865957408373,
+        "std": 2.614861661178093e-06
+      },
+      "mae": {
+        "mean": 0.01628087094342017,
+        "std": 0.0013703943352403867
+      }
+    },
+    "preferred_per_fold": [
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting"
+    ],
+    "tuned_on_all_archetypes": {
+      "random_forest": {
+        "spearman": {
+          "mean": 0.978512679359129,
+          "std": 0.0009557060666411303
+        },
+        "top10": {
+          "mean": 0.9564394760169408,
+          "std": 0.00366757724757373
+        },
+        "ndcg10": {
+          "mean": 0.9933983453629918,
+          "std": 0.0006608836875449405
+        },
+        "r2": {
+          "mean": 0.9991006758852121,
+          "std": 1.2834761907726816e-05
+        },
+        "mae": {
+          "mean": 0.0775260156323337,
+          "std": 0.002256216862350049
+        }
+      },
+      "hist_gradient_boosting": {
+        "spearman": {
+          "mean": 0.9987056857806431,
+          "std": 0.00011702192630679035
+        },
+        "top10": {
+          "mean": 0.9795420072884863,
+          "std": 0.0063497384837322614
+        },
+        "ndcg10": {
+          "mean": 0.9991687337539101,
+          "std": 0.00030783665315038493
+        },
+        "r2": {
+          "mean": 0.9999864914072599,
+          "std": 6.710095876925609e-07
+        },
+        "mae": {
+          "mean": 0.016325240338205073,
+          "std": 0.00028185564385812206
+        }
+      }
+    },
+    "folds": [
+      {
+        "fold": 1,
+        "n_train_archetypes": 134,
+        "n_test_archetypes": 34,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 150,
+              "min_samples_leaf": 5,
+              "max_depth": 18
+            },
+            "search_spearman": 0.9798721479892839,
+            "spearman": 0.9777256943990038,
+            "top10": 0.9559440559440561,
+            "ndcg10": 0.993947474957333,
+            "r2": 0.9990791612456256,
+            "mae": 0.08153970523192013,
+            "spearman_tuned_on_all": 0.9777256943990038
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 5,
+              "max_leaf_nodes": 127,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.0
+            },
+            "search_spearman": 0.9979998255696455,
+            "spearman": 0.998864905626568,
+            "top10": 0.9825174825174825,
+            "ndcg10": 0.9993970412545008,
+            "r2": 0.9999905977301756,
+            "mae": 0.014172347521037023,
+            "spearman_tuned_on_all": 0.9986885025720713
+          }
+        }
+      },
+      {
+        "fold": 2,
+        "n_train_archetypes": 135,
+        "n_test_archetypes": 33,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 150,
+              "min_samples_leaf": 5,
+              "max_depth": 18
+            },
+            "search_spearman": 0.9787184343294745,
+            "spearman": 0.979180276674346,
+            "top10": 0.9601398601398602,
+            "ndcg10": 0.9944236085639028,
+            "r2": 0.9990989290907534,
+            "mae": 0.07749818044700507,
+            "spearman_tuned_on_all": 0.979180276674346
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 63,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 1.0
+            },
+            "search_spearman": 0.998404403164674,
+            "spearman": 0.9988256960261044,
+            "top10": 0.9909090909090909,
+            "ndcg10": 0.9996510407348433,
+            "r2": 0.9999871783841139,
+            "mae": 0.015912239559097124,
+            "spearman_tuned_on_all": 0.9988256960261044
+          }
+        }
+      },
+      {
+        "fold": 3,
+        "n_train_archetypes": 135,
+        "n_test_archetypes": 33,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 150,
+              "min_samples_leaf": 5,
+              "max_depth": 18
+            },
+            "search_spearman": 0.9791083141998799,
+            "spearman": 0.9775729941230932,
+            "top10": 0.9608391608391609,
+            "ndcg10": 0.9929181687458977,
+            "r2": 0.9991027970024864,
+            "mae": 0.0751884117237149,
+            "spearman_tuned_on_all": 0.9775729941230932
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 10,
+              "max_leaf_nodes": 63,
+              "max_iter": 300,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.1
+            },
+            "search_spearman": 0.9983566492989807,
+            "spearman": 0.9983734239652238,
+            "top10": 0.9748251748251748,
+            "ndcg10": 0.9988322265032284,
+            "r2": 0.9999824728529065,
+            "mae": 0.018460032410457232,
+            "spearman_tuned_on_all": 0.9985068577419264
+          }
+        }
+      },
+      {
+        "fold": 4,
+        "n_train_archetypes": 134,
+        "n_test_archetypes": 34,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 150,
+              "min_samples_leaf": 5,
+              "max_depth": 18
+            },
+            "search_spearman": 0.9787852771863133,
+            "spearman": 0.9780278162481607,
+            "top10": 0.951048951048951,
+            "ndcg10": 0.9928820933423245,
+            "r2": 0.9991193011327852,
+            "mae": 0.07557954089024325,
+            "spearman_tuned_on_all": 0.9780278162481607
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 63,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 1.0
+            },
+            "search_spearman": 0.9984949886352643,
+            "spearman": 0.9988230845861268,
+            "top10": 0.9748251748251748,
+            "ndcg10": 0.9991252009892785,
+            "r2": 0.9999857618317147,
+            "mae": 0.0165164653481724,
+            "spearman_tuned_on_all": 0.9988230845861268
+          }
+        }
+      },
+      {
+        "fold": 5,
+        "n_train_archetypes": 134,
+        "n_test_archetypes": 34,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 150,
+              "min_samples_leaf": 5,
+              "max_depth": 18
+            },
+            "search_spearman": 0.9762896410962109,
+            "spearman": 0.9800566153510417,
+            "top10": 0.954225352112676,
+            "ndcg10": 0.9928203812055008,
+            "r2": 0.9991031909544097,
+            "mae": 0.07782423986878514,
+            "spearman_tuned_on_all": 0.9800566153510417
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 63,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 1.0
+            },
+            "search_spearman": 0.9983578476139652,
+            "spearman": 0.9986842879769865,
+            "top10": 0.9725352112676058,
+            "ndcg10": 0.9990570884436546,
+            "r2": 0.9999869679052759,
+            "mae": 0.016343269878337084,
+            "spearman_tuned_on_all": 0.9986842879769865
+          }
+        }
+      }
+    ]
+  },
+  "feature_importance": [
+    {
+      "feature": "nothing_emphasized",
+      "mean": 0.6515256036062675,
+      "std": 0.00890989011965836
+    },
+    {
+      "feature": "baseline_emphasis_score",
+      "mean": 0.19892722041459093,
+      "std": 0.002272374952653858
+    },
+    {
+      "feature": "group_spice",
+      "mean": 0.15046834828529648,
+      "std": 0.003955644396419858
+    },
+    {
+      "feature": "baseline_density_score",
+      "mean": 0.12043752101741918,
+      "std": 0.0029639134402138336
+    },
+    {
+      "feature": "group_vegetable",
+      "mean": 0.06307801452605033,
+      "std": 0.000944060587916178
+    },
+    {
+      "feature": "group_fruit",
+      "mean": 0.0209197733823554,
+      "std": 0.00029083634978944024
+    },
+    {
+      "feature": "group_fish",
+      "mean": 0.020306643909634704,
+      "std": 0.0006678525872249224
+    },
+    {
+      "feature": "finding_high_cholesterol",
+      "mean": 0.01112292643823456,
+      "std": 0.00031031598598860313
+    },
+    {
+      "feature": "sodium_mg_ratio",
+      "mean": 0.011085171260619853,
+      "std": 0.0007881662275916526
+    },
+    {
+      "feature": "finding_hypertension",
+      "mean": 0.008890852701456842,
+      "std": 0.00028343314447430484
+    },
+    {
+      "feature": "group_meat",
+      "mean": 0.007398951563418299,
+      "std": 0.0002502510006290041
+    },
+    {
+      "feature": "finding_diabetes",
+      "mean": 0.007079150520209576,
+      "std": 0.00022723041332391568
+    },
+    {
+      "feature": "iron_mg_ratio",
+      "mean": 0.006048274227048322,
+      "std": 0.0004336950713947992
+    },
+    {
+      "feature": "kcal_scaled",
+      "mean": 0.005763433343559221,
+      "std": 0.00021676488783875563
+    },
+    {
+      "feature": "kcal_ratio",
+      "mean": 0.005612135470084123,
+      "std": 6.636618531600663e-05
+    },
+    {
+      "feature": "tag_brewed_beverage",
+      "mean": 0.005277624374643653,
+      "std": 0.0006196826578238597
+    },
+    {
+      "feature": "fiber_g_emphasized_ratio",
+      "mean": 0.003877270927825438,
+      "std": 7.284625378466214e-05
+    },
+    {
+      "feature": "group_legume",
+      "mean": 0.003169568860687333,
+      "std": 0.00014932356496298404
+    },
+    {
+      "feature": "finding_anemia",
+      "mean": 0.0026671537806839617,
+      "std": 0.0003997022820948069
+    },
+    {
+      "feature": "iron_mg_emphasized_ratio",
+      "mean": 0.001748026297957339,
+      "std": 6.556739612281889e-05
+    },
+    {
+      "feature": "group_sweet",
+      "mean": 0.0012993879902843287,
+      "std": 0.00028867452613818147
+    },
+    {
+      "feature": "group_dairy",
+      "mean": 0.0011975019905267948,
+      "std": 4.131989354510437e-05
+    },
+    {
+      "feature": "group_other",
+      "mean": 0.0011568857084011785,
+      "std": 2.9566529755475277e-05
+    },
+    {
+      "feature": "iron_mg_emphasized",
+      "mean": 0.0010790792826910645,
+      "std": 0.00014850738560747039
+    },
+    {
+      "feature": "potassium_mg_emphasized",
+      "mean": 0.0010372834199010139,
+      "std": 0.00025472313429975913
+    },
+    {
+      "feature": "group_egg",
+      "mean": 0.0010200409605062965,
+      "std": 6.591981488611273e-05
+    },
+    {
+      "feature": "vit_c_mg_emphasized_ratio",
+      "mean": 0.0005659595697813824,
+      "std": 7.185324472064825e-05
+    },
+    {
+      "feature": "potassium_mg_ratio",
+      "mean": 0.00042077499000554576,
+      "std": 4.924341166391995e-05
+    },
+    {
+      "feature": "potassium_mg_emphasized_ratio",
+      "mean": 0.0004007621226505442,
+      "std": 6.936518639725597e-05
+    },
+    {
+      "feature": "vit_c_mg_ratio",
+      "mean": 0.00028913584995673427,
+      "std": 2.957560732048622e-05
+    },
+    {
+      "feature": "fiber_g_emphasized",
+      "mean": 0.00027961380229351017,
+      "std": 3.8677838594371945e-05
+    },
+    {
+      "feature": "group_grain",
+      "mean": 0.0002157492490542534,
+      "std": 3.48928687887686e-05
+    },
+    {
+      "feature": "protein_g_ratio",
+      "mean": 0.00020741138051372232,
+      "std": 3.879499874369654e-05
+    },
+    {
+      "feature": "calcium_mg_ratio",
+      "mean": 0.00018576370357885618,
+      "std": 1.493997073945342e-05
+    },
+    {
+      "feature": "fiber_g_ratio",
+      "mean": 0.00018034842423320097,
+      "std": 1.2262411330614288e-05
+    },
+    {
+      "feature": "vit_c_mg_emphasized",
+      "mean": 0.0001468385262200389,
+      "std": 4.014189377572089e-05
+    },
+    {
+      "feature": "tag_high_fat",
+      "mean": 0.00011163053973906045,
+      "std": 1.2764846776377158e-05
+    },
+    {
+      "feature": "vit_a_ug_ratio",
+      "mean": 9.092515262019152e-05,
+      "std": 1.8178093373528166e-05
+    },
+    {
+      "feature": "zinc_mg_ratio",
+      "mean": 8.11772525530996e-05,
+      "std": 9.622558149862299e-06
+    },
+    {
+      "feature": "group_oil",
+      "mean": 6.322655829027468e-05,
+      "std": 3.808405515838241e-06
+    },
+    {
+      "feature": "tag_high_sugar",
+      "mean": 6.25192358026494e-05,
+      "std": 1.867998686872697e-05
+    },
+    {
+      "feature": "tag_high_sodium",
+      "mean": 5.781864677523174e-06,
+      "std": 5.470655910218245e-06
+    },
+    {
+      "feature": "folate_ug_emphasized",
+      "mean": 3.247375407400277e-06,
+      "std": 1.369144679658766e-06
+    },
+    {
+      "feature": "kcal_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "kcal_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "protein_g_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "protein_g_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "carb_g_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "carb_g_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "carb_g_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "fat_g_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "fat_g_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "fat_g_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "calcium_mg_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "calcium_mg_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "zinc_mg_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "zinc_mg_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "folate_ug_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "folate_ug_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "vit_a_ug_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "vit_a_ug_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "sodium_mg_emphasized",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "sodium_mg_emphasized_ratio",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "group_none",
+      "mean": 0.0,
+      "std": 0.0
+    }
+  ]
+}

@@ -16,8 +16,8 @@ jobs:
           python-version: "3.13"
           cache: pip
       - run: pip install -e ".[dev]"
-      # The trained recommenders are build artifacts (data/models is not in
-      # the repository), so the suite runs on the deterministic scorers here.
+      # The trained recommenders are committed (data/models), so the
+      # trained-model tests run here as well as the deterministic ones.
       - run: pytest
 
   dashboard:

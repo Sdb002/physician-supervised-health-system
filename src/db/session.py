@@ -14,8 +14,15 @@ _MIGRATIONS = Path(__file__).resolve().parent / "migrations"
 _connect_args = {}
 if settings.database_url.startswith("sqlite"):
     _connect_args["check_same_thread"] = False
+elif settings.database_url.startswith("postgresql+psycopg"):
+    # hosted Postgres sits behind a connection pooler (Neon's PgBouncer on
+    # Vercel), where psycopg's automatic server-side prepared statements can
+    # land on another connection than the one that prepared them
+    _connect_args["prepare_threshold"] = None
 
-engine = create_engine(settings.database_url, connect_args=_connect_args)
+# a hosted Postgres closes idle connections (a serverless function sits idle
+# between requests): check a pooled one before handing it out
+engine = create_engine(settings.database_url, connect_args=_connect_args, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 

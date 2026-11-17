@@ -3,6 +3,7 @@
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from ruamel.yaml import YAML
 
@@ -36,15 +37,33 @@ class Settings(BaseSettings):
     # Bangladesh Standard Time is UTC+6 all year (no daylight saving since 2009)
     clinic_utc_offset_hours: float = 6.0
     database_url: str = _DEFAULT_DB
+    # the path the API is served under when it shares a domain with the
+    # dashboard (Vercel sends "/api/patients" to it as is): "/api" there,
+    # empty when the API has its own host. Paths without it still work.
+    api_root_path: str = ""
     cors_origins: str = "http://localhost:3000"
     # "development" on a developer's machine; anything else is a deployment
     environment: str = "development"
+    # seed the synthetic demo patients and demo logins at start-up, once,
+    # while the database has no patients (src/db/demo.py): for a hosted demo
+    seed_demo_data: bool = False
 
     # auth — override all of these outside local development
     secret_key: str = DEFAULT_SECRET_KEY
     admin_email: str = "admin@health.local"
     admin_password: str = DEFAULT_ADMIN_PASSWORD
     admin_name: str = "Administrator"
+
+    @field_validator("database_url")
+    @classmethod
+    def _sqlalchemy_postgres_url(cls, url: str) -> str:
+        """A Postgres URL as hosts hand it out (Neon through Vercel, Render,
+        Heroku: postgres://... or postgresql://...) names no driver, and
+        SQLAlchemy would then look for psycopg2. This app installs psycopg 3."""
+        for scheme in ("postgres://", "postgresql://"):
+            if url.startswith(scheme):
+                return "postgresql+psycopg://" + url[len(scheme):]
+        return url
 
     @property
     def cors_origin_list(self) -> list[str]:

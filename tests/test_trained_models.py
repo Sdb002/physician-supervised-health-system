@@ -6,8 +6,8 @@ dishes end to end. A model may reorder what the gate allows; it must never
 bring back what the gate removed or break a rule of the planner, and its
 scores must move the way the training constraints say they do.
 
-The models are build artifacts (data/models is not in the repository). Without
-them these tests are skipped, not passed: run scripts/train_recommenders.py.
+The models are build artifacts, committed in data/models. Without them these
+tests are skipped, not passed: run scripts/train_recommenders.py.
 """
 
 from dataclasses import replace

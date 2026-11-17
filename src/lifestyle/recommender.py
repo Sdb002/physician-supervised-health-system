@@ -12,8 +12,8 @@ load_model() returns None and the prescription ranks with
 ranking.baseline_score.
 
 Does not import src.llm. The artifact is produced by
-scripts/train_recommenders.py (--only exercise) and is not committed
-(data/models/ is gitignored).
+scripts/train_recommenders.py (--only exercise) and committed, so a
+deployment built from the repository ranks with it.
 """
 
 import numpy as np

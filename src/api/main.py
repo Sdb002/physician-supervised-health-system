@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import logging
+import os
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,12 +62,46 @@ def check_published_defaults(config=settings) -> None:
     )
 
 
+def check_hosted_database(config=settings) -> None:
+    """On Vercel the disk is read-only and forgets everything between
+    requests: a SQLite file there (the default when DATABASE_URL is not set)
+    would fail on the first write or lose every record. Say so plainly
+    instead of failing obscurely on every request."""
+    if os.environ.get("VERCEL") and config.database_url.startswith("sqlite"):
+        raise RuntimeError(
+            "refusing to start: DATABASE_URL is not set, and a SQLite file cannot keep data "
+            "on Vercel. Add a Postgres database to the project (Storage, then Neon), which "
+            "sets DATABASE_URL, and redeploy."
+        )
+
+
+def seed_demo_data() -> None:
+    """The synthetic demo patients and logins, for a hosted demo whose
+    database starts empty (SEED_DEMO_DATA). Seeded once; when two instances
+    start together, the one that loses the race leaves it to the other."""
+    from sqlalchemy.exc import IntegrityError
+
+    from src.db.demo import seed_demo
+
+    log = logging.getLogger(__name__)
+    with SessionLocal() as db:
+        try:
+            if seed_demo(db, actor="startup", report=log.info):
+                log.info("seeded the synthetic demo patients (SEED_DEMO_DATA)")
+        except IntegrityError:
+            db.rollback()
+            log.info("demo data already being seeded by another instance")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
+    check_hosted_database()
     check_published_defaults()
     init_db()
     ensure_default_admin()
+    if settings.seed_demo_data:
+        seed_demo_data()
     yield
 
 
@@ -78,6 +113,10 @@ app = FastAPI(
     ),
     version="0.1.0",
     lifespan=lifespan,
+    # "/api" when the API shares a domain with the dashboard: on Vercel, where
+    # vercel.json routes /api/* here with the prefix kept. Paths without the
+    # prefix still route, so a local run is unaffected either way.
+    root_path=settings.api_root_path or ("/api" if os.environ.get("VERCEL") else ""),
 )
 
 app.add_middleware(

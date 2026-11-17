@@ -25,6 +25,8 @@ dependencies = [
     "onnxruntime>=1.20",
     # lab reports sent as PDF: their own text, or a scanned page rendered for OCR
     "pypdfium2>=4.30",
+    # Postgres, for a deployment (the default database is a SQLite file)
+    "psycopg[binary]>=3.2",
 ]
 
 [project.optional-dependencies]

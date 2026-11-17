@@ -5,8 +5,8 @@ Here the shipped model ranks real patients' prescriptions end to end: it may
 reorder what the gate and the plannable rules allow, never bring back what
 they removed, and its scores must move the way the training constraints say.
 
-The model is a build artifact (data/models is not in the repository). Without
-it these tests are skipped, not passed: run
+The model is a build artifact, committed in data/models. Without it these
+tests are skipped, not passed: run
 scripts/train_recommenders.py --only exercise.
 """
 

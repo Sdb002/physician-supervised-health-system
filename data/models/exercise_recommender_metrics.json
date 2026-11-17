@@ -1,0 +1,666 @@
+{
+  "kind": "exercise",
+  "winner": "hist_gradient_boosting",
+  "n_items": 408,
+  "n_served_items": 74,
+  "n_rows": 273008,
+  "n_features": 46,
+  "n_archetypes": 1120,
+  "n_queries": 3680,
+  "n_folds": 5,
+  "tuned_params": {
+    "random_forest": {
+      "n_estimators": 100,
+      "min_samples_leaf": 3,
+      "max_depth": 10
+    },
+    "hist_gradient_boosting": {
+      "min_samples_leaf": 10,
+      "max_leaf_nodes": 63,
+      "max_iter": 300,
+      "learning_rate": 0.2,
+      "l2_regularization": 0.1
+    }
+  },
+  "tuned_search_spearman": {
+    "random_forest": 0.8890163560952379,
+    "hist_gradient_boosting": 0.9838496729668442
+  },
+  "monotonic_constraints": {
+    "levels_below_patient": -1,
+    "rated_modify_pregnancy": -1,
+    "rated_modify_hypertension": -1,
+    "rated_modify_diabetes": -1,
+    "rated_modify_anemia": -1,
+    "rated_modify_knee_osteoarthritis": -1,
+    "older_adult_modify": -1,
+    "needs_equipment": -1,
+    "has_dose": 1,
+    "video_exact": 1,
+    "video_close_variant": 1,
+    "needs_modification_pregnancy": -1,
+    "needs_modification_hypertension": -1,
+    "needs_modification_diabetes": -1,
+    "needs_modification_anemia": -1,
+    "needs_modification_knee_osteoarthritis": -1,
+    "needs_modification_older_adult": -1,
+    "baseline_score": 1
+  },
+  "metrics": {
+    "hand_tuned_baseline": {
+      "spearman": {
+        "mean": 0.7675579943059703,
+        "std": 0.0026841800841805883
+      },
+      "top3": {
+        "mean": 0.5449307093521985,
+        "std": 0.0031983442626555506
+      },
+      "ndcg3": {
+        "mean": 0.8935269078128488,
+        "std": 0.0013636917509300954
+      },
+      "r2": {
+        "mean": 0.7529230085730543,
+        "std": 0.004542618585437562
+      },
+      "mae": {
+        "mean": 0.08050220260708214,
+        "std": 0.0016936555460608706
+      }
+    },
+    "linear_regression": {
+      "spearman": {
+        "mean": 0.856653477009685,
+        "std": 0.00500712224669989
+      },
+      "top3": {
+        "mean": 0.8260832533791177,
+        "std": 0.003689884790326613
+      },
+      "ndcg3": {
+        "mean": 0.9712837565798644,
+        "std": 0.0012372990965788962
+      },
+      "r2": {
+        "mean": 0.8972053756722358,
+        "std": 0.0022425906007652063
+      },
+      "mae": {
+        "mean": 0.08446258753454636,
+        "std": 0.00039662065447086133
+      }
+    },
+    "gradient_boosting": {
+      "spearman": {
+        "mean": 0.9324058405361075,
+        "std": 0.004650761304775174
+      },
+      "top3": {
+        "mean": 0.9323434380232591,
+        "std": 0.007820505651787692
+      },
+      "ndcg3": {
+        "mean": 0.9936577296444872,
+        "std": 0.0005941566203487946
+      },
+      "r2": {
+        "mean": 0.9921961587550449,
+        "std": 0.0005457609783715219
+      },
+      "mae": {
+        "mean": 0.019563519952928404,
+        "std": 0.0006533944560804529
+      }
+    },
+    "random_forest": {
+      "spearman": {
+        "mean": 0.8906364436373073,
+        "std": 0.009187580910128905
+      },
+      "top3": {
+        "mean": 0.8662997519615836,
+        "std": 0.005753537227504088
+      },
+      "ndcg3": {
+        "mean": 0.9696468621164914,
+        "std": 0.00045181061594984085
+      },
+      "r2": {
+        "mean": 0.9020124058306692,
+        "std": 0.001937580661708939
+      },
+      "mae": {
+        "mean": 0.04238583090641107,
+        "std": 0.0007618442139555857
+      }
+    },
+    "hist_gradient_boosting": {
+      "spearman": {
+        "mean": 0.9864974127224782,
+        "std": 0.0008018733388298709
+      },
+      "top3": {
+        "mean": 0.9884962285255803,
+        "std": 0.0022697530003587202
+      },
+      "ndcg3": {
+        "mean": 0.9981685638159904,
+        "std": 7.108299228172831e-05
+      },
+      "r2": {
+        "mean": 0.9963281762186892,
+        "std": 0.00016674510511465097
+      },
+      "mae": {
+        "mean": 0.011152747359494864,
+        "std": 0.00028260610121858996
+      }
+    }
+  },
+  "nested_cv": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "candidates_per_search": 8,
+    "grouped_by": "archetype",
+    "selected_model": {
+      "spearman": {
+        "mean": 0.9864974127224782,
+        "std": 0.0008018733388298709
+      },
+      "top3": {
+        "mean": 0.9884962285255803,
+        "std": 0.0022697530003587202
+      },
+      "ndcg3": {
+        "mean": 0.9981685638159904,
+        "std": 7.108299228172831e-05
+      },
+      "r2": {
+        "mean": 0.9963281762186892,
+        "std": 0.00016674510511465097
+      },
+      "mae": {
+        "mean": 0.011152747359494864,
+        "std": 0.00028260610121858996
+      }
+    },
+    "preferred_per_fold": [
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting",
+      "hist_gradient_boosting"
+    ],
+    "tuned_on_all_archetypes": {
+      "random_forest": {
+        "spearman": {
+          "mean": 0.8935344293712678,
+          "std": 0.00895817603599185
+        },
+        "top3": {
+          "mean": 0.8667506857226218,
+          "std": 0.0066521412309941096
+        },
+        "ndcg3": {
+          "mean": 0.969704611248283,
+          "std": 0.0005597473568083886
+        },
+        "r2": {
+          "mean": 0.9016352783713071,
+          "std": 0.002159325022479025
+        },
+        "mae": {
+          "mean": 0.0430766139314562,
+          "std": 0.0011220760376696836
+        }
+      },
+      "hist_gradient_boosting": {
+        "spearman": {
+          "mean": 0.9835989913692508,
+          "std": 0.003789716307688893
+        },
+        "top3": {
+          "mean": 0.9857779735553936,
+          "std": 0.0023959722597436425
+        },
+        "ndcg3": {
+          "mean": 0.9981611903770213,
+          "std": 5.631986389330347e-05
+        },
+        "r2": {
+          "mean": 0.9970477129384742,
+          "std": 7.017984022905377e-05
+        },
+        "mae": {
+          "mean": 0.010345912290297622,
+          "std": 0.00015432491456380805
+        }
+      }
+    },
+    "folds": [
+      {
+        "fold": 1,
+        "n_train_archetypes": 896,
+        "n_test_archetypes": 224,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 100,
+              "min_samples_leaf": 3,
+              "max_depth": 10
+            },
+            "search_spearman": 0.8849912520241339,
+            "spearman": 0.9027334109529921,
+            "top3": 0.8653061224489796,
+            "ndcg3": 0.969171856038124,
+            "r2": 0.9043107120660823,
+            "mae": 0.04107820142706409,
+            "spearman_tuned_on_all": 0.9027334109529921
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 31,
+              "max_iter": 500,
+              "learning_rate": 0.1,
+              "l2_regularization": 0.0
+            },
+            "search_spearman": 0.9872181942513706,
+            "spearman": 0.9854040441884927,
+            "top3": 0.9850340136054422,
+            "ndcg3": 0.9982668856182326,
+            "r2": 0.9965186449597896,
+            "mae": 0.010693511495968228,
+            "spearman_tuned_on_all": 0.9780925438601284
+          }
+        }
+      },
+      {
+        "fold": 2,
+        "n_train_archetypes": 896,
+        "n_test_archetypes": 224,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 100,
+              "min_samples_leaf": 2,
+              "max_depth": 12
+            },
+            "search_spearman": 0.8822330951374248,
+            "spearman": 0.8841038821228292,
+            "top3": 0.8630385487528344,
+            "ndcg3": 0.9690217164312586,
+            "r2": 0.8990485956710678,
+            "mae": 0.04264372482725337,
+            "spearman_tuned_on_all": 0.8834924179567136
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 31,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.1
+            },
+            "search_spearman": 0.9866438645428254,
+            "spearman": 0.9878067423436647,
+            "top3": 0.9918367346938776,
+            "ndcg3": 0.9982329442007809,
+            "r2": 0.9961026611180835,
+            "mae": 0.011326906548149716,
+            "spearman_tuned_on_all": 0.9881461600767214
+          }
+        }
+      },
+      {
+        "fold": 3,
+        "n_train_archetypes": 896,
+        "n_test_archetypes": 224,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 100,
+              "min_samples_leaf": 3,
+              "max_depth": 10
+            },
+            "search_spearman": 0.8873120500579713,
+            "spearman": 0.9009316856998768,
+            "top3": 0.8727355072463767,
+            "ndcg3": 0.9700253311363249,
+            "r2": 0.9031539554436125,
+            "mae": 0.04327469630130235,
+            "spearman_tuned_on_all": 0.9009316856998768
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 31,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.1
+            },
+            "search_spearman": 0.9854137077614183,
+            "spearman": 0.9868051716665898,
+            "top3": 0.9895833333333334,
+            "ndcg3": 0.99807248903167,
+            "r2": 0.9965245962494235,
+            "mae": 0.01102141433295092,
+            "spearman_tuned_on_all": 0.9814055714762474
+          }
+        }
+      },
+      {
+        "fold": 4,
+        "n_train_archetypes": 896,
+        "n_test_archetypes": 224,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 100,
+              "min_samples_leaf": 2,
+              "max_depth": 12
+            },
+            "search_spearman": 0.8850195898963494,
+            "spearman": 0.8835100537149196,
+            "top3": 0.8726287262872628,
+            "ndcg3": 0.9700246515100035,
+            "r2": 0.9030566206049774,
+            "mae": 0.042064639540497,
+            "spearman_tuned_on_all": 0.8986114465508385
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 31,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.1
+            },
+            "search_spearman": 0.9864336411192673,
+            "spearman": 0.986044047424486,
+            "top3": 0.9887082204155376,
+            "ndcg3": 0.9981362447598987,
+            "r2": 0.9962356005415758,
+            "mae": 0.011525504872457291,
+            "spearman_tuned_on_all": 0.982826809720165
+          }
+        }
+      },
+      {
+        "fold": 5,
+        "n_train_archetypes": 896,
+        "n_test_archetypes": 224,
+        "preferred": "hist_gradient_boosting",
+        "models": {
+          "random_forest": {
+            "params": {
+              "n_estimators": 100,
+              "min_samples_leaf": 3,
+              "max_depth": 10
+            },
+            "search_spearman": 0.8876357619183904,
+            "spearman": 0.8819031856959185,
+            "top3": 0.8577898550724636,
+            "ndcg3": 0.9699907554667464,
+            "r2": 0.9004921453676062,
+            "mae": 0.04286789243593854,
+            "spearman_tuned_on_all": 0.8819031856959185
+          },
+          "hist_gradient_boosting": {
+            "params": {
+              "min_samples_leaf": 20,
+              "max_leaf_nodes": 31,
+              "max_iter": 500,
+              "learning_rate": 0.2,
+              "l2_regularization": 0.1
+            },
+            "search_spearman": 0.9859183239409514,
+            "spearman": 0.9864270579891578,
+            "top3": 0.9873188405797101,
+            "ndcg3": 0.9981342554693701,
+            "r2": 0.996259378224574,
+            "mae": 0.011196399547948157,
+            "spearman_tuned_on_all": 0.9875238717129923
+          }
+        }
+      }
+    ]
+  },
+  "feature_importance": [
+    {
+      "feature": "baseline_score",
+      "mean": 0.8338708827663732,
+      "std": 0.009749122562730446
+    },
+    {
+      "feature": "trait_knee_oa_strengthening",
+      "mean": 0.1169124740572306,
+      "std": 0.002063809497921752
+    },
+    {
+      "feature": "condition_knee_osteoarthritis",
+      "mean": 0.07530280818922527,
+      "std": 0.002954617570596013
+    },
+    {
+      "feature": "trait_seated",
+      "mean": 0.0386913120655263,
+      "std": 0.0003484976208564697
+    },
+    {
+      "feature": "age_scaled",
+      "mean": 0.01501858904583957,
+      "std": 0.0012326407131453292
+    },
+    {
+      "feature": "trait_pelvic_floor",
+      "mean": 0.008781900510500429,
+      "std": 0.0006528658755471257
+    },
+    {
+      "feature": "video_exact",
+      "mean": 0.007059626942154252,
+      "std": 0.00039567301799592867
+    },
+    {
+      "feature": "trait_isometric_hold",
+      "mean": 0.005993612893245048,
+      "std": 0.00011961589537531214
+    },
+    {
+      "feature": "start_light",
+      "mean": 0.00466673055288751,
+      "std": 0.0005480580628121104
+    },
+    {
+      "feature": "trait_pregnancy_recommended",
+      "mean": 0.004513586673620717,
+      "std": 0.00029010735004301834
+    },
+    {
+      "feature": "trait_low_impact",
+      "mean": 0.004242227848510027,
+      "std": 0.000559421127553748
+    },
+    {
+      "feature": "condition_hypertension",
+      "mean": 0.003947479277903199,
+      "std": 0.0001841775480061607
+    },
+    {
+      "feature": "trait_post_meal",
+      "mean": 0.002559872688102294,
+      "std": 0.00023232552923049796
+    },
+    {
+      "feature": "trait_falls_prevention",
+      "mean": 0.0021679435257874412,
+      "std": 0.00021327118244069052
+    },
+    {
+      "feature": "condition_diabetes",
+      "mean": 0.0013078683870042297,
+      "std": 0.0003911429386970707
+    },
+    {
+      "feature": "condition_pregnancy",
+      "mean": 0.001210078296641215,
+      "std": 0.000364734549962965
+    },
+    {
+      "feature": "obese",
+      "mean": 0.0009137535142879516,
+      "std": 0.00014403416485186848
+    },
+    {
+      "feature": "needs_modification_hypertension",
+      "mean": 0.0006558357160661998,
+      "std": 0.0001137725998539821
+    },
+    {
+      "feature": "video_close_variant",
+      "mean": 0.0006128164000512415,
+      "std": 5.3815869116148433e-05
+    },
+    {
+      "feature": "exercise_level_rank",
+      "mean": 0.000493652157763047,
+      "std": 7.822147765042013e-05
+    },
+    {
+      "feature": "rated_modify_hypertension",
+      "mean": 0.00045872239768591784,
+      "std": 4.3983075657121026e-05
+    },
+    {
+      "feature": "levels_below_patient",
+      "mean": 0.00041847811788051634,
+      "std": 0.00010227835694826183
+    },
+    {
+      "feature": "category_aerobic",
+      "mean": 0.0003832187246045171,
+      "std": 5.65765695531567e-05
+    },
+    {
+      "feature": "fitness_rank",
+      "mean": 0.00024254617914645226,
+      "std": 4.165549720928423e-05
+    },
+    {
+      "feature": "condition_anemia",
+      "mean": 0.00014682384780781988,
+      "std": 3.726331963336633e-05
+    },
+    {
+      "feature": "household_item",
+      "mean": 0.0001249069376082268,
+      "std": 1.3273866796930383e-05
+    },
+    {
+      "feature": "needs_modification_anemia",
+      "mean": 0.00012227931026578264,
+      "std": 3.0935901545909156e-05
+    },
+    {
+      "feature": "needs_equipment",
+      "mean": 7.612064990976108e-05,
+      "std": 9.181482055169307e-06
+    },
+    {
+      "feature": "has_dose",
+      "mean": 5.077443233607593e-05,
+      "std": 1.9134558158906945e-05
+    },
+    {
+      "feature": "category_balance",
+      "mean": 3.2980080808964195e-05,
+      "std": 2.8679460388311578e-05
+    },
+    {
+      "feature": "rated_modify_knee_osteoarthritis",
+      "mean": 2.2043413943340084e-05,
+      "std": 1.0244631615707612e-05
+    },
+    {
+      "feature": "met_scaled",
+      "mean": 1.9008555535870996e-05,
+      "std": 7.488541261985369e-06
+    },
+    {
+      "feature": "rated_modify_pregnancy",
+      "mean": 1.5276701803523807e-05,
+      "std": 4.993011425522468e-05
+    },
+    {
+      "feature": "category_flexibility",
+      "mean": 1.0870836521248429e-05,
+      "std": 1.8553192377859387e-05
+    },
+    {
+      "feature": "needs_modification_pregnancy",
+      "mean": 8.761244869304185e-06,
+      "std": 1.0958290986838131e-05
+    },
+    {
+      "feature": "older_adult_modify",
+      "mean": 7.585662009246264e-06,
+      "std": 2.1972735031884367e-06
+    },
+    {
+      "feature": "needs_modification_knee_osteoarthritis",
+      "mean": 2.959352891784839e-06,
+      "std": 9.285168629484367e-06
+    },
+    {
+      "feature": "needs_modification_diabetes",
+      "mean": 2.098914063708435e-06,
+      "std": 3.8437831584524745e-06
+    },
+    {
+      "feature": "rated_modify_diabetes",
+      "mean": 7.301219392408242e-07,
+      "std": 4.500602759162157e-06
+    },
+    {
+      "feature": "rated_modify_anemia",
+      "mean": 2.6763259475259817e-08,
+      "std": 1.6339174263053554e-08
+    },
+    {
+      "feature": "has_met",
+      "mean": 0.0,
+      "std": 0.0
+    },
+    {
+      "feature": "female",
+      "mean": -1.2331208556481955e-07,
+      "std": 4.607748355619302e-06
+    },
+    {
+      "feature": "trait_high_impact",
+      "mean": -1.477712657349528e-07,
+      "std": 1.1948281357603614e-06
+    },
+    {
+      "feature": "needs_modification_older_adult",
+      "mean": -1.7484517909283071e-06,
+      "std": 4.274386410661762e-06
+    },
+    {
+      "feature": "older_adult",
+      "mean": -1.0171165500905133e-05,
+      "std": 9.715212310087445e-06
+    },
+    {
+      "feature": "category_strength",
+      "mean": -0.0001080895631728751,
+      "std": 2.5660388545075188e-05
+    }
+  ]
+}

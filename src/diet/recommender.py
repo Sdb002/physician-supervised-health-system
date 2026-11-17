@@ -28,9 +28,10 @@ falls back to the deterministic formula. Never raises out of the load/score
 functions — featurize()/featurize_recipe() are the ones that will (they're a
 programming-error surface, not a runtime-degradation one).
 
-The trained artifacts are produced by scripts/train_recommenders.py and are
-NOT committed (data/models/ is gitignored) — same treatment as .venv or
-node_modules: regenerable build artifacts, not reference files.
+The trained artifacts are produced by scripts/train_recommenders.py:
+regenerable build artifacts, not reference files. They are committed
+(data/models/) so that a deployment built from the repository (Vercel)
+ranks with them; after retraining, commit them again.
 """
 
 import numpy as np

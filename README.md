@@ -189,7 +189,44 @@ review screen says why.
 ### Optional: PostgreSQL
 
 `docker compose up -d`, then set `DATABASE_URL` in `.env` (see
-`docker-compose.yml`) and `pip install "psycopg[binary]"`.
+`docker-compose.yml`). The driver (`psycopg`) is installed with the backend.
+A URL as hosts hand it out (`postgres://...`) works as it is.
+
+### Deploying on Vercel
+
+`vercel.json` deploys the dashboard and the API as one Vercel project with
+two [Services](https://vercel.com/docs/services): the Next.js dashboard at
+`/` and the FastAPI backend at `/api` on the same domain (so no CORS setup;
+`dashboard/.env.production` points the dashboard at `/api`). The backend
+runs as a Vercel Function on Python 3.14 (`.python-version`), lab-slip OCR
+included (its libraries make the function a "large function", which new
+projects allow). Vercel's disk does not keep files, so the data lives in
+Postgres; the API refuses to start there without one.
+
+1. **Import the repository** at vercel.com → Add New → Project → the GitHub
+   repository. Vercel reads `vercel.json`; change no build settings.
+2. **Add a database**: the project's Storage tab → Neon (Postgres) → connect
+   it to the project. It sets `DATABASE_URL`.
+3. **Set the environment variables** (Settings → Environment Variables):
+
+   | Variable | Value |
+   |---|---|
+   | `SECRET_KEY` | a long random value: `python -c "import secrets; print(secrets.token_urlsafe(48))"` |
+   | `ADMIN_PASSWORD` | the admin login's password (`ADMIN_EMAIL` defaults to `admin@health.local`) |
+   | `ENVIRONMENT` | `production` |
+   | `SEED_DEMO_DATA` | `1` to start with the synthetic demo patients and the demo logins above (anyone with the address can use those); leave unset for an empty site |
+   | `ANTHROPIC_API_KEY` | optional: AI wording for reports |
+
+4. **Redeploy** (Deployments → the latest → Redeploy) so the variables and
+   the database apply. Every push to `main` deploys again from then on.
+
+Things that differ from a local run: a request body is limited to 4.5 MB
+on Vercel, so a larger lab-slip photo is refused before it reaches the API;
+the first request after the site has been idle takes several seconds (the
+models and the food tables load, and pending migrations run); the trained
+models in `data/models/` are committed for this, so retrain, then commit
+them again. All patients in a demo deployment are synthetic: do not enter
+real patient data.
 
 ## Datasets
 
@@ -347,8 +384,9 @@ before engine 0.8.0. Those were one correlation pooled over every row of every
 patient and all 672 foods, so they also counted telling one patient's scores
 from another's, and spices from everything else.
 
-Writes `data/models/{food,recipe}_recommender.joblib` (gitignored —
-regenerable build artifacts), `..._metrics.json` (tuned hyperparameters and
+Writes `data/models/{food,recipe}_recommender.joblib` (regenerable, but
+committed so a deployment built from GitHub ranks with them: retrain, then
+commit them again), `..._metrics.json` (tuned hyperparameters and
 permutation feature importance, for the thesis record) and
 `thesis/results/{food,recipe}_recommender_comparison.csv` with
 `..._nested_cv.csv` beside it. A model that does
@@ -488,7 +526,7 @@ production build on every push to `main` and every pull request.
 
 ```
 data/          datasets (schema.md + snapshots + validation reports) and cited reference YAMLs
-data/models/   trained food, recipe and exercise recommender artifacts (gitignored, regenerable — see scripts/train_recommenders.py)
+data/models/   trained food, recipe and exercise recommender artifacts (committed for deployment; regenerable — see scripts/train_recommenders.py)
 src/clinical   deterministic rules: BMI, risk scoring, deficiency → targets, contraindication gate
 src/diet       food DB, recipe nutrition (computed from ingredients), matcher, meal plan, recommender (ML backend)
 src/lifestyle  exercise DB, ranking (formula + optional trained model), ACSM FITT-VP prescription, intensity scaling
